@@ -124,26 +124,30 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
+
+                // Create new student
+                // TODO: if student exists in DB
+                //  log in
+                // if not
+                //  then ask if they want to register
+
+                StudentModel newStudent;
+                try {
+                    // TODO: generate university ID here
+                    newStudent = new StudentModel(-1, "test student name", "test student id");
+                } catch(Exception e) {
+                    Toast.makeText(LoginActivity.this, "Error creating student", Toast.LENGTH_SHORT).show();
+                    newStudent = new StudentModel(-1, "error", "error");
+                }
+
+                DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
+                boolean success = dbo.addStudent(newStudent);
+
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
 
 
-                // Create new student
-                // if student exists in DB
-                //  log in
-                // if not
-                //  then ask if they want to register
-                //StudentModel newStudent;
-                //try {
-                //    newStudent = new StudentModel(-1, "test student name", "test student id");
-                //} catch(Exception e) {
-                //    Toast.makeText(LoginActivity.this, "Error creating student", Toast.LENGTH_SHORT).show();
-                //    newStudent = new StudentModel(-1, "error", "error");
-                //}
-
-                //DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
-                //boolean success = dbo.addStudent(newStudent);
             }
         });
     }

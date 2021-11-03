@@ -2,12 +2,11 @@ package com.example.ufs.data.model;
 
 public class StudentModel {
     private int id;           // ID for database
-    private String universityID; // student ID
+    private String universityID; // student's university ID
     private String name;
 
     // address will collected when student is ordering
     // private String address;
-
 
     // Constructors
     public StudentModel(int id, String name, String universityID) {
