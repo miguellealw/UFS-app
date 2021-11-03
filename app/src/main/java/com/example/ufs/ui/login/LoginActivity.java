@@ -22,7 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ufs.DatabaseHelper;
+import com.example.ufs.MainActivity;
 import com.example.ufs.R;
+import com.example.ufs.data.model.StudentModel;
 import com.example.ufs.ui.login.LoginViewModel;
 import com.example.ufs.ui.login.LoginViewModelFactory;
 import com.example.ufs.databinding.ActivityLoginBinding;
@@ -47,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
+        // Validate input when user types
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
@@ -63,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // show login failed message
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
@@ -114,12 +119,31 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // When user clicks on login / register
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+
+
+
+                // Create new student
+                // if student exists in DB
+                //  log in
+                // if not
+                //  then ask if they want to register
+                //StudentModel newStudent;
+                //try {
+                //    newStudent = new StudentModel(-1, "test student name", "test student id");
+                //} catch(Exception e) {
+                //    Toast.makeText(LoginActivity.this, "Error creating student", Toast.LENGTH_SHORT).show();
+                //    newStudent = new StudentModel(-1, "error", "error");
+                //}
+
+                //DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
+                //boolean success = dbo.addStudent(newStudent);
             }
         });
     }

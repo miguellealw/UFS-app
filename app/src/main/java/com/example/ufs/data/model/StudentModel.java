@@ -2,19 +2,18 @@ package com.example.ufs.data.model;
 
 public class StudentModel {
     private int id;           // ID for database
-    private String studentID; // student ID
-    private String username;
+    private String universityID; // student ID
     private String name;
-    private String address;
+
+    // address will collected when student is ordering
+    // private String address;
 
 
     // Constructors
-    public StudentModel(int id, String name, String address, String studentID, String username) {
+    public StudentModel(int id, String name, String universityID) {
         this.id = id;
         this.name = name;
-        this.address = address;
-        this.studentID = studentID;
-        this.username = username;
+        this.universityID = universityID;
     }
 
     // toString - will print out contents of a class object
@@ -23,9 +22,7 @@ public class StudentModel {
         return "CustomerModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", studentID='" + studentID + '\'' +
-                ", username='" + username + '\'' +
+                ", universityID='" + universityID + '\'' +
                 '}';
     }
 
@@ -33,7 +30,6 @@ public class StudentModel {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -41,33 +37,15 @@ public class StudentModel {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getUniversityID() {
+        return universityID;
     }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
-
-    public String username() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUniversityID(String universityID) {
+        this.universityID = universityID;
     }
 
     // TODO: methods
