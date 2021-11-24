@@ -24,11 +24,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create tables here
+
+        // TODO: createUserTable instaed of createStudentTable
         String createStudentTable = "CREATE TABLE " + STUDENT_TABLE + " (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_STUDENT_NAME + " TEXT NOT NULL, " +
                 COLUMN_STUDENT_UNIVERSITY_ID + " TEXT NOT NULL" +
         ")";
+
+        // TODO: create tables
+        //  Restaurant
+        //  Order
+        //  Rating
+        //  MenuItem
+        //  Favorite
+        //  Advertisement
 
         sqLiteDatabase.execSQL(createStudentTable);
     }
@@ -40,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //  TODO: change to addUser
     public boolean addStudent(StudentModel studentModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -55,4 +66,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // if negative then insertion was a failure
         return insert_status > 0;
     }
+
+
+    // TODO: add more methods
+    //  addOrder()
+    //  addRestaurant()
+    //  addRating()
+    //  addMenuItem()
+    //  addAdvertisement()
 }

@@ -1,5 +1,6 @@
 package com.example.ufs.data.model;
 
+// TODO: change this to UserModel instead of student model
 public class StudentModel {
     private int id;           // ID for database
     private String universityID; // student's university ID
