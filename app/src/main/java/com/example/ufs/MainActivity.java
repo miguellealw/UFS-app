@@ -20,29 +20,31 @@ public class MainActivity extends AppCompatActivity {
     Button Signin;
     Button Register;
     EditText ed1,ed2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Signin = (Button)findViewByID(R.id.@+id/signinbutton);
-        ed1 = (EditText)findViewById(R.id.editText);
-        ed2 = (EditText)findViewById(R.id.editText2);
-        Register = (Button)findViewByID(R.id.button);
-
-        Register.setOnClickListener(new View.onClickListener())
-        {
-            public void onClick(View view)
-            {
-                startActivity(new android.Intent(getApplicationContext(), Registration.class));
-            }
-        }
-        Signin.setOnClickListener(new View.onClickListener())
-        {
-            public void onClick(View view)
-            {
-
-            }
-        }
+//        REMOVED FOR NOW TO COMPILE
+//        Signin = (Button)findViewByID(R.id.@+id/signinbutton);
+//        ed1 = (EditText)findViewById(R.id.editText);
+//        ed2 = (EditText)findViewById(R.id.editText2);
+//        Register = (Button)findViewByID(R.id.button);
+//
+//        Register.setOnClickListener(new View.onClickListener())
+//        {
+//            public void onClick(View view)
+//            {
+//                startActivity(new android.Intent(getApplicationContext(), Registration.class));
+//            }
+//        }
+//        Signin.setOnClickListener(new View.onClickListener())
+//        {
+//            public void onClick(View view)
+//            {
+//
+//            }
+//        }
     }
 }
