@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 UserModel newUser;
                 try {
                     // TODO: generate university ID here
+                    // TODO: ID is not necessary; remove
                     newUser = new UserModel(-1, "jon@uta.edu", "Jon Doe", "12345679", 1);
 
                     DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);

@@ -197,15 +197,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // if positive then insertion was successful
         // if negative then insertion was a failure
+
+        // TODO: see if you can get back the user
         return insert_status > 0;
     }
 
 
 
     // TODO: add more methods
-    //  addOrder(), getOrder(), editOrder()
-    //  addRestaurant(), getRestaurant()
-    //  addRating(), getRating()
-    //  addMenuItem(), getMenuItem()
+    //  addOrder(), getOrder(id), getAllOrders(), editOrder(),
+    //  addRestaurant(), getRestaurant(id), getAllRestaurants()
+    //  addReview(), getReview(id), getAllReviews()
+    //  addMenuItem(), getMenuItem(id), getAllMenuItems(), removeMenuItem()
     //  addAdvertisement(), getAdvertisement()
+
+    // TODO: Figure out how to do favorites for menu items and restaurants
+    //  addFavorite(), getFavorite(id), getAllFavorites(), removeFavorite()
 }
