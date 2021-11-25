@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.Registration;
 import com.example.ufs.data.model.UserModel;
 import com.example.ufs.databinding.ActivityLoginBinding;
 
@@ -31,6 +34,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+
+    private Button registerButton;
+
+    private final String TAG = "LoginActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // When user clicks on login / register
+        // When user clicks on login
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,12 +151,29 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
             }
         });
+
+        registerButton = findViewById(R.id.register_btn);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String TAG = "LoginActivity";
+                Log.i(TAG, "REGISTER BUTTON CLICKED");
+
+                // Go to registration activity
+                Intent i = new Intent(getApplicationContext(), Registration.class);
+                startActivity(i);
+            }
+        });
+
+
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+
+        //Log.i(TAG, "=========== updateUiWithUser Ran");
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
