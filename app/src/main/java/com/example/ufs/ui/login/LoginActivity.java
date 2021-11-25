@@ -23,11 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
-import com.example.ufs.MainActivity;
 import com.example.ufs.R;
-import com.example.ufs.data.model.StudentModel;
-import com.example.ufs.ui.login.LoginViewModel;
-import com.example.ufs.ui.login.LoginViewModelFactory;
+import com.example.ufs.data.model.UserModel;
 import com.example.ufs.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -131,23 +128,20 @@ public class LoginActivity extends AppCompatActivity {
                 // if not
                 //  then ask if they want to register
 
-                StudentModel newStudent;
+                UserModel newUser;
                 try {
                     // TODO: generate university ID here
-                    newStudent = new StudentModel(-1, "test student name", "test student id");
-                } catch(Exception e) {
-                    Toast.makeText(LoginActivity.this, "Error creating student", Toast.LENGTH_SHORT).show();
-                    newStudent = new StudentModel(-1, "error", "error");
-                }
+                    // TODO: ID is not necessary; remove
+                    newUser = new UserModel(-1, "jon@uta.edu", "Jon Doe", "12345679", 1);
 
-                DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
-                boolean success = dbo.addStudent(newStudent);
+                    DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
+                    boolean u_success = dbo.addUser(newUser);
+                } catch(Exception e) {
+                    Toast.makeText(LoginActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();
+                }
 
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-
-
-
             }
         });
     }
