@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // TODO: generate university ID here
                     // TODO: ID is not necessary; remove
-                    newUser = new UserModel(-1, "jon@uta.edu", "Jon Doe", "12345679", 1);
+                    newUser = new UserModel("Jon", "Doe", "jondoe@uta.edu", "12345679", 1);
 
                     DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
                     boolean u_success = dbo.addUser(newUser);

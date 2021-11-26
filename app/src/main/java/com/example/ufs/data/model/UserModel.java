@@ -3,7 +3,8 @@ package com.example.ufs.data.model;
 public class UserModel {
     private int id;           // ID for database
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String universityID; // student's university ID
     private int isStudent;
 
@@ -11,10 +12,10 @@ public class UserModel {
     // private String address;
 
     // Constructors
-    public UserModel(int id, String email, String name, String universityID, int isStudent) {
-        this.id = id;
+    public UserModel(String firstName, String lastName, String email, String universityID, int isStudent) {
         this.email = email;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.universityID = universityID;
         this.isStudent = isStudent;
     }
@@ -25,7 +26,8 @@ public class UserModel {
         return "UserModel{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", universityID='" + universityID + '\'' +
                 ", isStudent='" + isStudent + '\'' +
                 '}';
@@ -40,8 +42,11 @@ public class UserModel {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String name) { this.firstName = name; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String name) { this.lastName = name; }
 
     public String getUniversityID() {
         return universityID;
