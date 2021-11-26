@@ -231,18 +231,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // if positive then insertion was successful
         // if negative then insertion was a failure
-
-        // TODO: see if you can get back the user
         return insert_status > 0;
     }
 
-    // TODO: change return value to UserViewModel or UserModel
-    public String getUser(String email, String password) throws Exception {
+    public UserModel getUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-
-        //String email;
-        //String password;
 
         // Columns to return to client
         String[] returned_cols = {
@@ -258,43 +251,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         String selection = COLUMN_USER_EMAIL + " = ?";
         String[] selectionArgs = { email + "", password + "" };
-        //int userFName = -1;
+
+        // User Data
         String userFName = "";
+        int userID = -1;
+        boolean userIsStudent;
 
         try {
             // get data from db
             //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
             cursor = db.rawQuery(
-                "SELECT " + COLUMN_USER_FIRST_NAME + " FROM " + USER_TABLE + " WHERE email = ? AND password = ?",
+                "SELECT " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_ID + ", " + COLUMN_USER_IS_STUDENT + " FROM " + USER_TABLE + " WHERE email = ? AND password = ?",
                 selectionArgs
             );
 
-            // If no user is found
-//            if(cursor.getCount() == 0) {
-//                Log.i("=========DB HELPER", "no user found");
-//                throw new Exception("invalid login");
-//            }
-
+            // If user is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
+                userIsStudent = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)));
+                Log.i("===DBO getUser", "userID: " + userIsStudent);
             } else {
+                // if no user is found
                 return null;
             }
 
-            return userFName;
+            return new UserModel(userID, userFName, userIsStudent);
         } finally {
             assert cursor != null;
             cursor.close();
         }
-
-
-        // if positive then insertion was successful
-        // if negative then insertion was a failure
-
-        // TODO: see if you can get back the user
-        //return userFName;
-        //return status > 0;
     }
 
     // Orders

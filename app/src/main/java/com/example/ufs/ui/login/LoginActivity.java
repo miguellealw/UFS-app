@@ -129,36 +129,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
+
                 // Login user logic
                 loginViewModel.login(
                     emailEditText.getText().toString(),
                     passwordEditText.getText().toString(),
                     LoginActivity.this
                 );
+
                 loadingProgressBar.setVisibility(View.GONE);
-
-//                //UserModel newUser;
-//                String fname = "";
-//                try {
-//                   // TODO: generate university ID here
-//                   // TODO: ID is not necessary; remove
-//                   Log.i(TAG, "Email: " + emailEditText.getText().toString());
-//                   Log.i(TAG, "Password: " + passwordEditText.getText().toString());
-//
-//                   DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
-//                   fname = dbo.getUser(
-//                            emailEditText.getText().toString(),
-//                            passwordEditText.getText().toString()
-//                        );
-//
-//                   if(fname == null) throw new Exception("Invalid login. Try Again.");
-//
-//
-//                    Log.i(TAG, "USER FIRST NAME: " + fname);
-//                } catch(Exception e) {
-//                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-
             }
         });
 
@@ -181,11 +160,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
+
         // TODO : initiate successful logged in experience
         // INTENT TO RESTAURANTS PAGE
+
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
 
         //Log.i(TAG, "=========== updateUiWithUser Ran");
+        // may need to remove
         finish();
     }
 

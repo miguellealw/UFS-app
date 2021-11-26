@@ -1,13 +1,13 @@
 package com.example.ufs.data.model;
 
 public class UserModel {
-    private int id;           // ID for database
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String universityID; // student's university ID
-    private String password;
-    private boolean isStudent;
+    private int id = -1;           // ID for database
+    private String email = null;
+    private String firstName = null;
+    private String lastName = null;
+    private String universityID = null; // student's university ID
+    private String password = null;
+    private boolean isStudent = false;
 
     // address will collected when student is ordering
     // private String address;
@@ -20,6 +20,15 @@ public class UserModel {
         this.universityID = universityID;
         this.isStudent = isStudent;
         this.password = password;
+    }
+
+    // Will be used to return from getUser in the DatabaseHelper
+    // to provide to LoggedInUser view model
+    //public UserModel(int id, String firstName, boolean isStudent) {
+    public UserModel(int id, String firstName, boolean isStudent) {
+        this.id = id;
+        this.firstName = firstName;
+        this.isStudent = isStudent;
     }
 
     // toString - will print out contents of a class object
