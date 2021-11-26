@@ -21,9 +21,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Constants for user table
     public static final String USER_TABLE = "USER_TABLE";
     public static final String COLUMN_USER_EMAIL = "email";
-    public static final String COLUMN_USER_NAME = "name";
+    public static final String COLUMN_USER_FIRST_NAME = "first_name";
+    public static final String COLUMN_USER_LAST_NAME = "last_name";
     public static final String COLUMN_USER_UNIVERSITY_ID = "university_id";
     public static final String COLUMN_USER_IS_STUDENT = "is_student";
+    public static final String COLUMN_USER_PASSWORD = "password";
 
     // Order Table
     public static final String ORDER_TABLE = "ORDER_TABLE";
@@ -80,9 +82,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // =============== USER TABLE
         String createUserTable = "CREATE TABLE " + USER_TABLE + " (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_USER_NAME + " TEXT NOT NULL, " +
+            COLUMN_USER_FIRST_NAME + " TEXT NOT NULL, " +
+            COLUMN_USER_LAST_NAME + " TEXT NOT NULL, " +
             COLUMN_USER_EMAIL + " TEXT NOT NULL, " +
             COLUMN_USER_UNIVERSITY_ID + " TEXT, " +
+            COLUMN_USER_PASSWORD + " TEXT NOT NULL, " +
             COLUMN_USER_IS_STUDENT + " INTEGER NOT NULL" + // sqlite does not have boolean
         ")";
 
@@ -200,10 +204,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         // add values to table
-        cv.put(COLUMN_USER_NAME, userModel.getName());
+        cv.put(COLUMN_USER_FIRST_NAME, userModel.getFirstName());
+        cv.put(COLUMN_USER_LAST_NAME, userModel.getLastName());
         cv.put(COLUMN_USER_EMAIL, userModel.getEmail());
         cv.put(COLUMN_USER_UNIVERSITY_ID, userModel.getUniversityID());
         cv.put(COLUMN_USER_IS_STUDENT, userModel.getIsStudent());
+        cv.put(COLUMN_USER_PASSWORD, userModel.getPassword());
 
         // commit data to DB
         long insert_status = db.insert(USER_TABLE, null, cv);

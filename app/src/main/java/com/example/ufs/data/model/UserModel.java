@@ -3,20 +3,23 @@ package com.example.ufs.data.model;
 public class UserModel {
     private int id;           // ID for database
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String universityID; // student's university ID
-    private int isStudent;
+    private String password;
+    private boolean isStudent;
 
     // address will collected when student is ordering
     // private String address;
 
     // Constructors
-    public UserModel(int id, String email, String name, String universityID, int isStudent) {
-        this.id = id;
+    public UserModel(String firstName, String lastName, String email, String universityID, String password, boolean isStudent) {
         this.email = email;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.universityID = universityID;
         this.isStudent = isStudent;
+        this.password = password;
     }
 
     // toString - will print out contents of a class object
@@ -25,7 +28,8 @@ public class UserModel {
         return "UserModel{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", universityID='" + universityID + '\'' +
                 ", isStudent='" + isStudent + '\'' +
                 '}';
@@ -40,8 +44,11 @@ public class UserModel {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String name) { this.firstName = name; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String name) { this.lastName = name; }
 
     public String getUniversityID() {
         return universityID;
@@ -50,8 +57,11 @@ public class UserModel {
         this.universityID = universityID;
     }
 
-    public int getIsStudent() { return isStudent; }
-    public void setIsStudent(int isStudent) { this.isStudent = isStudent; }
+    public boolean getIsStudent() { return isStudent; }
+    public void setIsStudent(boolean isStudent) { this.isStudent = isStudent; }
+
+    public String getPassword() { return password; }
+    public void setIsStudent(String password) { this.password = password; }
 
     // TODO: methods
     // void OrderFood();
