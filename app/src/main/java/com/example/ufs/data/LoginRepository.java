@@ -1,5 +1,7 @@
 package com.example.ufs.data;
 
+import android.content.Context;
+
 import com.example.ufs.data.model.LoggedInUser;
 
 /**
@@ -43,9 +45,10 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String username, String password, Context cxt) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<LoggedInUser> result = dataSource.login(username, password, cxt);
+
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
