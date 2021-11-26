@@ -25,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_LAST_NAME = "last_name";
     public static final String COLUMN_USER_UNIVERSITY_ID = "university_id";
     public static final String COLUMN_USER_IS_STUDENT = "is_student";
+    public static final String COLUMN_USER_PASSWORD = "password";
 
     // Order Table
     public static final String ORDER_TABLE = "ORDER_TABLE";
@@ -85,6 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_USER_LAST_NAME + " TEXT NOT NULL, " +
             COLUMN_USER_EMAIL + " TEXT NOT NULL, " +
             COLUMN_USER_UNIVERSITY_ID + " TEXT, " +
+            COLUMN_USER_PASSWORD + " TEXT NOT NULL, " +
             COLUMN_USER_IS_STUDENT + " INTEGER NOT NULL" + // sqlite does not have boolean
         ")";
 
@@ -207,6 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USER_EMAIL, userModel.getEmail());
         cv.put(COLUMN_USER_UNIVERSITY_ID, userModel.getUniversityID());
         cv.put(COLUMN_USER_IS_STUDENT, userModel.getIsStudent());
+        cv.put(COLUMN_USER_PASSWORD, userModel.getPassword());
 
         // commit data to DB
         long insert_status = db.insert(USER_TABLE, null, cv);

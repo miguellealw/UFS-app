@@ -139,12 +139,12 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // TODO: generate university ID here
                     // TODO: ID is not necessary; remove
-                    newUser = new UserModel("Jon", "Doe", "jondoe@uta.edu", "12345679", 1);
+//                    newUser = new UserModel("Jon", "Doe", "jondoe@uta.edu", "12345679", 1);
 
-                    DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
-                    boolean u_success = dbo.addUser(newUser);
+//                    DatabaseHelper dbo = new DatabaseHelper(LoginActivity.this);
+//                    boolean u_success = dbo.addUser(newUser);
                 } catch(Exception e) {
-                    Toast.makeText(LoginActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LoginActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();
                 }
 
                 loginViewModel.login(usernameEditText.getText().toString(),

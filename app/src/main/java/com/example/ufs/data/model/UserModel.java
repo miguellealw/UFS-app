@@ -6,18 +6,20 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String universityID; // student's university ID
-    private int isStudent;
+    private String password;
+    private boolean isStudent;
 
     // address will collected when student is ordering
     // private String address;
 
     // Constructors
-    public UserModel(String firstName, String lastName, String email, String universityID, int isStudent) {
+    public UserModel(String firstName, String lastName, String email, String universityID, String password, boolean isStudent) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.universityID = universityID;
         this.isStudent = isStudent;
+        this.password = password;
     }
 
     // toString - will print out contents of a class object
@@ -55,8 +57,11 @@ public class UserModel {
         this.universityID = universityID;
     }
 
-    public int getIsStudent() { return isStudent; }
-    public void setIsStudent(int isStudent) { this.isStudent = isStudent; }
+    public boolean getIsStudent() { return isStudent; }
+    public void setIsStudent(boolean isStudent) { this.isStudent = isStudent; }
+
+    public String getPassword() { return password; }
+    public void setIsStudent(String password) { this.password = password; }
 
     // TODO: methods
     // void OrderFood();
