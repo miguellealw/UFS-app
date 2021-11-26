@@ -1,11 +1,28 @@
 package com.example.ufs;
 
+import static androidx.navigation.ui.NavigationUI.setupWithNavController;
+
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.example.ufs.ui.OrdersFragment;
+import com.example.ufs.ui.RestaurantsFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     Button Signin;
@@ -17,25 +34,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        REMOVED FOR NOW TO COMPILE
-//        Signin = (Button)findViewByID(R.id.@+id/signinbutton);
-//        ed1 = (EditText)findViewById(R.id.editText);
-//        ed2 = (EditText)findViewById(R.id.editText2);
-//        Register = (Button)findViewByID(R.id.button);
-//
-//        Register.setOnClickListener(new View.onClickListener())
-//        {
-//            public void onClick(View view)
-//            {
-//                startActivity(new android.Intent(getApplicationContext(), Registration.class));
-//            }
-//        }
-//        Signin.setOnClickListener(new View.onClickListener())
-//        {
-//            public void onClick(View view)
-//            {
-//
-//            }
-//        }
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        NavHostFragment navHostFragment =
+                (NavHostFragment) supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+
+
+        BottomNavigationView bottom_nav = findViewById(R.id.bottom_nav);
+        setupWithNavController(bottom_nav, navController);
+        //bottom_nav.setupWithController(navController);
+
+        // deprecated, but could not find better way
+        bottom_nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Log.i("======== Bottom nav", "nav clicked");
+                Fragment selectedFragment = null;
+
+                switch(item.getItemId()) {
+                    case R.id.restaurantsFragment:
+                        selectedFragment = new RestaurantsFragment();
+                        //openFragment(new RestaurantsFragment());
+                        break;
+                    case R.id.ordersFragment:
+                        selectedFragment = new OrdersFragment();
+                        break;
+                }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, selectedFragment).commit();
+                return true;
+            }
+        });
+
+
+
     }
+
+//    void openFragment(Fragment fragment){
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.frameLayout, fragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//
+//    }
+
 }

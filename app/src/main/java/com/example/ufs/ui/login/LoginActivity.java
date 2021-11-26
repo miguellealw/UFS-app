@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
+import com.example.ufs.MainActivity;
 import com.example.ufs.R;
 import com.example.ufs.Registration;
 import com.example.ufs.data.model.UserModel;
@@ -161,8 +162,9 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
 
-        // TODO : initiate successful logged in experience
         // INTENT TO RESTAURANTS PAGE
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
 
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
 
