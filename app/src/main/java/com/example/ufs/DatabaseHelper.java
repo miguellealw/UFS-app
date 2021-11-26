@@ -35,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ORDER_ID = "id";
     public static final String COLUMN_ORDER_USER_ID = "user_id";
     public static final String COLUMN_ORDER_TOTAL_PRICE = "total_price";
+    public static final String COLUMN_ORDER_PAYMENT_OPTION = "payment_option";
     public static final String COLUMN_ORDER_IS_DELIVERED = "is_delivered";
     public static final String COLUMN_ORDER_IS_PICKUP = "is_pickup";
     public static final String COLUMN_ORDER_TIMESTAMP = "timestamp";
@@ -106,6 +107,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ORDER_TOTAL_PRICE + " TEXT NOT NULL, " +
             COLUMN_ORDER_IS_DELIVERED + " INTEGER NOT NULL, " +
             COLUMN_ORDER_IS_PICKUP + " INTEGER NOT NULL, " + // sqlite does not have boolean
+            // 1 - Meal Plan
+            // 2 - Credit Card
+            // 3 - Cash
+            COLUMN_ORDER_PAYMENT_OPTION + " INTEGER NOT NULL, " +
             COLUMN_ORDER_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
             COLUMN_ORDER_ADDRESS + " TEXT, " +
             COLUMN_ORDER_USER_ID + " INTEGER NOT NULL, " +
