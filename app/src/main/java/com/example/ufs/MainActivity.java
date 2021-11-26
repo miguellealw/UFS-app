@@ -18,8 +18,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.ufs.ui.FavoritesFragment;
 import com.example.ufs.ui.OrdersFragment;
 import com.example.ufs.ui.RestaurantsFragment;
+import com.example.ufs.ui.ReviewsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -53,11 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.restaurantsFragment:
-                        selectedFragment = new RestaurantsFragment();
                         //openFragment(new RestaurantsFragment());
+                        selectedFragment = new RestaurantsFragment();
                         break;
                     case R.id.ordersFragment:
                         selectedFragment = new OrdersFragment();
+                        break;
+                    case R.id.favoritesFragment:
+                        selectedFragment = new FavoritesFragment();
+                        break;
+                    case R.id.reviewsFragment:
+                        selectedFragment = new ReviewsFragment();
                         break;
                 }
 
