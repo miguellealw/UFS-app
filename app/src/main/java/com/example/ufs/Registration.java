@@ -42,8 +42,6 @@ public class Registration extends AppCompatActivity {
 
         registerButton = findViewById(R.id.registerbutton);
 
-        Editable fname = et_fName.getText();
-
         // Register handler
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +50,7 @@ public class Registration extends AppCompatActivity {
                 UserModel newUser;
                 try {
                     // TODO: data validation
+                    // check if edittext data is empty
 
 
                     //newUser = new UserModel("Jon", "Doe", "jondoe@gmail.edu", "12345679", "password123", 1);

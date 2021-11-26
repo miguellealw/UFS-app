@@ -2,8 +2,10 @@ package com.example.ufs;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -20,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Constants for user table
     public static final String USER_TABLE = "USER_TABLE";
+    public static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_FIRST_NAME = "first_name";
     public static final String COLUMN_USER_LAST_NAME = "last_name";
@@ -29,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Order Table
     public static final String ORDER_TABLE = "ORDER_TABLE";
+    public static final String COLUMN_ORDER_ID = "id";
     public static final String COLUMN_ORDER_USER_ID = "user_id";
     public static final String COLUMN_ORDER_TOTAL_PRICE = "total_price";
     public static final String COLUMN_ORDER_IS_DELIVERED = "is_delivered";
@@ -38,33 +42,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Restaurant Table
     private static final String RESTAURANT_TABLE = "RESTAURANT_TABLE";
+    private static final String COLUMN_RESTAURANT_ID = "id";
     private static final String COLUMN_RESTAURANT_NAME = "name";
     private static final String COLUMN_RESTAURANT_LOCATION = "location";
     private static final String COLUMN_RESTAURANT_USER_ID = "user_id";
 
     // Menu Item
     private static final String MENU_ITEM_TABLE = "MENU_ITEM_TABLE";
+    private static final String COLUMN_MENU_ITEM_ID = "id";
     private static final String COLUMN_MENU_ITEM_NAME = "name";
     private static final String COLUMN_MENU_ITEM_PRICE = "price";
     private static final String COLUMN_MENU_ITEM_RESTAURANT_ID = "restaurant_id";
 
     // Favorite Restaurant
     private static final String FAVORITE_RESTAURANT_TABLE = "FAVORITE_RESTAURANT_TABLE";
+    private static final String COLUMN_FAVORITE_RESTAURANT_ID = "id";
     private static final String COLUMN_FAVORITE_RESTAURANT_USER_ID = "user_id";
     private static final String COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID = "restaurant_id";
 
     // Favorite Menu Item
     private static final String FAVORITE_MENU_ITEM_TABLE = "FAVORITE_MENU_ITEM_TABLE";
+    private static final String COLUMN_FAVORITE_MENU_ITEM_ID = "id";
     private static final String COLUMN_FAVORITE_MENU_ITEM_USER_ID = "user_id";
     private static final String COLUMN_FAVORITE_MENU_ITEM_MENU_ITEM_ID = "menu_item_id";
 
     // Review
     private static final String REVIEW_TABLE = "REVIEW_TABLE";
+    private static final String COLUMN_REVIEW_ID = "id";
     private static final String COLUMN_REVIEW_RATING = "rating";
     private static final String COLUMN_REVIEW_REVIEW = "review";
 
     // Advertisement
     private static final String AD_TABLE = "ADVERTISEMENT_TABLE";
+    private static final String COLUMN_AD_ID = "id";
     private static final String COLUMN_AD_COMPANY_NAME = "company_name";
     private static final String COLUMN_AD_MESSAGE = "message";
     private static final String COLUMN_AD_USER_ID = "user_id";
@@ -192,9 +202,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // will be called  if the DB version changes
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        // drop student table
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + STUDENT_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ORDER_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RESTAURANT_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MENU_ITEM_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + REVIEW_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FAVORITE_RESTAURANT_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FAVORITE_MENU_ITEM_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + AD_TABLE);
 
         onCreate(sqLiteDatabase);
     }
@@ -216,9 +231,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // if positive then insertion was successful
         // if negative then insertion was a failure
-
-        // TODO: see if you can get back the user
         return insert_status > 0;
+    }
+
+    public UserModel getUser(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Columns to return to client
+        String[] returned_cols = {
+            COLUMN_USER_ID,
+            COLUMN_USER_FIRST_NAME,
+            COLUMN_USER_LAST_NAME,
+            COLUMN_USER_EMAIL,
+            COLUMN_USER_UNIVERSITY_ID,
+            COLUMN_USER_IS_STUDENT
+        };
+
+        // Condition of rows to select
+        Cursor cursor = null;
+        String selection = COLUMN_USER_EMAIL + " = ?";
+        String[] selectionArgs = { email + "", password + "" };
+
+        // User Data
+        String userFName = "";
+        int userID = -1;
+        boolean userIsStudent;
+
+        try {
+            // get data from db
+            //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
+            cursor = db.rawQuery(
+                "SELECT " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_ID + ", " + COLUMN_USER_IS_STUDENT + " FROM " + USER_TABLE + " WHERE email = ? AND password = ?",
+                selectionArgs
+            );
+
+            // If user is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
+                userIsStudent = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)));
+                Log.i("===DBO getUser", "userID: " + userIsStudent);
+            } else {
+                // if no user is found
+                return null;
+            }
+
+            return new UserModel(userID, userFName, userIsStudent);
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
     }
 
     // Orders
