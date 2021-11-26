@@ -64,7 +64,11 @@ public class Registration extends AppCompatActivity {
                     );
                     DatabaseHelper dbo = new DatabaseHelper(Registration.this);
                     boolean u_success = dbo.addUser(newUser);
-                    Toast.makeText(Registration.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Registered Successfully! You can now login.", Toast.LENGTH_SHORT).show();
+
+                    // Go to Login screen
+                    Intent i = new Intent(Registration.this, LoginActivity.class);
+                    startActivity(i);
                 } catch(Exception e) {
                     Toast.makeText(Registration.this, "Error registering user", Toast.LENGTH_SHORT).show();
                 }
