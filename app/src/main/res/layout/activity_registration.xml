@@ -12,7 +12,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/foodbackground"
         tools:context=".MainActivity">
 
         <ImageView
@@ -21,27 +20,11 @@
             android:layout_height="87dp"
             android:layout_marginTop="24dp"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/textenterinfo"
+            app:layout_constraintBottom_toTopOf="@+id/fname_reg_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/textenterinfo"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="32dp"
-            android:text="Please enter the following information:"
-            android:textColor="@color/white"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textfname"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
         <TextView
             android:id="@+id/textfname"
@@ -57,7 +40,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/fname_reg_input" />
+            app:layout_constraintStart_toStartOf="@+id/fname_reg_input"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
 
         <EditText
@@ -141,6 +125,41 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
+
+        <TextView
+            android:id="@+id/uni_id_reg_label"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginBottom="8dp"
+            android:text="University ID (if applicable)"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/uni_id_reg_input"
+            app:layout_constraintEnd_toEndOf="@+id/uni_id_reg_input"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/uni_id_reg_input" />
+
+
+        <EditText
+            android:id="@+id/uni_id_reg_input"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="76dp"
+            android:background="#ffffff"
+            android:ems="10"
+            android:hint="123456789"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/registerbutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/textpassword"
             android:layout_width="wrap_content"
@@ -164,7 +183,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="68dp"
+            android:layout_marginBottom="180dp"
             android:background="#ffffff"
             android:ems="10"
             android:hint="*************"
@@ -172,7 +191,7 @@
             android:paddingLeft="10dp"
             app:layout_constraintBottom_toTopOf="@+id/registerbutton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
@@ -197,7 +216,7 @@
             app:layout_constraintBottom_toTopOf="@+id/registerbutton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_reg_input" />
+            app:layout_constraintTop_toBottomOf="@+id/uni_id_reg_input" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
