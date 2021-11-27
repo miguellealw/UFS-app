@@ -1,6 +1,7 @@
 package com.example.ufs.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
+import com.example.ufs.data.model.RestaurantModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -35,6 +41,8 @@ public class RestaurantsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private final String TAG = "== RestaurantsFragment ";
 
     public RestaurantsFragment() {
         // Required empty public constructor
@@ -70,11 +78,57 @@ public class RestaurantsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurants, container, false);
         Context ctx = getActivity().getApplicationContext();
-        // Inflate the layout for this fragment
 
-        FloatingActionButton addButton = view.findViewById(R.id.createRestaurantButton);
+        // Get logged in user id
+//        SharedPreferences sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        int user_id = sp.getLoggedInUserId();
+
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        RestaurantModel restaurant = dbo.getRestaurantByUserId(user_id);
+
+        // Get views
+        FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.createRestaurantButton);
+        TextView noRestaurantsMessage = (TextView) view.findViewById(R.id.noRestaurantsMessage);
+        TextView nameLabel = (TextView) view.findViewById(R.id.restaurantNameLabel);
+        TextView locationLabel = (TextView) view.findViewById(R.id.restaurantLocationLabel);
+        TextView name = (TextView) view.findViewById(R.id.restaurantName);
+        TextView location = (TextView) view.findViewById(R.id.restaurantLocation);
+
+        if (restaurant != null) {
+
+            // TODO: Show restaurant title and location
+            nameLabel.setVisibility(View.VISIBLE);
+            locationLabel.setVisibility(View.VISIBLE);
+            name.setVisibility(View.VISIBLE);
+            location.setVisibility(View.VISIBLE);
+
+            // Set name and location text
+            name.setText(restaurant.getName());
+            location.setText(restaurant.getLocation());
+
+
+            // TODO: Show restaurant menu items
+
+            // Hide add button and no restaurant message
+            addButton.setVisibility(View.GONE);
+            noRestaurantsMessage.setVisibility(View.GONE);
+            //Log.i(TAG, restaurant.getName());
+        } else {
+            nameLabel.setVisibility(View.GONE);
+            locationLabel.setVisibility(View.GONE);
+            name.setVisibility(View.GONE);
+            location.setVisibility(View.GONE);
+
+            noRestaurantsMessage.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.VISIBLE);
+        }
+
+        // Clicking the add restaurant action button
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

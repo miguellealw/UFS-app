@@ -245,20 +245,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public UserModel getUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
 
         // Columns to return to client
-        String[] returned_cols = {
-            COLUMN_USER_ID,
-            COLUMN_USER_FIRST_NAME,
-            COLUMN_USER_LAST_NAME,
-            COLUMN_USER_EMAIL,
-            COLUMN_USER_UNIVERSITY_ID,
-            COLUMN_USER_IS_STUDENT
-        };
+        //String[] returned_cols = {
+        //    COLUMN_USER_ID,
+        //    COLUMN_USER_FIRST_NAME,
+        //    COLUMN_USER_LAST_NAME,
+        //    COLUMN_USER_EMAIL,
+        //    COLUMN_USER_UNIVERSITY_ID,
+        //    COLUMN_USER_IS_STUDENT
+        //};
+
+        //String selection = COLUMN_USER_EMAIL + " = ?";
 
         // Condition of rows to select
-        Cursor cursor = null;
-        String selection = COLUMN_USER_EMAIL + " = ?";
         String[] selectionArgs = { email + "", password + "" };
 
         // User Data
@@ -270,7 +271,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // get data from db
             //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
             cursor = db.rawQuery(
-                "SELECT " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_ID + ", " + COLUMN_USER_IS_STUDENT + " FROM " + USER_TABLE + " WHERE email = ? AND password = ?",
+                "SELECT " + COLUMN_USER_FIRST_NAME + ", " +
+                        COLUMN_USER_ID + ", " +
+                        COLUMN_USER_IS_STUDENT +
+                    " FROM " + USER_TABLE +
+                    " WHERE email = ? AND password = ?",
                 selectionArgs
             );
 
@@ -280,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)));
-                Log.i("===DBO getUser", "userID: " + userIsStudent);
+                //Log.i("===DBO getUser", "userID: " + userIsStudent);
             } else {
                 // if no user is found
                 return null;
@@ -331,10 +336,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // if positive then insertion was successful
         // if negative then insertion was a failure
         return insert_status > 0;
-        //return null;
     }
-    public RestaurantModel getRestaurant(int id) { return null; }
+
+    // Will get restaurant belonging to user. Returns null if user does not own restaurant
+    public RestaurantModel getRestaurantByUserId(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        RestaurantModel restaurant;
+        String[] selectionArgs = { userId + "" };
+        String name, location;
+
+        String queryString = "SELECT * FROM " + RESTAURANT_TABLE +
+                " WHERE user_id = ?";
+
+        try {
+            // get data from db
+            //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
+            cursor = db.rawQuery( queryString, selectionArgs );
+
+            // If user is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+            } else {
+                // if no user is found
+                return null;
+            }
+
+            // TODO: check if it can go at end of method
+            return new RestaurantModel(name, location, userId);
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+    }
+    public RestaurantModel getRestaurantById(int id) { return null; }
     public List<RestaurantModel> getAllRestaurants() { return null; }
+
+    public RestaurantModel removeRestaurant(int id) { return null; }
+    public RestaurantModel editRestaurant(int id) { return null; }
+
 
     // Reviews
     //  TODO: addReview(), getReview(id), getAllReviews()

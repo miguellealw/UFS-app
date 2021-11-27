@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.RestaurantModel;
 import com.example.ufs.data.model.UserModel;
 
@@ -86,8 +87,8 @@ public class CreateRestaurantFragment extends Fragment {
                 EditText et_location = (EditText) view.findViewById(R.id.et_restaurantLocation);
 
                 // Get logged in user id
-                SharedPreferences sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
-                int user_id = sp.getInt("userId", -1);
+                SP_LocalStorage sp = new SP_LocalStorage(ctx);
+                int user_id = sp.getLoggedInUserId();
 
                 // Create model to pass to Database Object (dbo)
                 RestaurantModel newRestaurant = new RestaurantModel(
@@ -99,15 +100,18 @@ public class CreateRestaurantFragment extends Fragment {
                 DatabaseHelper dbo = new DatabaseHelper(ctx);
                 boolean u_success = dbo.addRestaurant(newRestaurant);
 
-                // Go back to restaurant fragment
-                //@NonNull NavDirections action = RestaurantsFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
-                @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2();
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(action);
-
                 if (u_success) {
                     Toast.makeText(ctx, "Restaurant created successfully", Toast.LENGTH_LONG).show();
+
+                    // Go back to restaurant fragment
+                    @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2();
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+                } else {
+                    Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
                 }
+
+
             }
         });
 

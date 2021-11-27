@@ -6,20 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/restaurantsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restaurants"
+        android:layout_marginTop="24dp"
+        android:text="Your Restaurant"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createRestaurantButton"
@@ -33,7 +31,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible"
+        />
 
     <TextView
         android:id="@+id/noRestaurantsMessage"
@@ -44,6 +44,54 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/restaurantNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Name: "
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantsTitle" />
+
+    <TextView
+        android:id="@+id/restaurantLocationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location: "
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantNameLabel"
+        app:layout_constraintVertical_bias="0.016" />
+
+    <TextView
+        android:id="@+id/restaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantNameLabel"
+        app:layout_constraintStart_toEndOf="@+id/restaurantNameLabel"
+        app:layout_constraintTop_toTopOf="@+id/restaurantNameLabel" />
+
+    <TextView
+        android:id="@+id/restaurantLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantLocationLabel"
+        app:layout_constraintStart_toEndOf="@+id/restaurantLocationLabel"
+        app:layout_constraintTop_toTopOf="@+id/restaurantLocationLabel"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
