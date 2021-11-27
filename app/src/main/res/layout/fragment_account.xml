@@ -5,7 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.AccountFragment">
-
+    
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width= "115dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/logo"
+        android:layout_constraintEnd_toEndOf= "parent"
+        android:layout_constraintHorizontal_bias= "0.54"
+        android:layout_constraintStart_toStartOf= "parent"
+        android:layout_contraintTop_toTopOf= "parent" />
+    
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -18,7 +29,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
-
+     <Button
+        android:id="@+id/EditAccountbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.332" />
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
@@ -26,8 +47,8 @@
         android:text="Log Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.894" />
 </androidx.constraintlayout.widget.ConstraintLayout>
