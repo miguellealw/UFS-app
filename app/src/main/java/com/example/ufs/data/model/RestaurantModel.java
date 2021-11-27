@@ -7,9 +7,9 @@ public class RestaurantModel {
 
     //private int User;
 
-    public RestaurantModel(String location, String name, int userID) {
-        this.location = location;
+    public RestaurantModel(String name, String location, int userID) {
         this.name = name;
+        this.location = location;
         this.userID = userID;
     }
 

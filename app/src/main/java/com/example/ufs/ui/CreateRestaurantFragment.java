@@ -1,14 +1,26 @@
 package com.example.ufs.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.data.model.RestaurantModel;
+import com.example.ufs.data.model.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +73,44 @@ public class CreateRestaurantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_restaurant, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_restaurant, container, false);
+        Context ctx = getActivity().getApplicationContext();
+
+        // Create button is clicked
+        Button createButton = view.findViewById(R.id.createRestaurantButton);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get data from input fields
+                EditText et_name = (EditText) view.findViewById(R.id.et_restaurantName);
+                EditText et_location = (EditText) view.findViewById(R.id.et_restaurantLocation);
+
+                // Get logged in user id
+                SharedPreferences sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
+                int user_id = sp.getInt("userId", -1);
+
+                // Create model to pass to Database Object (dbo)
+                RestaurantModel newRestaurant = new RestaurantModel(
+                        et_name.getText().toString(),
+                        et_location.getText().toString(),
+                        user_id
+                );
+
+                DatabaseHelper dbo = new DatabaseHelper(ctx);
+                boolean u_success = dbo.addRestaurant(newRestaurant);
+
+                // Go back to restaurant fragment
+                //@NonNull NavDirections action = RestaurantsFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
+                @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2();
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(action);
+
+                if (u_success) {
+                    Toast.makeText(ctx, "Restaurant created successfully", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        return view;
     }
 }

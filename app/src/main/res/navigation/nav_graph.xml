@@ -38,5 +38,9 @@
         android:id="@+id/createRestaurantFragment"
         android:name="com.example.ufs.ui.CreateRestaurantFragment"
         android:label="fragment_create_restaurant"
-        tools:layout="@layout/fragment_create_restaurant" />
+        tools:layout="@layout/fragment_create_restaurant" >
+        <action
+            android:id="@+id/action_createRestaurantFragment_to_restaurantsFragment2"
+            app:destination="@id/restaurantsFragment" />
+    </fragment>
 </navigation>
