@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ORDER_TABLE = "ORDER_TABLE";
     public static final String COLUMN_ORDER_ID = "id";
     public static final String COLUMN_ORDER_USER_ID = "user_id";
+    public static final String COLUMN_ORDER_RESTAURANT_ID = "restaurant_id";
     public static final String COLUMN_ORDER_TOTAL_PRICE = "total_price";
     public static final String COLUMN_ORDER_PAYMENT_OPTION = "payment_option";
     public static final String COLUMN_ORDER_IS_DELIVERED = "is_delivered";
@@ -111,11 +112,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 2 - Credit Card
             // 3 - Cash
             COLUMN_ORDER_PAYMENT_OPTION + " INTEGER NOT NULL, " +
-            COLUMN_ORDER_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+            COLUMN_ORDER_TIMESTAMP + " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
             COLUMN_ORDER_ADDRESS + " TEXT, " +
+            // Foreign keys
             COLUMN_ORDER_USER_ID + " INTEGER NOT NULL, " +
+            COLUMN_ORDER_RESTAURANT_ID + " INTEGER NOT NULL, " +
 
-            // Foreign key relating user and order
+            // Foreign key relating order to user and restaurant
+            "FOREIGN KEY(restaurant_id) REFERENCES " + RESTAURANT_TABLE + "(id), " +
             "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id)" +
         ")";
 
@@ -290,16 +294,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Orders
-    //  TODO: addOrder(), getOrder(id), getAllOrders(), editOrder(),
+    //  TODO:
+    //    student orders - addOrder(), getStudentOrder(id), getAllUserOrders(), editOrder(id),
+    //    restaurant orders - getAllRestaurantOrders(), getRestaurantOrder(id)
+    // TODO: differentiate between an order a user made
+    //  and an order a restaurant received
+    // Student orders
     public OrderModel addOrder(OrderModel orderModel) { return null; }
-    public OrderModel getOrder(int id) { return null; }
-    public List<OrderModel> getAllOrders() { return null; }
+    // get specific order a student has made
+    public OrderModel getStudentOrder(int id) { return null; }
+    // get all orders that a student made
+    public List<OrderModel> getAllStudentOrders() { return null; }
+    public OrderModel editOrder(int id) { return null; }
+
+    // Restaurant orders
+    // get specific order restaurant has received
+    public OrderModel getRestaurantOrder(int id) { return null; }
+    // get all orders a restaurant has received
+    public List<OrderModel> getAllRestaurantOrders() { return null; }
 
     // Restaurants
     //  TODO: addRestaurant(), getRestaurant(id), getAllRestaurants()
     public RestaurantModel addRestaurant(RestaurantModel restaurantModel) { return null; }
     public RestaurantModel getRestaurant(int id) { return null; }
-    public List<RestaurantModel> getAllRestaurant() { return null; }
+    public List<RestaurantModel> getAllRestaurants() { return null; }
 
     // Reviews
     //  TODO: addReview(), getReview(id), getAllReviews()
