@@ -41,6 +41,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.332" />
+    //Todo: button for owning a restaurant
+    // intent switch to restaurant managaing activity(view/add/modify menu, start/stop ads)
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
