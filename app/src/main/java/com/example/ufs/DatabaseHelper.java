@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.ufs.data.model.AdvertisementModel;
-import com.example.ufs.data.model.FavoriteModel;
+import com.example.ufs.data.model.FavoriteMenuItemModel;
+import com.example.ufs.data.model.FavoriteRestaurantModel;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.data.model.OrderModel;
 import com.example.ufs.data.model.RestaurantModel;
@@ -300,7 +300,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // ======== Orders
+    // =============== ORDERS
     //  TODO:
     //    student orders - addOrder(), getStudentOrder(id), getAllStudentOrders(), editOrder(id),
     //    restaurant orders - getAllRestaurantOrders(), getRestaurantOrder(id)
@@ -330,7 +330,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // get all orders a restaurant has received
     public List<OrderModel> getAllRestaurantOrders() { return null; }
 
-    // =============== Restaurants:
+    // =============== RESTAURANTS:
     public boolean addRestaurant(RestaurantModel restaurantModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -396,18 +396,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public RestaurantModel editRestaurant(int id) { return null; }
 
 
-    // Reviews
+    // ================= REVIEWS
 
     // TODO
     public ReviewModel addReview(ReviewModel reviewModel) { return null; }
 
     // TODO
-    public ReviewModel getReview(int id) { return null; }
+    public ReviewModel getReviewById(int id) { return null; }
 
     // TODO
     public List<ReviewModel> getAllReviews() { return null; }
 
-    // MenuItems
+    // ================= MENU ITEMS
     //  TODO: addMenuItem(), getMenuItem(id), getAllMenuItems(), removeMenuItem()
     public MenuItemModel addMenuItem(MenuItemModel menuItemModel) { return null; }
     public MenuItemModel getMenuItemById(int id) { return null; }
@@ -415,24 +415,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public MenuItemModel editMenuItem(int id) { return null; }
     public MenuItemModel removeMenuItem(int id) { return null; }
 
-    // Advertisement
+    // ================= ADVERTISEMENTS
     // TODO
     public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) { return null; }
     public AdvertisementModel getAdvertisementById(int id) { return null; }
+    public AdvertisementModel editAdvertisement(int id) { return null; }
+    public AdvertisementModel getAllAdvertisements() { return null; }
+
+    // ================= FAVORITES
+    // TODO
+    public int addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {return -1;}
+    public int addFavoriteMenuItem(FavoriteRestaurantModel favoriteModel) {return -1;}
 
     // TODO
-    public FavoriteModel addRestaurantFavorite(FavoriteModel favoriteModel) {return null;}
-    public FavoriteModel addMenuItemFavorite(FavoriteModel favoriteModel) {return null;}
+    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {return null;}
+    public FavoriteMenuItemModel getFavoriteMenuItemById(int id) {return null;}
 
     // TODO
-    public FavoriteModel getRestaurantFavoriteById(int id) {return null;}
-    public FavoriteModel getMenuItemFavoriteById(int id) {return null;}
+    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {return null;}
+    public List<FavoriteMenuItemModel> getAllFavoriteMenuItems() {return null;}
 
     // TODO
-    public List<FavoriteModel> getAllRestaurantFavorite() {return null;}
-    public List<FavoriteModel> getAllMenuItemFavorite() {return null;}
-
-    // TODO
-    public List<FavoriteModel> removeRestaurantFavorite(int id) {return null;}
-    public List<FavoriteModel> removeMenuItemFavorite(int id) {return null;}
+    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {return null;}
+    public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {return null;}
 }
