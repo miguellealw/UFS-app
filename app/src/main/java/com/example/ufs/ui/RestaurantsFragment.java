@@ -11,6 +11,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,9 +80,11 @@ public class RestaurantsFragment extends Fragment {
             public void onClick(View v) {
                 // Perform action of going to createRestaurant Fragment
                 @NonNull NavDirections action = RestaurantsFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
-                NavController navController = NavHostFragment.findNavController(RestaurantsFragment.this);
-                //Navigation.findNavController(v).navigate(action);
+                NavController navController = Navigation.findNavController(view);
                 navController.navigate(action);
+
+                //NavController navController = NavHostFragment.findNavController(RestaurantsFragment.this);
+                //Navigation.findNavController(v).navigate(action);
             }
         });
 

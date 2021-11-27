@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.ufs.data.LoginDataSource;
 import com.example.ufs.data.LoginRepository;
@@ -36,6 +37,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "===== MAIN ACTIVITY";
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,50 +59,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         NavHostFragment navHostFragment =
                 (NavHostFragment) supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-
+        navController = navHostFragment.getNavController();
 
         BottomNavigationView bottom_nav = findViewById(R.id.bottom_nav);
-        setupWithNavController(bottom_nav, navController);
-        //bottom_nav.setupWithController(navController);
-
-        // deprecated, but could not find better way
-        bottom_nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                //Log.i("======== Bottom nav", "nav clicked");
-                Fragment selectedFragment = null;
-
-                switch(item.getItemId()) {
-                    case R.id.restaurantsFragment:
-                        //openFragment(new RestaurantsFragment());
-                        // TODO: check if user is student
-                        selectedFragment = new RestaurantsFragment();
-                        break;
-                    case R.id.ordersFragment:
-                        // TODO: Check if user is student
-                        selectedFragment = new OrdersFragment();
-                        break;
-                    case R.id.favoritesFragment:
-                        selectedFragment = new FavoritesFragment();
-                        break;
-                    case R.id.reviewsFragment:
-                        // TODO: Check if user is student
-                        selectedFragment = new ReviewsFragment();
-                        break;
-                    case R.id.accountFragment:
-                        selectedFragment = new AccountFragment();
-                        break;
-                }
-
-                getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.nav_host_fragment, selectedFragment)
-                    .commit();
-                return true;
-            }
-        });
-
+        NavigationUI.setupWithNavController(bottom_nav, navController);
     }
 
 
