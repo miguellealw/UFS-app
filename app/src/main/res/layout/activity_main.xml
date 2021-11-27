@@ -25,6 +25,7 @@
         app:menu="@menu/drawer_bottom_nav_menu"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
+        app:labelVisibilityMode="labeled"
     />
 
 </RelativeLayout>

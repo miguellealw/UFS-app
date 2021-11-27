@@ -1,13 +1,16 @@
 package com.example.ufs.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
+import com.example.ufs.R;
 import com.example.ufs.data.model.LoggedInUser;
 import com.example.ufs.data.model.UserModel;
 import com.example.ufs.ui.login.LoginActivity;
+import com.example.ufs.ui.login.LoginViewModelFactory;
 
 import java.io.IOException;
 
@@ -16,11 +19,11 @@ import java.io.IOException;
  */
 public class LoginDataSource {
 
-    public Result<LoggedInUser> login(String email, String password, Context cxt) {
+    public Result<LoggedInUser> login(String email, String password, Context ctx) {
 
         try {
             // Get user data from database
-            DatabaseHelper dbo = new DatabaseHelper(cxt);
+            DatabaseHelper dbo = new DatabaseHelper(ctx);
             UserModel db_user = dbo.getUser(email, password);
 
             // Assign user data to view model. This will contain the data that
@@ -31,8 +34,24 @@ public class LoginDataSource {
                     db_user.getIsStudent()
             );
 
+//            UserModel login_user = new UserModel(db_user.getId(), db_user.getFirstName(), db_user.getIsStudent());
+//            LoginViewModelFactory usr = new LoginViewModelFactory();
+//            usr.create(login_user);
+
+
             // if db_user is null that means user w/ email and password does not exist
             if (db_user == null) throw new Exception("Invalid login. Try Again.");
+
+            // Add user data to shared preferences to access later
+            SharedPreferences sharedPref = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putBoolean("isLoggedIn", true);
+            editor.putInt("userId", db_user.getId());
+            editor.putString("userFName", db_user.getFirstName());
+            editor.putBoolean("isStudent", db_user.getIsStudent());
+
+            editor.apply();
 
             return new Result.Success<LoggedInUser>(usr);
         } catch (Exception e) {

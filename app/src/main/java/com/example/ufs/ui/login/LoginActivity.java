@@ -147,8 +147,8 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String TAG = "LoginActivity";
-                Log.i(TAG, "REGISTER BUTTON CLICKED");
+                //String TAG = "LoginActivity";
+                //Log.i(TAG, "REGISTER BUTTON CLICKED");
 
                 // Go to registration activity
                 Intent i = new Intent(getApplicationContext(), Registration.class);
