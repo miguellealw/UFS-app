@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantsFragment">
 
+//todo: advertisement
+    
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width= "115dp"
