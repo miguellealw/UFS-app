@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.ufs.data.model.AdvertisementModel;
+import com.example.ufs.data.model.FavoriteModel;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.data.model.OrderModel;
 import com.example.ufs.data.model.RestaurantModel;
@@ -86,7 +87,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, "ufs.db", null, 1);
     }
 
-    // will be called the first time db is accessed
+    // will be called the first time db is accessed. this is where
+    // the database tables are created
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create tables here
@@ -298,29 +300,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Orders
+    // ======== Orders
     //  TODO:
-    //    student orders - addOrder(), getStudentOrder(id), getAllUserOrders(), editOrder(id),
+    //    student orders - addOrder(), getStudentOrder(id), getAllStudentOrders(), editOrder(id),
     //    restaurant orders - getAllRestaurantOrders(), getRestaurantOrder(id)
     // TODO: differentiate between an order a user made
     //  and an order a restaurant received
+
     // Student orders
+    // TODO
     public OrderModel addOrder(OrderModel orderModel) { return null; }
+
+    // TODO
     // get specific order a student has made
     public OrderModel getStudentOrder(int id) { return null; }
+
+    // TODO
     // get all orders that a student made
     public List<OrderModel> getAllStudentOrders() { return null; }
     public OrderModel editOrder(int id) { return null; }
 
     // Restaurant orders
+
+    // TODO
     // get specific order restaurant has received
     public OrderModel getRestaurantOrder(int id) { return null; }
+
+    // TODO
     // get all orders a restaurant has received
     public List<OrderModel> getAllRestaurantOrders() { return null; }
 
-    // Restaurants
-    //  TODO: addRestaurant(), getRestaurant(id), getAllRestaurants()
-    //public RestaurantModel addRestaurant(RestaurantModel restaurantModel) {
+    // =============== Restaurants:
     public boolean addRestaurant(RestaurantModel restaurantModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -372,30 +382,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
+
+    // TODO
     public RestaurantModel getRestaurantById(int id) { return null; }
+
+    // TODO
     public List<RestaurantModel> getAllRestaurants() { return null; }
 
+    // TODO
     public RestaurantModel removeRestaurant(int id) { return null; }
+
+    // TODO
     public RestaurantModel editRestaurant(int id) { return null; }
 
 
     // Reviews
-    //  TODO: addReview(), getReview(id), getAllReviews()
+
+    // TODO
     public ReviewModel addReview(ReviewModel reviewModel) { return null; }
+
+    // TODO
     public ReviewModel getReview(int id) { return null; }
+
+    // TODO
     public List<ReviewModel> getAllReviews() { return null; }
 
     // MenuItems
     //  TODO: addMenuItem(), getMenuItem(id), getAllMenuItems(), removeMenuItem()
     public MenuItemModel addMenuItem(MenuItemModel menuItemModel) { return null; }
-    public MenuItemModel getMenuItem(int id) { return null; }
+    public MenuItemModel getMenuItemById(int id) { return null; }
     public List<MenuItemModel> getAllMenuItems() { return null; }
+    public MenuItemModel editMenuItem(int id) { return null; }
+    public MenuItemModel removeMenuItem(int id) { return null; }
 
     // Advertisement
-    //  TODO: addAdvertisement(), getAdvertisement()
+    // TODO
     public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) { return null; }
-    public AdvertisementModel getAdvertisement(int id) { return null; }
+    public AdvertisementModel getAdvertisementById(int id) { return null; }
 
-    // TODO: Figure out how to do favorites for menu items and restaurants
-    //  addFavorite(), getFavorite(id), getAllFavorites(), removeFavorite()
+    // TODO
+    public FavoriteModel addRestaurantFavorite(FavoriteModel favoriteModel) {return null;}
+    public FavoriteModel addMenuItemFavorite(FavoriteModel favoriteModel) {return null;}
+
+    // TODO
+    public FavoriteModel getRestaurantFavoriteById(int id) {return null;}
+    public FavoriteModel getMenuItemFavoriteById(int id) {return null;}
+
+    // TODO
+    public List<FavoriteModel> getAllRestaurantFavorite() {return null;}
+    public List<FavoriteModel> getAllMenuItemFavorite() {return null;}
+
+    // TODO
+    public List<FavoriteModel> removeRestaurantFavorite(int id) {return null;}
+    public List<FavoriteModel> removeMenuItemFavorite(int id) {return null;}
 }
