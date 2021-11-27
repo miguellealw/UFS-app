@@ -9,7 +9,11 @@
         android:id="@+id/restaurantsFragment"
         android:name="com.example.ufs.ui.RestaurantsFragment"
         android:label="fragment_restaurants"
-        tools:layout="@layout/fragment_restaurants" />
+        tools:layout="@layout/fragment_restaurants" >
+        <action
+            android:id="@+id/action_restaurantsFragment_to_createRestaurantFragment"
+            app:destination="@id/createRestaurantFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.example.ufs.ui.OrdersFragment"
@@ -30,4 +34,9 @@
         android:name="com.example.ufs.ui.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/createRestaurantFragment"
+        android:name="com.example.ufs.ui.CreateRestaurantFragment"
+        android:label="fragment_create_restaurant"
+        tools:layout="@layout/fragment_create_restaurant" />
 </navigation>

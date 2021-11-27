@@ -315,7 +315,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Restaurants
     //  TODO: addRestaurant(), getRestaurant(id), getAllRestaurants()
-    public RestaurantModel addRestaurant(RestaurantModel restaurantModel) { return null; }
+    //public RestaurantModel addRestaurant(RestaurantModel restaurantModel) {
+    public boolean addRestaurant(RestaurantModel restaurantModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // add values to table
+        cv.put(COLUMN_RESTAURANT_NAME, restaurantModel.getName());
+        cv.put(COLUMN_RESTAURANT_LOCATION, restaurantModel.getLocation());
+        cv.put(COLUMN_FAVORITE_MENU_ITEM_USER_ID, restaurantModel.getUserID());
+
+        // commit data to DB
+        long insert_status = db.insert(RESTAURANT_TABLE, null, cv);
+
+        // if positive then insertion was successful
+        // if negative then insertion was a failure
+        return insert_status > 0;
+        //return null;
+    }
     public RestaurantModel getRestaurant(int id) { return null; }
     public List<RestaurantModel> getAllRestaurants() { return null; }
 
