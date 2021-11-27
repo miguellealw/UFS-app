@@ -14,4 +14,5 @@ public class SP_LocalStorage {
 
     public SharedPreferences getSP() { return this.sp; }
     public int getLoggedInUserId() { return this.sp.getInt("userId", -1); }
+    public boolean getIsLoggedIn() { return this.sp.getBoolean("isLoggedIn", false); }
 }

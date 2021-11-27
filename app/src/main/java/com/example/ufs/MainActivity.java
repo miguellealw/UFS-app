@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.LocaleList;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //  get logged in user info
-        SharedPreferences sp = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
-        boolean isLoggedIn = sp.getBoolean("isLoggedIn", false);
-        //Log.i(TAG, "Is logged in " + isLoggedIn);
+        SP_LocalStorage sp = new SP_LocalStorage(MainActivity.this);
+        boolean isLoggedIn = sp.getIsLoggedIn();
 
         // If not logged in redirect to login screen
         if(!isLoggedIn) {
