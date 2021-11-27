@@ -74,15 +74,18 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.restaurantsFragment:
                         //openFragment(new RestaurantsFragment());
+                        // TODO: check if user is student
                         selectedFragment = new RestaurantsFragment();
                         break;
                     case R.id.ordersFragment:
+                        // TODO: Check if user is student
                         selectedFragment = new OrdersFragment();
                         break;
                     case R.id.favoritesFragment:
                         selectedFragment = new FavoritesFragment();
                         break;
                     case R.id.reviewsFragment:
+                        // TODO: Check if user is student
                         selectedFragment = new ReviewsFragment();
                         break;
                     case R.id.accountFragment:
