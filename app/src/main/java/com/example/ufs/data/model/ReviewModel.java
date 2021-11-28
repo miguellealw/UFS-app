@@ -4,9 +4,15 @@ public class ReviewModel {
     private int rating;
     private String message;
 
-    public ReviewModel(int rating, String message) {
+
+    private int userId;
+    private int restaurantId;
+
+    public ReviewModel(int rating, String message, int userId, int restaurantId) {
         this.rating = rating;
         this.message = message;
+        this.userId = userId;
+        this.restaurantId = restaurantId;
     }
 
     @Override
@@ -14,6 +20,8 @@ public class ReviewModel {
         return "ReviewModel{" +
                 "rating=" + rating +
                 ", message='" + message + '\'' +
+                ", userId='" + userId + '\'' +
+                ", restaurantId='" + restaurantId + '\'' +
                 '}';
     }
 
@@ -22,5 +30,11 @@ public class ReviewModel {
 
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public int getRestaurantId() { return restaurantId; }
+    public void setRestaurantId(int restaurantId) { this.restaurantId = restaurantId; }
 
 }

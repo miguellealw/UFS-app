@@ -78,6 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_REVIEW_ID = "id";
     private static final String COLUMN_REVIEW_RATING = "rating";
     private static final String COLUMN_REVIEW_REVIEW = "review";
+    private static final String COLUMN_REVIEW_USER_ID = "user_id";
+    private static final String COLUMN_REVIEW_RESTAURANT_ID = "restaurant_id";
 
     // Advertisement
     private static final String AD_TABLE = "ADVERTISEMENT_TABLE";
@@ -155,8 +157,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // =============== REVIEW TABLE
         String createReviewTable = "CREATE TABLE " + REVIEW_TABLE + " (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_FAVORITE_RESTAURANT_USER_ID + " INTEGER NOT NULL, " +
-            COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID + " INTEGER NOT NULL, " +
+            COLUMN_REVIEW_USER_ID + " INTEGER NOT NULL, " +
+            COLUMN_REVIEW_RESTAURANT_ID + " INTEGER NOT NULL, " +
 
             COLUMN_REVIEW_RATING + " INTEGER NOT NULL, " +
             COLUMN_REVIEW_REVIEW + " TEXT NOT NULL, " +
@@ -861,14 +863,156 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ================= REVIEWS
 
-    // TODO
-    public ReviewModel addReview(ReviewModel reviewModel) { return null; }
+    // TODO - test
+    public boolean addReview(ReviewModel reviewModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // add values to table
+        cv.put(COLUMN_REVIEW_RATING, reviewModel.getRating());
+        cv.put(COLUMN_REVIEW_REVIEW, reviewModel.getMessage());
+        cv.put(COLUMN_REVIEW_USER_ID, reviewModel.getUserId());
+        cv.put(COLUMN_REVIEW_RESTAURANT_ID, reviewModel.getRestaurantId());
+
+        // commit data to DB
+        long status = db.insert(REVIEW_TABLE, null, cv);
+        return status > 0;
+    }
+
+    // TODO - test
+    public ReviewModel getReviewById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        int rating ;
+        String message;
+        int userId, restaurantId;
+
+        String queryString = "SELECT * FROM " + REVIEW_TABLE +
+                " WHERE id = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery( queryString, new String[] {Integer.toString(id)} );
+
+            // If menu item is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                rating = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RATING));
+                message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_REVIEW));
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_USER_ID));
+                restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RESTAURANT_ID));
+            } else {
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return new ReviewModel(rating, message, userId, restaurantId);
+    }
 
     // TODO
-    public ReviewModel getReviewById(int id) { return null; }
+    public List<ReviewModel> getAllStudentReviews(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
 
+        int rating ;
+        String message;
+        int restaurantId;
+        List<ReviewModel> studentReviews = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE userId = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(userId)});
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    rating = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RATING));
+                    message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_REVIEW));
+                    //userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_USER_ID));
+                    restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RESTAURANT_ID));
+
+                    ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
+                    studentReviews.add(fetchedReview);
+
+                } while(cursor.moveToFirst());
+            } else {
+                // if student has no orders
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return studentReviews;
+    }
+
+    public List<ReviewModel> getAllRestaurantReviews(int restaurantId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        int rating ;
+        String message;
+        int userId;
+        List<ReviewModel> restaurantReviews = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE restaurantId = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(restaurantId)});
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    rating = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RATING));
+                    message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_REVIEW));
+                    userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_USER_ID));
+                    //restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RESTAURANT_ID));
+
+                    ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
+                    restaurantReviews.add(fetchedReview);
+
+                } while(cursor.moveToFirst());
+            } else {
+                // if student has no orders
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return restaurantReviews;
+    }
+
+    // ================= ADVERTISEMENTS
     // TODO
-    public List<ReviewModel> getAllReviews() { return null; }
+    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {
+        throw new NotImplementedError("addAdvertisement is not implemented");
+    }
+    public AdvertisementModel getAdvertisementById(int id) {
+        throw new NotImplementedError("getAdvertisementById is not implemented");
+    }
+    public AdvertisementModel editAdvertisement(int id) {
+        throw new NotImplementedError("editAdvertisement is not implemented");
+    }
+    public AdvertisementModel getAllAdvertisements() {
+        throw new NotImplementedError("getAllAdvertisements is not implemented");
+    }
 
     // ================= FAVORITES
     // TODO
@@ -903,19 +1047,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         throw new NotImplementedError("removeFavoriteMenuItem is not implemented");
     }
 
-    // ================= ADVERTISEMENTS
-    // TODO
-    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {
-        throw new NotImplementedError("addAdvertisement is not implemented");
-    }
-    public AdvertisementModel getAdvertisementById(int id) {
-        throw new NotImplementedError("getAdvertisementById is not implemented");
-    }
-    public AdvertisementModel editAdvertisement(int id) {
-        throw new NotImplementedError("editAdvertisement is not implemented");
-    }
-    public AdvertisementModel getAllAdvertisements() {
-        throw new NotImplementedError("getAllAdvertisements is not implemented");
-    }
 
 }
