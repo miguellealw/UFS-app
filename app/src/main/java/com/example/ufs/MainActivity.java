@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         SP_LocalStorage sp = new SP_LocalStorage(MainActivity.this);
         boolean isLoggedIn = sp.getIsLoggedIn();
         boolean isStudent = sp.isStudent();
-        Log.i(TAG, "Is User Student " + isStudent);
+        //Log.i(TAG, "Is User Student " + isStudent);
 
         // If not logged in redirect to login screen
         if(!isLoggedIn) {
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView student_bottom_nav = findViewById(R.id.student_bottom_nav);
         BottomNavigationView admin_bottom_nav = findViewById(R.id.admin_bottom_nav);
 
+        // Decide which bottom navigation to show based on if user is student
         student_bottom_nav.setVisibility(isStudent ? View.VISIBLE : View.GONE);
         admin_bottom_nav.setVisibility(isStudent ? View.GONE : View.VISIBLE);
         NavigationUI.setupWithNavController(isStudent ? student_bottom_nav : admin_bottom_nav, navController);

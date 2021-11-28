@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/restaurantsFragment">
+    app:startDestination="@id/accountFragment">
 
     <fragment
         android:id="@+id/restaurantsFragment"
@@ -48,4 +48,9 @@
         android:name="com.example.ufs.ui.AdvertFragment"
         android:label="fragment_advert"
         tools:layout="@layout/fragment_advert" />
+    <fragment
+        android:id="@+id/allRestaurantsFragment"
+        android:name="com.example.ufs.ui.AllRestaurantsFragment"
+        android:label="fragment_all_restaurants"
+        tools:layout="@layout/fragment_all_restaurants" />
 </navigation>

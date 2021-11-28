@@ -26,6 +26,9 @@ public class LoginDataSource {
             DatabaseHelper dbo = new DatabaseHelper(ctx);
             UserModel db_user = dbo.getUser(email, password);
 
+            // if db_user is null that means user w/ email and password does not exist
+            if (db_user == null) throw new Exception("Invalid login. Try Again.");
+
             // Assign user data to view model. This will contain the data that
             // can be displayed on the app
             LoggedInUser usr = new LoggedInUser(
@@ -38,10 +41,6 @@ public class LoginDataSource {
 //            LoginViewModelFactory usr = new LoginViewModelFactory();
 //            usr.create(login_user);
 
-
-            // if db_user is null that means user w/ email and password does not exist
-            if (db_user == null) throw new Exception("Invalid login. Try Again.");
-
             // Add user data to shared preferences to access later
             SharedPreferences sharedPref = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -49,6 +48,8 @@ public class LoginDataSource {
             editor.putBoolean("isLoggedIn", true);
             editor.putInt("userId", db_user.getId());
             editor.putString("userFName", db_user.getFirstName());
+            editor.putString("userLName", db_user.getLastName());
+            editor.putString("userEmail", db_user.getEmail());
             editor.putBoolean("isStudent", db_user.getIsStudent());
 
             editor.apply();

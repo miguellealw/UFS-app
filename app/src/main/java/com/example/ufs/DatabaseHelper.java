@@ -272,6 +272,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // User Data
         String userFName = "";
+        String userLName = "";
+        String userEmail = "";
         int userID = -1;
         boolean userIsStudent;
 
@@ -281,6 +283,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(
                 "SELECT " + COLUMN_USER_FIRST_NAME + ", " +
                         COLUMN_USER_ID + ", " +
+                        COLUMN_USER_LAST_NAME + ", " +
+                        COLUMN_USER_EMAIL + ", " +
                         COLUMN_USER_IS_STUDENT +
                     " FROM " + USER_TABLE +
                     " WHERE email = ? AND password = ?",
@@ -291,6 +295,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
+                userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
             } else {
@@ -298,7 +304,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
-            return new UserModel(userID, userFName, userIsStudent);
+            return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
         } finally {
             assert cursor != null;
             cursor.close();
