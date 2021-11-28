@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -17,6 +18,7 @@ import com.example.ufs.data.model.RestaurantModel;
 import com.example.ufs.data.model.ReviewModel;
 import com.example.ufs.data.model.UserModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -286,8 +288,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
-                userIsStudent = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)));
-                //Log.i("===DBO getUser", "userID: " + userIsStudent);
+                //userIsStudent = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)));
+                userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+                //Log.i("===DBO getUser", "user is student: " + userIsStudent);
             } else {
                 // if no user is found
                 return null;
@@ -352,7 +355,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public RestaurantModel getRestaurantByUserId(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
-        RestaurantModel restaurant;
         String[] selectionArgs = { userId + "" };
         String name, location;
 
@@ -364,63 +366,115 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
             cursor = db.rawQuery( queryString, selectionArgs );
 
-            // If user is found
+            // If restaurant is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
                 location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
             } else {
-                // if no user is found
+                // if no restaurant is found
                 return null;
             }
 
-            // TODO: check if it can go at end of method
-            return new RestaurantModel(name, location, userId);
         } finally {
             assert cursor != null;
             cursor.close();
         }
 
+        return new RestaurantModel(name, location, userId);
     }
 
     // TODO
-    public RestaurantModel getRestaurantById(int id) { return null; }
+    public RestaurantModel getRestaurantById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String[] selectionArgs = { id + "" };
+        String name, location;
+        int userId;
+
+        String queryString = "SELECT * FROM " + RESTAURANT_TABLE +
+                " WHERE id = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery( queryString, selectionArgs );
+
+            // If restaurant is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_USER_ID));
+            } else {
+                // if no restaurant is found
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return new RestaurantModel(name, location, userId);
+    }
 
     // TODO
-    public List<RestaurantModel> getAllRestaurants() { return null; }
+    public List<RestaurantModel> getAllRestaurants() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String name, location;
+        int userId;
+        List<RestaurantModel> restaurants = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + RESTAURANT_TABLE;
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, null);
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                    location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+                    userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_USER_ID));
+
+                    RestaurantModel restaurant = new RestaurantModel(name, location, userId);
+                    restaurants.add(restaurant);
+
+                } while(cursor.moveToFirst());
+            } else {
+                // if no restaurant is found
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return restaurants;
+    }
 
     // TODO
-    public RestaurantModel removeRestaurant(int id) { return null; }
+    public RestaurantModel removeRestaurant(int id) {
+        return null;
+    }
 
     // TODO
-    public RestaurantModel editRestaurant(int id) { return null; }
-
-
-    // ================= REVIEWS
-
-    // TODO
-    public ReviewModel addReview(ReviewModel reviewModel) { return null; }
-
-    // TODO
-    public ReviewModel getReviewById(int id) { return null; }
-
-    // TODO
-    public List<ReviewModel> getAllReviews() { return null; }
+    public RestaurantModel editRestaurant(int id, String newName, String newLocation) {
+        return null;
+    }
 
     // ================= MENU ITEMS
     //  TODO: addMenuItem(), getMenuItem(id), getAllMenuItems(), removeMenuItem()
     public MenuItemModel addMenuItem(MenuItemModel menuItemModel) { return null; }
     public MenuItemModel getMenuItemById(int id) { return null; }
     public List<MenuItemModel> getAllMenuItems() { return null; }
-    public MenuItemModel editMenuItem(int id) { return null; }
+    public MenuItemModel editMenuItem(int id, String newName, String newPrice) { return null; }
     public MenuItemModel removeMenuItem(int id) { return null; }
-
-    // ================= ADVERTISEMENTS
-    // TODO
-    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) { return null; }
-    public AdvertisementModel getAdvertisementById(int id) { return null; }
-    public AdvertisementModel editAdvertisement(int id) { return null; }
-    public AdvertisementModel getAllAdvertisements() { return null; }
 
     // ================= FAVORITES
     // TODO
@@ -438,4 +492,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // TODO
     public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {return null;}
     public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {return null;}
+
+
+    // ================= REVIEWS
+
+    // TODO
+    public ReviewModel addReview(ReviewModel reviewModel) { return null; }
+
+    // TODO
+    public ReviewModel getReviewById(int id) { return null; }
+
+    // TODO
+    public List<ReviewModel> getAllReviews() { return null; }
+
+
+    // ================= ADVERTISEMENTS
+    // TODO
+    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) { return null; }
+    public AdvertisementModel getAdvertisementById(int id) { return null; }
+    public AdvertisementModel editAdvertisement(int id) { return null; }
+    public AdvertisementModel getAllAdvertisements() { return null; }
+
 }
