@@ -389,6 +389,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // TODO - test
+    public RestaurantModel getRestaurantByName(String searchName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String name, location;
+        int userId;
+
+        String queryString = "SELECT * FROM " + RESTAURANT_TABLE +
+                " WHERE name = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery( queryString, new String[] {searchName} );
+
+            // If restaurant is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_USER_ID));
+            } else {
+                // if no restaurant is found
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return new RestaurantModel(name, location, userId);
+    }
+
+    // TODO - test
     public List<RestaurantModel> getAllRestaurants() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -704,7 +737,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public MenuItemModel getMenuItemById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
-        String[] selectionArgs = { id + "" };
 
         String name;
         float price;
@@ -715,9 +747,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             // get data from db
-            cursor = db.rawQuery( queryString, selectionArgs );
+            cursor = db.rawQuery( queryString, new String[] {Integer.toString(id)} );
 
-            // If order is found
+            // If menu item is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_NAME));
@@ -735,16 +767,96 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new MenuItemModel(name, price, restaurantID);
     }
 
-    public List<MenuItemModel> getAllMenuItems() {
-        throw new NotImplementedError("getAllMenuItems is not implemented");
+    public MenuItemModel getMenuItemByName(String searchName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String name;
+        float price;
+        int restaurantID;
+
+        String queryString = "SELECT * FROM " + MENU_ITEM_TABLE +
+                " WHERE name = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery( queryString, new String[] { searchName } );
+
+            // If menu item is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_NAME));
+                price = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_PRICE));
+                restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_RESTAURANT_ID));
+            } else {
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return new MenuItemModel(name, price, restaurantID);
     }
 
-    public MenuItemModel editMenuItem(int id, String newName, String newPrice) {
-        throw new NotImplementedError("editMenuItem is not implemented");
+    public List<MenuItemModel> getAllRestaurantMenuItems(int restaurantId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String name;
+        float price;
+        int restaurantID;
+        List<MenuItemModel> restaurantMenuItems = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + MENU_ITEM_TABLE + " WHERE restaurant_id = ?";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(restaurantId)});
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_NAME));
+                    price = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_PRICE));
+                    restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_RESTAURANT_ID));
+
+                    MenuItemModel fetchedMenuItem = new MenuItemModel(name, price, restaurantID);
+                    restaurantMenuItems.add(fetchedMenuItem);
+
+                } while(cursor.moveToFirst());
+            } else {
+                // if student has no orders
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return restaurantMenuItems;
     }
 
-    public MenuItemModel removeMenuItem(int id) {
-        throw new NotImplementedError("removeMenuItem is not implemented");
+    public boolean editMenuItem(int id, String newName, String newPrice) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_MENU_ITEM_NAME, newName);
+        values.put(COLUMN_MENU_ITEM_PRICE, newPrice);
+
+        //int status = db.rawQuery(queryString, selectionArgs);
+        long status = db.update( MENU_ITEM_TABLE, values, "id=?", new String[]{Integer.toString(id)});
+        return status > 0;
+    }
+
+    public boolean removeMenuItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long insert_status = db.delete(MENU_ITEM_TABLE, "WHERE id = ?", new String[]{ Integer.toString(id) });
+        return insert_status > 0;
     }
 
     // ================= REVIEWS
@@ -768,22 +880,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // TODO
-    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {return null;}
-    public FavoriteMenuItemModel getFavoriteMenuItemById(int id) {return null;}
+    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
+        throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
+    }
+    public FavoriteMenuItemModel getFavoriteMenuItemById(int id) {
+        throw new NotImplementedError("getFavoriteMenuItemById is not implemented");
+    }
 
     // TODO
-    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {return null;}
-    public List<FavoriteMenuItemModel> getAllFavoriteMenuItems() {return null;}
+    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {
+        throw new NotImplementedError("getAllFavoriteRestaurants is not implemented");
+    }
+    public List<FavoriteMenuItemModel> getAllFavoriteMenuItems() {
+        throw new NotImplementedError("getAllFavoriteMenuItems is not implemented");
+    }
 
     // TODO
-    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {return null;}
-    public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {return null;}
+    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
+        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
+    }
+    public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {
+        throw new NotImplementedError("removeFavoriteMenuItem is not implemented");
+    }
 
     // ================= ADVERTISEMENTS
     // TODO
-    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) { return null; }
-    public AdvertisementModel getAdvertisementById(int id) { return null; }
-    public AdvertisementModel editAdvertisement(int id) { return null; }
-    public AdvertisementModel getAllAdvertisements() { return null; }
+    public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {
+        throw new NotImplementedError("addAdvertisement is not implemented");
+    }
+    public AdvertisementModel getAdvertisementById(int id) {
+        throw new NotImplementedError("getAdvertisementById is not implemented");
+    }
+    public AdvertisementModel editAdvertisement(int id) {
+        throw new NotImplementedError("editAdvertisement is not implemented");
+    }
+    public AdvertisementModel getAllAdvertisements() {
+        throw new NotImplementedError("getAllAdvertisements is not implemented");
+    }
 
 }
