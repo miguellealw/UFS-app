@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/restaurantsFragment"
-        android:name="com.example.ufs.ui.RestaurantsFragment"
+        android:name="com.example.ufs.ui.MyRestaurantFragment"
         android:label="fragment_restaurants"
         tools:layout="@layout/fragment_restaurants" >
         <action
@@ -43,4 +43,9 @@
             android:id="@+id/action_createRestaurantFragment_to_restaurantsFragment2"
             app:destination="@id/restaurantsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/advertFragment"
+        android:name="com.example.ufs.ui.AdvertFragment"
+        android:label="fragment_advert"
+        tools:layout="@layout/fragment_advert" />
 </navigation>

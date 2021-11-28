@@ -1,20 +1,14 @@
 package com.example.ufs.ui;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +22,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RestaurantsFragment#newInstance} factory method to
+ * Use the {@link MyRestaurantFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RestaurantsFragment extends Fragment {
+public class MyRestaurantFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +38,7 @@ public class RestaurantsFragment extends Fragment {
 
     private final String TAG = "== RestaurantsFragment ";
 
-    public RestaurantsFragment() {
+    public MyRestaurantFragment() {
         // Required empty public constructor
     }
 
@@ -57,8 +51,8 @@ public class RestaurantsFragment extends Fragment {
      * @return A new instance of fragment restaurants.
      */
     // TODO: Rename and change types and number of parameters
-    public static RestaurantsFragment newInstance(String param1, String param2) {
-        RestaurantsFragment fragment = new RestaurantsFragment();
+    public static MyRestaurantFragment newInstance(String param1, String param2) {
+        MyRestaurantFragment fragment = new MyRestaurantFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -93,12 +87,14 @@ public class RestaurantsFragment extends Fragment {
 
         // Get views
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.createRestaurantButton);
+        FloatingActionButton editButton = (FloatingActionButton) view.findViewById(R.id.editRestaurantButton);
         TextView noRestaurantsMessage = (TextView) view.findViewById(R.id.noRestaurantsMessage);
         TextView nameLabel = (TextView) view.findViewById(R.id.restaurantNameLabel);
         TextView locationLabel = (TextView) view.findViewById(R.id.restaurantLocationLabel);
         TextView name = (TextView) view.findViewById(R.id.restaurantName);
         TextView location = (TextView) view.findViewById(R.id.restaurantLocation);
 
+        // If user owns a restaurant show restaurant info
         if (restaurant != null) {
 
             // TODO: Show restaurant title and location
@@ -106,6 +102,7 @@ public class RestaurantsFragment extends Fragment {
             locationLabel.setVisibility(View.VISIBLE);
             name.setVisibility(View.VISIBLE);
             location.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
 
             // Set name and location text
             name.setText(restaurant.getName());
@@ -123,6 +120,7 @@ public class RestaurantsFragment extends Fragment {
             locationLabel.setVisibility(View.GONE);
             name.setVisibility(View.GONE);
             location.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
 
             noRestaurantsMessage.setVisibility(View.VISIBLE);
             addButton.setVisibility(View.VISIBLE);
@@ -133,7 +131,7 @@ public class RestaurantsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Perform action of going to createRestaurant Fragment
-                @NonNull NavDirections action = RestaurantsFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
+                @NonNull NavDirections action = MyRestaurantFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(action);
 
