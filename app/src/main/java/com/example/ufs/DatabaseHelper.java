@@ -24,6 +24,7 @@ import java.util.List;
 import kotlin.NotImplementedError;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private final String TAG = "==== DatabaseHelper";
 
     // Constants for user table
     public static final String USER_TABLE = "USER_TABLE";
@@ -245,6 +246,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // commit data to DB
         long insert_status = db.insert(USER_TABLE, null, cv);
+        db.close();
 
         // if positive then insertion was successful
         // if negative then insertion was a failure
@@ -323,6 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // commit data to DB
         long insert_status = db.insert(RESTAURANT_TABLE, null, cv);
+        db.close();
 
         // if positive then insertion was successful
         // if negative then insertion was a failure
@@ -358,6 +361,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new RestaurantModel(name, location, userId);
     }
@@ -392,6 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new RestaurantModel(name, location, userId);
     }
@@ -425,6 +430,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new RestaurantModel(name, location, userId);
     }
@@ -454,8 +460,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                     RestaurantModel restaurant = new RestaurantModel(name, location, userId);
                     restaurants.add(restaurant);
+                    Log.i(TAG, restaurant.toString());
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if no restaurant is found
                 return null;
@@ -465,6 +472,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+
+        db.close();
 
         return restaurants;
     }
@@ -608,7 +617,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     fetchedOrder.setTimestamp(timestamp);
                     studentOrders.add(fetchedOrder);
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if student has no orders
                 return null;
@@ -688,7 +697,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     fetchedOrder.setTimestamp(timestamp);
                     restaurantOrders.add(fetchedOrder);
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if student has no orders
                 return null;
@@ -835,7 +844,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     MenuItemModel fetchedMenuItem = new MenuItemModel(name, price, restaurantID);
                     restaurantMenuItems.add(fetchedMenuItem);
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if student has no orders
                 return null;
@@ -949,7 +958,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
                     studentReviews.add(fetchedReview);
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if student has no orders
                 return null;
@@ -991,7 +1000,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
                     restaurantReviews.add(fetchedReview);
 
-                } while(cursor.moveToFirst());
+                } while(cursor.moveToNext());
             } else {
                 // if student has no orders
                 return null;
