@@ -9,13 +9,16 @@ public class OrderModel {
     private int restaurantID;
     private int userID;
 
+
+    private String timestamp;
+
     // Can be get user of order
     // private int User;
 
     public OrderModel(
-        Float totalPrice,
-        Boolean isDelivered,
-        Boolean isPickup,
+        float totalPrice,
+        boolean isDelivered,
+        boolean isPickup,
         String address,
         int paymentOption,
         int restaurantID,
@@ -50,19 +53,15 @@ public class OrderModel {
         this.totalPrice = totalPrice;
     }
 
-    public Boolean getDelivered() {
+    public Boolean getIsDelivered() {
         return isDelivered;
     }
-    public void setDelivered(Boolean delivered) {
-        isDelivered = delivered;
-    }
+    public void setIsDelivered(Boolean isDelivered) { this.isDelivered = isDelivered; }
 
-    public Boolean getPickup() {
+    public Boolean getIsPickup() {
         return isPickup;
     }
-    public void setPickup(Boolean pickup) {
-        isPickup = pickup;
-    }
+    public void setIsPickup(Boolean isPickup) { this.isPickup = isPickup; }
 
     public String getAddress() {
         return address;
@@ -77,4 +76,7 @@ public class OrderModel {
 
     public int getUserID() { return userID; }
     public void setUserID(int userID) { this.userID = userID; }
+
+    public String getTimestamp() { return timestamp; }
+    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
 }

@@ -2,13 +2,15 @@ package com.example.ufs.data.model;
 
 public class MenuItemModel {
     private String name;
-    private Float price;
+    private float price;
+    private int restaurantId;
 
     // private int Restaurant;
 
-    public MenuItemModel(String name, Float price) {
+    public MenuItemModel(String name, float price, int restaurantId) {
         this.name = name;
         this.price = price;
+        this.restaurantId = restaurantId;
     }
 
     @Override
@@ -16,12 +18,16 @@ public class MenuItemModel {
         return "MenuItemModel{" +
                 "name='" + name + '\'' +
                 ", price=" + price +
+                ", restaurantId=" + restaurantId +
                 '}';
     }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Float getPrice() { return price; }
-    public void setPrice(Float price) { this.price = price; }
+    public float getPrice() { return price; }
+    public void setPrice(float price) { this.price = price; }
+
+    public int getRestaurantId() { return restaurantId; }
+    public void setRestaurantId(int restaurantId) { this.restaurantId = restaurantId; }
 }
