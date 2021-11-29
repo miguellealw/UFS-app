@@ -7,6 +7,9 @@
     tools:context=".ui.MyRestaurantFragment">
 
 
+//todo: searchbar restaurants
+//todo: advertisement
+    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/restaurantsTitle"
         android:layout_width="wrap_content"
