@@ -97,6 +97,10 @@ public class MyRestaurantFragment extends Fragment {
         TextView location = (TextView) view.findViewById(R.id.restaurantLocation);
 
         boolean userHasRestaurant = restaurant != null;
+        // set isEditingRestaurant so createRestaurant fragment knows what to show
+        editor.putBoolean("isEditingRestaurant", userHasRestaurant);
+        editor.apply();
+        Log.i(TAG, " isEditingRestaurant " + sp.getIsEditingRestaurant());
 
         // If user has restaurant show the information and edit button;
         nameLabel.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
@@ -132,32 +136,30 @@ public class MyRestaurantFragment extends Fragment {
                     navController.navigate(action);
 
 
-                    //sp.getIsEditingRestaurant();
-                    editor.putBoolean("isEditingRestaurant", true);
-                    editor.apply();
-                    Log.i(TAG, " isEditingRestaurant " + sp.getIsEditingRestaurant());
                 }
             });
 
             //Log.i(TAG, restaurant.getName());
+        } else {
+            // Clicking the add restaurant action button
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Perform action of going to createRestaurant Fragment
+                    // Since add default values in nav_graph.xml gives error then I have to
+                    // pass them in here
+                    @NonNull NavDirections action = MyRestaurantFragmentDirections
+                            .actionRestaurantsFragmentToCreateRestaurantFragment();
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+
+                    //NavController navController = NavHostFragment.findNavController(RestaurantsFragment.this);
+                    //Navigation.findNavController(v).navigate(action);
+                }
+            });
+
         }
 
-        // Clicking the add restaurant action button
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform action of going to createRestaurant Fragment
-                // Since add default values in nav_graph.xml gives error then I have to
-                // pass them in here
-                @NonNull NavDirections action = MyRestaurantFragmentDirections
-                        .actionRestaurantsFragmentToCreateRestaurantFragment();
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(action);
-
-                //NavController navController = NavHostFragment.findNavController(RestaurantsFragment.this);
-                //Navigation.findNavController(v).navigate(action);
-            }
-        });
 
 
         return view;

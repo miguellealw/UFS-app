@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
@@ -72,6 +73,62 @@ public class CreateRestaurantFragment extends Fragment {
         }
     }
 
+    public void createRestaurant(Context ctx, View view, EditText et_name, EditText et_location) {
+        // TODO: data validation
+
+        // Get logged in user id
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        int user_id = sp.getLoggedInUserId();
+
+        // Create model to pass to Database Object (dbo)
+        RestaurantModel newRestaurant = new RestaurantModel(
+                et_name.getText().toString(),
+                et_location.getText().toString(),
+                user_id
+        );
+
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        boolean u_success = dbo.addRestaurant(newRestaurant);
+
+        if (u_success) {
+            // Go back to restaurant fragment
+            @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToAddMenuItemsFragment();
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(action);
+
+            Toast.makeText(ctx, "Add your menu items", Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void updateRestaurant(Context ctx, View view, int id, EditText et_name, EditText et_location) {
+        // Get logged in user id
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        int user_id = sp.getLoggedInUserId();
+
+
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        boolean u_success = dbo.editRestaurant(
+                id,
+                et_name.getText().toString(),
+                et_location.getText().toString()
+        );
+
+        if (u_success) {
+            // Go back to restaurant fragment
+            @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment();
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(action);
+
+            Toast.makeText(ctx, "Restaurant edited successfully", Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(ctx, "Error editing restaurant. Try again", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,58 +136,55 @@ public class CreateRestaurantFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_restaurant, container, false);
         Context ctx = getActivity().getApplicationContext();
 
-        Button createButton = view.findViewById(R.id.createRestaurantButton);
+        // Get data from input fields
+        EditText et_name = (EditText) view.findViewById(R.id.et_restaurantName);
+        EditText et_location = (EditText) view.findViewById(R.id.et_restaurantLocation);
+        Button confirmButton = view.findViewById(R.id.createRestaurantButton);
         Button deleteButton = view.findViewById(R.id.deleteRestaurantButton);
 
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
         boolean isEditingRestaurant = sp.getIsEditingRestaurant();
         if (isEditingRestaurant) deleteButton.setVisibility(View.VISIBLE);
 
+        CreateRestaurantFragmentArgs args;
+        boolean isArgsAvailable = getArguments() != null;
 
-        // Create button is clicked
-        createButton.setOnClickListener(new View.OnClickListener() {
+
+        if(isEditingRestaurant && isArgsAvailable) {
+            args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
+
+            et_name.setText(args.getRestaurantName());
+            et_location.setText(args.getRestaurantLocation());
+            //createButton.setText("Update Restaurant");
+        }
+
+
+
+        // Confirm button is when editing or creating
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get data from input fields
-                EditText et_name = (EditText) view.findViewById(R.id.et_restaurantName);
-                EditText et_location = (EditText) view.findViewById(R.id.et_restaurantLocation);
-
-                // TODO: data validation
-
-                // Get logged in user id
-                SP_LocalStorage sp = new SP_LocalStorage(ctx);
-                int user_id = sp.getLoggedInUserId();
-
-                // Create model to pass to Database Object (dbo)
-                RestaurantModel newRestaurant = new RestaurantModel(
-                        et_name.getText().toString(),
-                        et_location.getText().toString(),
-                        user_id
-                );
-
-                DatabaseHelper dbo = new DatabaseHelper(ctx);
-                boolean u_success = dbo.addRestaurant(newRestaurant);
-
-                if (u_success) {
-
-                    // Go back to restaurant fragment
-                    @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToAddMenuItemsFragment();
-                    NavController navController = Navigation.findNavController(view);
-                    navController.navigate(action);
-
-                    Toast.makeText(ctx, "Add your menu items", Toast.LENGTH_LONG).show();
-
+                if(isEditingRestaurant && isArgsAvailable) {
+                    CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
+                    updateRestaurant(ctx, view, args.getRestaurantId(), et_name, et_location);
                 } else {
-                    Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
+                    if( et_name.getText().toString().isEmpty() || et_location.getText().toString().isEmpty() ) {
+                        Toast.makeText(ctx, "Provide information to continue", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        createRestaurant(ctx, view, et_name, et_location);
+                    }
                 }
             }
         });
 
+        // Delete restaurant
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getArguments() != null) {
-                    CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
+                if(isArgsAvailable) {
+                    CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs
+                            .fromBundle(getArguments());
 
                     DatabaseHelper dbo = new DatabaseHelper(ctx);
                     boolean success = dbo.removeRestaurant(args.getRestaurantId());
@@ -138,7 +192,9 @@ public class CreateRestaurantFragment extends Fragment {
                     Log.i("Create restaurant: ",
                             "restaurantId arg " + args.getRestaurantId());
                     if(success) {
-                        @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment();
+                        @NonNull NavDirections action =
+                                CreateRestaurantFragmentDirections
+                                        .actionCreateRestaurantFragmentToRestaurantsFragment();
                         NavController navController = Navigation.findNavController(view);
                         navController.navigate(action);
 
