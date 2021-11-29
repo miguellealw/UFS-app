@@ -1,11 +1,11 @@
-# View Database Data in Client
+# View Database Data 
 1. Get a database client like [TablePlus](https://www.tableplus.io/) or [SQLite browser](https://sqlitebrowser.org/)
-2. Open app and create a user or perform other DB interaction
+2. Open the app in an emulator and create a user or perform other DB interaction
 3. Open Device File Controller in Android Studio
 4. Go to `data > data > com.example.ufs > databases`
 5. Right click on `databases` folder and click `Synchronize` to make sure the databse file is updated.
 5. Right click on `ufs.db` file and `Save as`. Save to computer
-6. Open db file in database client downloaded in step 1
+6. Open the file `ufs.db` in database client downloaded in step 1
 
 ## If database is updated
 If data is added, edited or removed from the database through the app you will need to perform steps **2 - 6** above.
@@ -97,6 +97,28 @@ int loggedInUserId = sp.getLoggedInUserId();
 ...
 
 ```
+
+# Navigate through fragments
+1. First go to `nav_graph.xml` in `res > navigation > nav_graph.xml`
+2. Create an arrow between the fragments you want. If the fragment is not there, add it.
+3. Go to `Build > Rebuild Project` at the top of android studio. This will create methods you will need.
+4. Select the fragment and give it an id.
+5. Go to the source fragment java file (the fragment you navigating from) and go to the `onCreateView` method
+
+6. Type the following in the event handler of a button. The following code is an example from the `CreateRestaurantFragment.java` file. Here we are navigating from the createRestaurant fragment back to the my restaurant fragment
+```java
+onCreateView() {
+	...
+	View view = inflater.inflate(R.layout.fragment_create_restaurant, container, false);
+
+	// Get action from the CreateRestaurantFragment. This will go back to the MyRestaurantFragment
+	@NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2();
+	NavController navController = Navigation.findNavController(view);
+	navController.navigate(action);
+	...
+}
+```
+**NOTE:** the method names like `CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2` are based on the id given to the fragment in the `nav_graph.xml` file. These are 
 
 
 # Database design
