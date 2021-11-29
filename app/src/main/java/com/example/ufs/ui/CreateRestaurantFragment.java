@@ -164,14 +164,16 @@ public class CreateRestaurantFragment extends Fragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEditingRestaurant && isArgsAvailable) {
-                    CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
-                    updateRestaurant(ctx, view, args.getRestaurantId(), et_name, et_location);
+                boolean ifInputIsEmpty = et_name.getText().toString().trim().isEmpty()
+                        || et_location.getText().toString().trim().isEmpty();
+
+                if(ifInputIsEmpty) {
+                    Toast.makeText(ctx, "Provide information to continue", Toast.LENGTH_LONG).show();
                 } else {
-                    if( et_name.getText().toString().isEmpty() || et_location.getText().toString().isEmpty() ) {
-                        Toast.makeText(ctx, "Provide information to continue", Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    if(isEditingRestaurant && isArgsAvailable) {
+                        CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
+                        updateRestaurant(ctx, view, args.getRestaurantId(), et_name, et_location);
+                    } else {
                         createRestaurant(ctx, view, et_name, et_location);
                     }
                 }
