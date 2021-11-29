@@ -1,6 +1,7 @@
 package com.example.ufs.data.model;
 
 public class OrderModel {
+    private int id;
     private Float totalPrice;
     private Boolean isDelivered;
     private Boolean isPickup;
@@ -14,6 +15,26 @@ public class OrderModel {
 
     // Can be get user of order
     // private int User;
+
+    public OrderModel(
+            int id,
+            float totalPrice,
+            boolean isDelivered,
+            boolean isPickup,
+            String address,
+            int paymentOption,
+            int restaurantID,
+            int userID
+    ) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.isDelivered = isDelivered;
+        this.isPickup = isPickup;
+        this.address = address;
+        this.paymentOption = paymentOption;
+        this.restaurantID = restaurantID;
+        this.userID = userID;
+    }
 
     public OrderModel(
         float totalPrice,
@@ -79,4 +100,8 @@ public class OrderModel {
 
     public String getTimestamp() { return timestamp; }
     public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+
+    public int getId() {
+        return id;
+    }
 }

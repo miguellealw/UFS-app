@@ -1,11 +1,19 @@
 package com.example.ufs.data.model;
 
 public class MenuItemModel {
+    private int id;
     private String name;
     private float price;
     private int restaurantId;
 
     // private int Restaurant;
+
+    public MenuItemModel(int id, String name, float price, int restaurantId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.restaurantId = restaurantId;
+    }
 
     public MenuItemModel(String name, float price, int restaurantId) {
         this.name = name;
@@ -30,4 +38,8 @@ public class MenuItemModel {
 
     public int getRestaurantId() { return restaurantId; }
     public void setRestaurantId(int restaurantId) { this.restaurantId = restaurantId; }
+
+    public int getId() {
+        return id;
+    }
 }
