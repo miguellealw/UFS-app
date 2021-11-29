@@ -61,6 +61,12 @@ public class ReviewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reviews, container, false);
+        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
+
+
+        // TODO: if isStudent show the student's reviews
+        //  if not isStudent then show the restaurants reviews
+
+        return view;
     }
 }
