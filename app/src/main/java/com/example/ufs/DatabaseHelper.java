@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // =============== USER TABLE
         String createUserTable = "CREATE TABLE " + USER_TABLE + " (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_USER_FIRST_NAME + " TEXT NOT NULL, " +
             COLUMN_USER_LAST_NAME + " TEXT NOT NULL, " +
             COLUMN_USER_EMAIL + " TEXT NOT NULL, " +
@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // =============== ORDER TABLE
         String createOrderTable = "CREATE TABLE " + ORDER_TABLE + " (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_ORDER_TOTAL_PRICE + " REAL NOT NULL, " +
             COLUMN_ORDER_IS_DELIVERED + " INTEGER NOT NULL, " +
             COLUMN_ORDER_IS_PICKUP + " INTEGER NOT NULL, " + // sqlite does not have boolean
@@ -128,81 +128,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ORDER_RESTAURANT_ID + " INTEGER NOT NULL, " +
 
             // Foreign key relating order to user and restaurant
-            "FOREIGN KEY(restaurant_id) REFERENCES " + RESTAURANT_TABLE + "(id), " +
-            "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_ORDER_RESTAURANT_ID + ") REFERENCES " + RESTAURANT_TABLE + "(id), " +
+            "FOREIGN KEY(" + COLUMN_ORDER_USER_ID + ") REFERENCES " + USER_TABLE + "(id)" +
         ")";
 
         // =============== RESTAURANT TABLE
         String createRestaurantTable = "CREATE TABLE " + RESTAURANT_TABLE + " (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_RESTAURANT_LOCATION + " TEXT NOT NULL, " +
             COLUMN_RESTAURANT_NAME + " TEXT NOT NULL, " +
             COLUMN_RESTAURANT_USER_ID + " INTEGER NOT NULL, " +
 
             // Foreign key relating user and restaurant
-            "FOREIGN KEY(id) REFERENCES " + USER_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_RESTAURANT_USER_ID + ") REFERENCES " + USER_TABLE + "(id)" +
         ")";
 
         // =============== MENU_ITEM TABLE
         String createMenuItemTable = "CREATE TABLE " + MENU_ITEM_TABLE + " (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_MENU_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_MENU_ITEM_NAME + " TEXT NOT NULL, " +
             COLUMN_MENU_ITEM_PRICE + " REAL NOT NULL, " +
             COLUMN_MENU_ITEM_RESTAURANT_ID + " INTEGER NOT NULL, " +
 
             // Foreign key relating menu_item and restaurant
-            "FOREIGN KEY(id) REFERENCES " + RESTAURANT_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_MENU_ITEM_RESTAURANT_ID + ") REFERENCES " + RESTAURANT_TABLE + "(id)" +
         ")";
 
 
         // =============== REVIEW TABLE
         String createReviewTable = "CREATE TABLE " + REVIEW_TABLE + " (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_REVIEW_USER_ID + " INTEGER NOT NULL, " +
-            COLUMN_REVIEW_RESTAURANT_ID + " INTEGER NOT NULL, " +
-
+            COLUMN_REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_REVIEW_RATING + " INTEGER NOT NULL, " +
             COLUMN_REVIEW_REVIEW + " TEXT NOT NULL, " +
 
+            COLUMN_REVIEW_USER_ID + " INTEGER NOT NULL, " +
+            COLUMN_REVIEW_RESTAURANT_ID + " INTEGER NOT NULL, " +
+
             // Foreign key mapping user and reviewed restaurant
-            "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id), " +
-            "FOREIGN KEY(restaurant_id) REFERENCES " + RESTAURANT_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_REVIEW_USER_ID + ") REFERENCES " + USER_TABLE + "(id), " +
+            "FOREIGN KEY(" + COLUMN_REVIEW_RESTAURANT_ID + ") REFERENCES " + RESTAURANT_TABLE + "(id)" +
         ")";
 
 
         // =============== FAVORITE RESTAURANT
         String createFavoriteRestaurantTable = "CREATE TABLE " + FAVORITE_RESTAURANT_TABLE + " (" +
             // may not need this ID col
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_FAVORITE_RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_FAVORITE_RESTAURANT_USER_ID + " INTEGER NOT NULL, " +
             COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID + " INTEGER NOT NULL, " +
 
             // Foreign key mapping user to favorite restaurant
-            "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id), " +
-            "FOREIGN KEY(restaurant_id) REFERENCES " + RESTAURANT_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_FAVORITE_RESTAURANT_USER_ID + ") REFERENCES " + USER_TABLE + "(id), " +
+            "FOREIGN KEY(" + COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID + ") REFERENCES " + RESTAURANT_TABLE + "(id)" +
         ")";
 //
         // =============== FAVORITE MENU ITEM
         String createFavoriteMenuItemTable = "CREATE TABLE " + FAVORITE_MENU_ITEM_TABLE + " (" +
             // may not need this ID col
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_FAVORITE_MENU_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_FAVORITE_MENU_ITEM_USER_ID + " INTEGER NOT NULL, " +
             COLUMN_FAVORITE_MENU_ITEM_MENU_ITEM_ID + " INTEGER NOT NULL, " +
 
             // Foreign key relating menu_item and restaurant
-            "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id), " +
-            "FOREIGN KEY(menu_item_id) REFERENCES " + MENU_ITEM_TABLE + "(id)" +
+            "FOREIGN KEY(" + COLUMN_FAVORITE_MENU_ITEM_USER_ID + ") REFERENCES " + USER_TABLE + "(id), " +
+            "FOREIGN KEY(" + COLUMN_FAVORITE_MENU_ITEM_MENU_ITEM_ID + ") REFERENCES " + MENU_ITEM_TABLE + "(id)" +
         ")";
 
         String createAdvertisementTable = "CREATE TABLE " + AD_TABLE + " (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_AD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_AD_COMPANY_NAME + " TEXT NOT NULL, " +
                 COLUMN_AD_MESSAGE + " TEXT NOT NULL, " +
                 COLUMN_AD_USER_ID + " INTEGER NOT NULL, " +
 
                 // Foreign key relating menu_item and restaurant
-                "FOREIGN KEY(user_id) REFERENCES " + USER_TABLE + "(id)" +
-                ")";
+                "FOREIGN KEY(" + COLUMN_AD_USER_ID + ") REFERENCES " + USER_TABLE + "(id)" +
+            ")";
 
         sqLiteDatabase.execSQL(createUserTable);
         sqLiteDatabase.execSQL(createOrderTable);
@@ -236,6 +236,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+
+
         // add values to table
         cv.put(COLUMN_USER_FIRST_NAME, userModel.getFirstName());
         cv.put(COLUMN_USER_LAST_NAME, userModel.getLastName());
@@ -251,6 +253,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // if positive then insertion was successful
         // if negative then insertion was a failure
         return insert_status > 0;
+    }
+
+    public UserModel getUserByEmail(String email) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        // User Data
+        String userFName = "";
+        String userLName = "";
+        String userEmail = "";
+        int userID = -1;
+        boolean userIsStudent;
+
+        try {
+            // get data from db
+            //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
+            cursor = db.rawQuery(
+                    "SELECT " +
+                            COLUMN_USER_FIRST_NAME + ", " +
+                            COLUMN_USER_LAST_NAME + ", " +
+                            COLUMN_USER_ID + ", " +
+                            COLUMN_USER_EMAIL + ", " +
+                            COLUMN_USER_IS_STUDENT +
+                            " FROM " + USER_TABLE +
+                            " WHERE email = ?",
+                    new String[] {email}
+            );
+
+            // If user is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
+                userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+                userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
+                userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+            } else {
+                // if no user is found
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+            db.close();
+        }
+
+        return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
     }
 
     public UserModel getUser(String email, String password) {
@@ -283,8 +334,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // get data from db
             //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
             cursor = db.rawQuery(
-                "SELECT " + COLUMN_USER_FIRST_NAME + ", " +
+                "SELECT " +
                         COLUMN_USER_ID + ", " +
+                        COLUMN_USER_FIRST_NAME + ", " +
                         COLUMN_USER_LAST_NAME + ", " +
                         COLUMN_USER_EMAIL + ", " +
                         COLUMN_USER_IS_STUDENT +
@@ -337,6 +389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         String[] selectionArgs = { userId + "" };
+        int id;
         String name, location;
 
         String queryString = "SELECT * FROM " + RESTAURANT_TABLE +
@@ -350,6 +403,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // If restaurant is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID));
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
                 location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
             } else {
@@ -363,7 +417,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
 
-        return new RestaurantModel(name, location, userId);
+        return new RestaurantModel(id, name, location, userId);
     }
 
     // TODO - test
@@ -398,13 +452,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
 
-        return new RestaurantModel(name, location, userId);
+        return new RestaurantModel(id, name, location, userId);
     }
 
     // TODO - test
     public RestaurantModel getRestaurantByName(String searchName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
+        int id;
         String name, location;
         int userId;
 
@@ -418,6 +473,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // If restaurant is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID));
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
                 location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
                 userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_USER_ID));
@@ -432,13 +488,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
 
-        return new RestaurantModel(name, location, userId);
+        return new RestaurantModel(id, name, location, userId);
     }
 
-    // TODO - test
     public List<RestaurantModel> getAllRestaurants() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
+        int id;
         String name, location;
         int userId;
         List<RestaurantModel> restaurants = new ArrayList<>();
@@ -454,11 +510,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID));
                     name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
                     location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_USER_ID));
 
-                    RestaurantModel restaurant = new RestaurantModel(name, location, userId);
+                    RestaurantModel restaurant = new RestaurantModel(id, name, location, userId);
                     restaurants.add(restaurant);
                     Log.i(TAG, restaurant.toString());
 
@@ -483,7 +540,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // commit data to DB
-        long insert_status = db.delete(USER_TABLE, "WHERE id = ?", new String[]{id + ""});
+        long insert_status = db.delete(RESTAURANT_TABLE, "id = ?", new String[]{id + ""});
 
         // if positive then deletion was successful
         // if negative then deletion was a failure
@@ -574,7 +631,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        OrderModel fetchedOrder = new OrderModel(totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+        OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
         fetchedOrder.setTimestamp(timestamp);
         return fetchedOrder;
     }
@@ -586,6 +643,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         String[] selectionArgs = { studentId + "" };
 
+        int id;
         float totalPrice;
         boolean isDelivered, isPickup;
         String address;
@@ -604,6 +662,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ID));
                     totalPrice = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TOTAL_PRICE));
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
@@ -613,7 +672,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     studentOrders.add(fetchedOrder);
 
@@ -666,6 +725,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         String[] selectionArgs = { Integer.toString(restaurantId) };
 
+        int id;
         float totalPrice;
         boolean isDelivered, isPickup;
         String address;
@@ -684,6 +744,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ID));
                     totalPrice = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TOTAL_PRICE));
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
@@ -693,7 +754,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     restaurantOrders.add(fetchedOrder);
 
@@ -781,13 +842,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        return new MenuItemModel(name, price, restaurantID);
+        return new MenuItemModel(id, name, price, restaurantID);
     }
 
     public MenuItemModel getMenuItemByName(String searchName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
 
+        int id;
         String name;
         float price;
         int restaurantID;
@@ -802,6 +864,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // If menu item is found
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_ID));
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_NAME));
                 price = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_PRICE));
                 restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_RESTAURANT_ID));
@@ -814,13 +877,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        return new MenuItemModel(name, price, restaurantID);
+        return new MenuItemModel(id, name, price, restaurantID);
     }
 
     public List<MenuItemModel> getAllRestaurantMenuItems(int restaurantId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
 
+        int id;
         String name;
         float price;
         int restaurantID;
@@ -837,11 +901,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_ID));
                     name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_NAME));
                     price = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_PRICE));
                     restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ITEM_RESTAURANT_ID));
 
-                    MenuItemModel fetchedMenuItem = new MenuItemModel(name, price, restaurantID);
+                    MenuItemModel fetchedMenuItem = new MenuItemModel(id, name, price, restaurantID);
                     restaurantMenuItems.add(fetchedMenuItem);
 
                 } while(cursor.moveToNext());
@@ -926,7 +991,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        return new ReviewModel(rating, message, userId, restaurantId);
+        return new ReviewModel(id, rating, message, userId, restaurantId);
     }
 
     // TODO
@@ -934,7 +999,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
 
-        int rating ;
+        int id;
+        int rating;
         String message;
         int restaurantId;
         List<ReviewModel> studentReviews = new ArrayList<>();
@@ -950,12 +1016,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_ID));
                     rating = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RATING));
                     message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_REVIEW));
                     //userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_USER_ID));
                     restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RESTAURANT_ID));
 
-                    ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
+                    ReviewModel fetchedReview = new ReviewModel(id, rating, message, userId, restaurantId);
                     studentReviews.add(fetchedReview);
 
                 } while(cursor.moveToNext());
@@ -976,7 +1043,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
 
-        int rating ;
+        int id;
+        int rating;
         String message;
         int userId;
         List<ReviewModel> restaurantReviews = new ArrayList<>();
@@ -992,12 +1060,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 //cursor.moveToFirst();
                 do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_ID));
                     rating = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RATING));
                     message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_REVIEW));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_USER_ID));
                     //restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REVIEW_RESTAURANT_ID));
 
-                    ReviewModel fetchedReview = new ReviewModel(rating, message, userId, restaurantId);
+                    ReviewModel fetchedReview = new ReviewModel(id, rating, message, userId, restaurantId);
                     restaurantReviews.add(fetchedReview);
 
                 } while(cursor.moveToNext());
