@@ -118,7 +118,62 @@ onCreateView() {
 	...
 }
 ```
-**NOTE:** the method names like `CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2` are based on the id given to the fragment in the `nav_graph.xml` file. These are 
+**NOTE:** the method names like `CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2` are based on the id given to the fragment in the `nav_graph.xml` file. This is the code generated from step 3.
+
+## Send arguments to fragment
+Sometimes you want to send data from 1 screen to another. This is done by passing arguments to the destination fragment
+
+1. Select to the destination fragment (fragment you are going to send data to) in `nav_graph.xml`
+2. In the side view find `Arguments` and click the `+` icon
+3. Name the argument and add a default value if needed.
+4. Go to `Build > Rebuild Project` in android studio to generate methods
+
+**Example with `MyRestaurantFragment` and `CreateRestaurantFragment`**
+* When editing a restaurant, arguments like the `restaurantId`, `restaurantName` and `restaurantLocation` are sent to the `CreateRestaurantFragment` to put in the input fields.
+
+In `MyRestaurantFragment.java` file to *send* arguments
+```java
+public View onCreateView(LayouInflater inflater, ViewGroup container, Bundle savdedInstanceState) {
+	...
+
+	// Create action to go to the CreateRestaurantFragment
+	MyRestaurantFragmentDirections.ActionRestaurantsFragmentToCreateRestaurantFragment action =
+			MyRestaurantFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
+
+	// Assign the arguements for the CreateRestaurantFragment
+	action.setRestaurantId(restaurant.getId());
+	action.setRestaurantName(restaurant.getName());
+	action.setRestaurantLocation(restaurant.getLocation());
+
+	// Navigation to destination fragment
+	NavController navController = Navigation.findNavController(view);
+	navController.navigate(action);
+
+	...
+}
+
+```
+
+In `CreateRestaurantFragment.java` file (the destination) to *get*  arguments
+```java
+public View onCreateView(LayouInflater inflater, ViewGroup container, Bundle savdedInstanceState) {
+	...
+
+	// Create action to go to the CreateRestaurantFragment
+	boolean isArgsAvailable = getArguments() != null;
+	if(isArgsAvailable) {
+		// Notice the CreateRestaurantFragmentArgs class was generated from step 4 above.
+		// The name will change depending on the fragment name
+		 CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
+
+		 // get arguments
+		 int id = args.getRestaurantById();
+	}
+	...
+}
+
+```
+
 
 
 # Database design
