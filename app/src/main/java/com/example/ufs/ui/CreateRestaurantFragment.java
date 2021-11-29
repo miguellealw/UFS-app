@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class CreateRestaurantFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     public CreateRestaurantFragment() {
         // Required empty public constructor
@@ -77,14 +79,23 @@ public class CreateRestaurantFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_restaurant, container, false);
         Context ctx = getActivity().getApplicationContext();
 
-        // Create button is clicked
         Button createButton = view.findViewById(R.id.createRestaurantButton);
+        Button deleteButton = view.findViewById(R.id.deleteRestaurantButton);
+
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        boolean isEditingRestaurant = sp.getIsEditingRestaurant();
+        if (isEditingRestaurant) deleteButton.setVisibility(View.VISIBLE);
+
+
+        // Create button is clicked
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get data from input fields
                 EditText et_name = (EditText) view.findViewById(R.id.et_restaurantName);
                 EditText et_location = (EditText) view.findViewById(R.id.et_restaurantLocation);
+
+                // TODO: data validation
 
                 // Get logged in user id
                 SP_LocalStorage sp = new SP_LocalStorage(ctx);
@@ -101,17 +112,41 @@ public class CreateRestaurantFragment extends Fragment {
                 boolean u_success = dbo.addRestaurant(newRestaurant);
 
                 if (u_success) {
-                    Toast.makeText(ctx, "Restaurant created successfully", Toast.LENGTH_LONG).show();
 
                     // Go back to restaurant fragment
-                    @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment2();
+                    @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToAddMenuItemsFragment();
                     NavController navController = Navigation.findNavController(view);
                     navController.navigate(action);
+
+                    Toast.makeText(ctx, "Add your menu items", Toast.LENGTH_LONG).show();
+
                 } else {
                     Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
 
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getArguments() != null) {
+                    CreateRestaurantFragmentArgs args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
 
+                    DatabaseHelper dbo = new DatabaseHelper(ctx);
+                    boolean success = dbo.removeRestaurant(args.getRestaurantId());
+
+                    Log.i("Create restaurant: ",
+                            "restaurantId arg " + args.getRestaurantId());
+                    if(success) {
+                        @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment();
+                        NavController navController = Navigation.findNavController(view);
+                        navController.navigate(action);
+
+                        Toast.makeText(ctx, "Restaurant deleted successfully", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ctx, "Error deleting restaurant", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 

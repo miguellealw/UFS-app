@@ -1,6 +1,7 @@
 package com.example.ufs.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,8 +80,8 @@ public class MyRestaurantFragment extends Fragment {
         Context ctx = getActivity().getApplicationContext();
 
         // Get logged in user id
-//        SharedPreferences sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        SharedPreferences.Editor editor = sp.getEditor();
         int user_id = sp.getLoggedInUserId();
 
         DatabaseHelper dbo = new DatabaseHelper(ctx);
@@ -94,36 +96,50 @@ public class MyRestaurantFragment extends Fragment {
         TextView name = (TextView) view.findViewById(R.id.restaurantName);
         TextView location = (TextView) view.findViewById(R.id.restaurantLocation);
 
-        // If user owns a restaurant show restaurant info
-        if (restaurant != null) {
+        boolean userHasRestaurant = restaurant != null;
 
-            // TODO: Show restaurant title and location
-            nameLabel.setVisibility(View.VISIBLE);
-            locationLabel.setVisibility(View.VISIBLE);
-            name.setVisibility(View.VISIBLE);
-            location.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
+        // If user has restaurant show the information and edit button;
+        nameLabel.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
+        locationLabel.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
+        name.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
+        location.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
+        editButton.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
 
+        // Hide add button and no restaurant message
+        addButton.setVisibility(userHasRestaurant ? View.GONE : View.VISIBLE);
+        noRestaurantsMessage.setVisibility(userHasRestaurant ? View.GONE : View.VISIBLE);
+
+        if (userHasRestaurant) {
             // Set name and location text
             name.setText(restaurant.getName());
             location.setText(restaurant.getLocation());
 
-
             // TODO: Show restaurant menu items
 
-            // Hide add button and no restaurant message
-            addButton.setVisibility(View.GONE);
-            noRestaurantsMessage.setVisibility(View.GONE);
-            //Log.i(TAG, restaurant.getName());
-        } else {
-            nameLabel.setVisibility(View.GONE);
-            locationLabel.setVisibility(View.GONE);
-            name.setVisibility(View.GONE);
-            location.setVisibility(View.GONE);
-            editButton.setVisibility(View.GONE);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Perform action of going to createRestaurant Fragment
+                    final String TAG = "editButton";
 
-            noRestaurantsMessage.setVisibility(View.VISIBLE);
-            addButton.setVisibility(View.VISIBLE);
+                    MyRestaurantFragmentDirections.ActionRestaurantsFragmentToCreateRestaurantFragment action =
+                            MyRestaurantFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
+                    action.setRestaurantId(restaurant.getId());
+                    action.setRestaurantName(restaurant.getName());
+                    action.setRestaurantLocation(restaurant.getLocation());
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+
+
+                    //sp.getIsEditingRestaurant();
+                    editor.putBoolean("isEditingRestaurant", true);
+                    editor.apply();
+                    Log.i(TAG, " isEditingRestaurant " + sp.getIsEditingRestaurant());
+                }
+            });
+
+            //Log.i(TAG, restaurant.getName());
         }
 
         // Clicking the add restaurant action button
@@ -131,7 +147,10 @@ public class MyRestaurantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Perform action of going to createRestaurant Fragment
-                @NonNull NavDirections action = MyRestaurantFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
+                // Since add default values in nav_graph.xml gives error then I have to
+                // pass them in here
+                @NonNull NavDirections action = MyRestaurantFragmentDirections
+                        .actionRestaurantsFragmentToCreateRestaurantFragment();
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(action);
 
@@ -139,6 +158,7 @@ public class MyRestaurantFragment extends Fragment {
                 //Navigation.findNavController(v).navigate(action);
             }
         });
+
 
         return view;
     }

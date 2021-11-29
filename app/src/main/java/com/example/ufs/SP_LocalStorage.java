@@ -13,10 +13,16 @@ public class SP_LocalStorage {
     }
 
     public SharedPreferences getSP() { return this.sp; }
+    public SharedPreferences.Editor getEditor() { return this.sp.edit(); }
+
     public int getLoggedInUserId() { return this.sp.getInt("userId", -1); }
     public boolean getIsLoggedIn() { return this.sp.getBoolean("isLoggedIn", false); }
     public boolean isStudent() { return this.sp.getBoolean("isStudent", false); }
     public String getUserFName() { return this.sp.getString("userFName", ""); }
     public String getUserLName() { return this.sp.getString("userLName", ""); }
     public String getUserEmail() { return this.sp.getString("userEmail", ""); }
+
+    public boolean getIsEditingRestaurant() {
+        return this.sp.getBoolean("isEditingRestaurant", false);
+    }
 }
