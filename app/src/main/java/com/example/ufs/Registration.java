@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ufs.data.model.UserModel;
 import com.example.ufs.ui.login.LoginActivity;
 
+import java.io.IOException;
+
 public class Registration extends AppCompatActivity {
 
     private EditText et_fName;
@@ -48,9 +50,15 @@ public class Registration extends AppCompatActivity {
             public void onClick(View v) {
                 //Log.i(TAG, "REGISTER BUTTON CLICKED");
                 UserModel newUser;
+                DatabaseHelper dbo = new DatabaseHelper(Registration.this);
                 try {
                     // TODO: data validation
                     // check if edittext data is empty
+
+                    // check if user already exists
+                    UserModel userWithSameEmail = dbo.getUserByEmail(et_email.getText().toString());
+                    if(userWithSameEmail != null) throw new Exception("Email is already registered");
+
 
 
                     //newUser = new UserModel("Jon", "Doe", "jondoe@gmail.edu", "12345679", "password123", 1);
@@ -62,15 +70,17 @@ public class Registration extends AppCompatActivity {
                             et_password.getText().toString(),
                             chk_isStudent.isChecked()
                     );
-                    DatabaseHelper dbo = new DatabaseHelper(Registration.this);
                     boolean u_success = dbo.addUser(newUser);
+                    if(!u_success) throw new IOException("Error registering user");
+
                     Toast.makeText(Registration.this, "Registered Successfully! You can now login.", Toast.LENGTH_SHORT).show();
 
                     // Go to Login screen
                     Intent i = new Intent(Registration.this, LoginActivity.class);
                     startActivity(i);
                 } catch(Exception e) {
-                    Toast.makeText(Registration.this, "Error registering user", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Registration.this, "Error registering user", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

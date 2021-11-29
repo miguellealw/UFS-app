@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/allRestaurantsFragment"
+        android:title="Restaurants"
+        android:icon="@drawable/restaurant_icon"/>
+    <item
+        android:id="@+id/ordersFragment"
+        android:title="Orders"
+        android:icon="@drawable/orders_icon"/>
+    <item
+        android:id="@+id/favoritesFragment"
+        android:title="Favorites"
+        android:icon="@drawable/favorites_icon"/>
+    <item
+        android:id="@+id/reviewsFragment"
+        android:title="Reviews"
+        android:icon="@drawable/review_icon"/>
+    <item
+        android:id="@+id/accountFragment"
+        android:title="Account"
+        android:icon="@drawable/account_icon"/>
+
+</menu>

@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.ufs.R;
 import com.example.ufs.Registration;
+import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.ui.login.LoginActivity;
 
 /**
@@ -69,12 +71,21 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
+        Context ctx = getActivity().getApplicationContext();
+
+        TextView fName = (TextView) view.findViewById(R.id.accountFirstName);
+        TextView lName = (TextView) view.findViewById(R.id.accountLastName);
+        TextView email = (TextView) view.findViewById(R.id.accountEmail);
+
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        fName.setText(sp.getUserFName());
+        lName.setText(sp.getUserLName());
+        email.setText(sp.getUserEmail());
 
         Button logoutButton = view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context ctx = getActivity().getApplicationContext();
                 Intent i = new Intent(ctx, LoginActivity.class);
                 startActivity(i);
 

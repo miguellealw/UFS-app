@@ -1,4 +1,4 @@
 package com.example.ufs.data.model;
 
-public class FavoriteModel {
+public class FavoriteMenuItemModel {
 }
