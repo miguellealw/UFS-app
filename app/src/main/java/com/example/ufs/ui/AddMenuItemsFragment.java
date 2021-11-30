@@ -3,6 +3,7 @@ package com.example.ufs.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,23 @@ public class AddMenuItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_menu_items, container, false);
+
+
+        // If there are restaurants
+//        if(restaurantList != null) {
+//            // Set up recycler view and display
+//            recyclerView = view.findViewById(R.id.lv_restaurantList);
+//            recyclerView.setVisibility(View.VISIBLE);
+//            noRestaurantsMessage.setVisibility(View.GONE);
+//            recyclerView.setHasFixedSize(true);
+//
+//            layoutManager = new LinearLayoutManager(ctx);
+//            recyclerView.setLayoutManager(layoutManager);
+//
+//            //mAdapter = new MyAdapter(restaurantList);
+//            mAdapter = new RestaurantRecyclerView(restaurantList, ctx);
+//            recyclerView.setAdapter(mAdapter);
+//        }
 
 
         return view;
