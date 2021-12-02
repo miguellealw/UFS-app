@@ -366,7 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // =============== RESTAURANTS:
-    public boolean addRestaurant(RestaurantModel restaurantModel) {
+    public int addRestaurant(RestaurantModel restaurantModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -379,9 +379,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long insert_status = db.insert(RESTAURANT_TABLE, null, cv);
         db.close();
 
+
+
         // if positive then insertion was successful
         // if negative then insertion was a failure
-        return insert_status > 0;
+        //return insert_status > 0;
+        return (int) insert_status;
     }
 
     // Will get restaurant belonging to user. Returns null if user does not own restaurant
@@ -798,7 +801,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ================= MENU ITEMS
     //  TODO:
-    public boolean addMenuItem(MenuItemModel menuItemModel) {
+    public int addMenuItem(MenuItemModel menuItemModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -808,8 +811,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_MENU_ITEM_RESTAURANT_ID, menuItemModel.getRestaurantId());
 
         // commit data to DB
-        long status = db.insert(MENU_ITEM_TABLE, null, cv);
-        return status > 0;
+        long row_id = db.insert(MENU_ITEM_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
     }
 
     public MenuItemModel getMenuItemById(int id) {
@@ -841,6 +845,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new MenuItemModel(id, name, price, restaurantID);
     }
@@ -876,6 +881,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new MenuItemModel(id, name, price, restaurantID);
     }
@@ -919,6 +925,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return restaurantMenuItems;
     }
@@ -944,7 +951,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // ================= REVIEWS
 
     // TODO - test
-    public boolean addReview(ReviewModel reviewModel) {
+    public int addReview(ReviewModel reviewModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -955,8 +962,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_REVIEW_RESTAURANT_ID, reviewModel.getRestaurantId());
 
         // commit data to DB
-        long status = db.insert(REVIEW_TABLE, null, cv);
-        return status > 0;
+        long row_id = db.insert(REVIEW_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
     }
 
     // TODO - test
