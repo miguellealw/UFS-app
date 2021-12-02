@@ -125,8 +125,17 @@ public class AddMenuItemsFragment extends Fragment {
                     // Add menu item to local array list to display in recycler view
                     if(menuItemId != -1) {
                         //menuItemList.add(newMenuItem);
-                        menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
-                        Toast.makeText(ctx, "Menu Item Created", Toast.LENGTH_LONG).show();
+                        // TODO: consider making menuItemList a member variable
+                        List<MenuItemModel> menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+
+                        // TODO: find better way of updating recycler view
+                        mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+                        recyclerView.setAdapter(mAdapter);
+
+                        et_menuItemName.setText("");
+                        et_menuItemPrice.setText("");
+
+                        Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_LONG).show();
                     }
