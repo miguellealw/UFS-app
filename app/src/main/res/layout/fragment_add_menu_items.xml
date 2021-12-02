@@ -21,28 +21,26 @@
         app:layout_constraintVertical_bias="0.042" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/et_menuItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Item Name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextNumberDecimal2"
+        app:layout_constraintBottom_toTopOf="@+id/et_menuItemPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumberDecimal2"
+        android:id="@+id/et_menuItemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="134dp"
-        android:layout_marginBottom="80dp"
         android:ems="10"
         android:hint="Item Price"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,12 +52,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="$"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberDecimal2"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal2"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal2" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_menuItemPrice"
+        app:layout_constraintEnd_toStartOf="@+id/et_menuItemPrice"
+        app:layout_constraintTop_toTopOf="@+id/et_menuItemPrice" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_addMenuItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -67,10 +65,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal2" />
+        app:layout_constraintTop_toBottomOf="@+id/et_menuItemPrice" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
+        android:id="@+id/rv_menuItems"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
@@ -81,7 +79,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/button_addMenuItem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

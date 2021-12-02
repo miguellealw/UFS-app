@@ -1,15 +1,28 @@
 package com.example.ufs.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.data.model.MenuItemModel;
+import com.example.ufs.data.model.RestaurantModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +30,9 @@ import com.example.ufs.R;
  * create an instance of this fragment.
  */
 public class AddMenuItemsFragment extends Fragment {
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,23 +79,67 @@ public class AddMenuItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_menu_items, container, false);
+        Context ctx = getActivity().getApplicationContext();
+
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        //List<MenuItemModel> menuItemList = dbo.getAllRestaurantMenuItems();
+        List<MenuItemModel> menuItemList = new ArrayList<>();
+        // TODO: if restaurant has menu items insert to menuItemList
+
+        //List<MenuItemModel> menuItemList = null;
+        //TextView noMenuItemsMessage = view.findViewById(R.id.noMenuItemsMessage);
+        EditText et_menuItemName = view.findViewById(R.id.et_menuItemName);
+        EditText et_menuItemPrice = view.findViewById(R.id.et_menuItemPrice);
+        Button button_addMenuItem = view.findViewById(R.id.button_addMenuItem);
+
+        boolean isArgsAvailable = getArguments() != null;
 
 
-        // If there are restaurants
-//        if(restaurantList != null) {
-//            // Set up recycler view and display
-//            recyclerView = view.findViewById(R.id.lv_restaurantList);
-//            recyclerView.setVisibility(View.VISIBLE);
-//            noRestaurantsMessage.setVisibility(View.GONE);
-//            recyclerView.setHasFixedSize(true);
-//
-//            layoutManager = new LinearLayoutManager(ctx);
-//            recyclerView.setLayoutManager(layoutManager);
-//
-//            //mAdapter = new MyAdapter(restaurantList);
-//            mAdapter = new RestaurantRecyclerView(restaurantList, ctx);
-//            recyclerView.setAdapter(mAdapter);
-//        }
+        button_addMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: pass arguments from CreateRestaurantFragment to AddMenuItemsFragment
+                if(isArgsAvailable) {
+                    AddMenuItemsFragmentArgs args = AddMenuItemsFragmentArgs
+                            .fromBundle(getArguments());
+                    int restaurantId =  (int) args.getRestaurantId();
+                    Log.i("AddMenuFrag", "restaurant ID from menu items " + restaurantId);
+
+                    // Get data from edit texts
+                    String menuItemName = et_menuItemName.getText().toString();
+                    float menuItemPrice = Float.parseFloat(et_menuItemPrice.getText().toString());
+
+                    // Create menu item in DB
+                    MenuItemModel newMenuItem = new MenuItemModel(menuItemName, menuItemPrice, restaurantId);
+                    int menuItemId = dbo.addMenuItem(newMenuItem);
+
+                    // Add menu item to local array list to display in recycler view
+                    if(menuItemId != -1) {
+                        menuItemList.add(newMenuItem);
+                        Toast.makeText(ctx, "Menu Item Created", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        //if(menuItemList != null) {
+        // If there are menu items display in recycler view
+        if(menuItemList.size() > 0) {
+            // Set up recycler view and display
+            recyclerView = view.findViewById(R.id.rv_menuItems);
+            //recyclerView.setVisibility(View.VISIBLE);
+            //noRestaurantsMessage.setVisibility(View.GONE);
+            recyclerView.setHasFixedSize(true);
+
+            layoutManager = new LinearLayoutManager(ctx);
+            recyclerView.setLayoutManager(layoutManager);
+
+            //mAdapter = new MyAdapter(restaurantList);
+            mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+            recyclerView.setAdapter(mAdapter);
+        }
 
 
         return view;

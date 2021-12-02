@@ -51,7 +51,11 @@
         tools:layout="@layout/fragment_create_restaurant" >
         <action
             android:id="@+id/action_createRestaurantFragment_to_addMenuItemsFragment"
-            app:destination="@id/addMenuItemsFragment" />
+            app:destination="@id/addMenuItemsFragment" >
+            <argument
+                android:name="restaurantId"
+                android:defaultValue="-1" />
+        </action>
         <argument
             android:name="restaurantId"
             app:argType="integer" />
@@ -79,5 +83,9 @@
         android:id="@+id/addMenuItemsFragment"
         android:name="com.example.ufs.ui.AddMenuItemsFragment"
         android:label="fragment_add_menu_items"
-        tools:layout="@layout/fragment_add_menu_items" />
+        tools:layout="@layout/fragment_add_menu_items" >
+        <argument android:name="restaurantId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

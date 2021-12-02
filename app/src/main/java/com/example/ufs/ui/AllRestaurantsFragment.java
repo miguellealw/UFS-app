@@ -84,14 +84,16 @@ public class AllRestaurantsFragment extends Fragment {
         if(restaurantList != null) {
             // Set up recycler view and display
             recyclerView = view.findViewById(R.id.lv_restaurantList);
+            recyclerView.setHasFixedSize(true);
+
+            // Show list and hide no restaurants message
             recyclerView.setVisibility(View.VISIBLE);
             noRestaurantsMessage.setVisibility(View.GONE);
-            recyclerView.setHasFixedSize(true);
 
             layoutManager = new LinearLayoutManager(ctx);
             recyclerView.setLayoutManager(layoutManager);
 
-            //mAdapter = new MyAdapter(restaurantList);
+            // Add data to the recycler view
             mAdapter = new RestaurantRecyclerView(restaurantList, ctx);
             recyclerView.setAdapter(mAdapter);
         }

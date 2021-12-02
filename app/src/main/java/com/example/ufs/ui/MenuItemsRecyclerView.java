@@ -31,7 +31,7 @@ public class MenuItemsRecyclerView extends RecyclerView.Adapter<MenuItemsRecycle
     public MenuItemsRecyclerView.MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Get layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_line_menu_item, parent, false);
-        // Associate with restaurant one line view holder
+        // Associate with menu item one line view holder
         MenuItemsRecyclerView.MenuItemViewHolder holder = new MenuItemsRecyclerView.MenuItemViewHolder(view);
         return holder;
     }
@@ -60,8 +60,8 @@ public class MenuItemsRecyclerView extends RecyclerView.Adapter<MenuItemsRecycle
         public MenuItemViewHolder(View itemView) {
             super(itemView);
             iv_menuItemImage = itemView.findViewById(R.id.iv_list_restaurantImage);
-            tv_menuItemName = itemView.findViewById(R.id.tv_list_restaurantName);
-            tv_menuItemPrice = itemView.findViewById(R.id.tv_list_restaurantLocation);
+            tv_menuItemName = itemView.findViewById(R.id.tv_list_menuItemName);
+            tv_menuItemPrice = itemView.findViewById(R.id.tv_list_menuItemPrice);
         }
     }
 }

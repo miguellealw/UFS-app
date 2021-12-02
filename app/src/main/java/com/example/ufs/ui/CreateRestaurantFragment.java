@@ -36,6 +36,7 @@ public class CreateRestaurantFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "CREATE RESTAURANT";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -88,11 +89,14 @@ public class CreateRestaurantFragment extends Fragment {
         );
 
         DatabaseHelper dbo = new DatabaseHelper(ctx);
-        boolean u_success = dbo.addRestaurant(newRestaurant);
+        int restaurantId = dbo.addRestaurant(newRestaurant);
 
-        if (u_success) {
-            // Go back to restaurant fragment
-            @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToAddMenuItemsFragment();
+        // Created successfully
+        if (restaurantId != -1) {
+            // Go to menu items screen and pass restaurant id
+            CreateRestaurantFragmentDirections.ActionCreateRestaurantFragmentToAddMenuItemsFragment action = CreateRestaurantFragmentDirections
+                    .actionCreateRestaurantFragmentToAddMenuItemsFragment();
+            action.setRestaurantId(restaurantId);
             NavController navController = Navigation.findNavController(view);
             navController.navigate(action);
 
@@ -118,7 +122,8 @@ public class CreateRestaurantFragment extends Fragment {
 
         if (u_success) {
             // Go back to restaurant fragment
-            @NonNull NavDirections action = CreateRestaurantFragmentDirections.actionCreateRestaurantFragmentToRestaurantsFragment();
+            @NonNull NavDirections action = CreateRestaurantFragmentDirections
+                    .actionCreateRestaurantFragmentToRestaurantsFragment();
             NavController navController = Navigation.findNavController(view);
             navController.navigate(action);
 
@@ -150,6 +155,7 @@ public class CreateRestaurantFragment extends Fragment {
         boolean isArgsAvailable = getArguments() != null;
 
 
+        // Add the restaurant data to the input fields
         if(isEditingRestaurant && isArgsAvailable) {
             args = CreateRestaurantFragmentArgs.fromBundle(getArguments());
 
@@ -177,6 +183,9 @@ public class CreateRestaurantFragment extends Fragment {
                         createRestaurant(ctx, view, et_name, et_location);
                     }
                 }
+
+
+
             }
         });
 

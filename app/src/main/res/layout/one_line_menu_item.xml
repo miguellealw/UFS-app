@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/menuItemNameLabel" />
 
     <TextView
-        android:id="@+id/tv_menuItemName"
+        android:id="@+id/tv_list_menuItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="@+id/menuItemNameLabel" />
 
     <TextView
-        android:id="@+id/tv_menuItemPrice"
+        android:id="@+id/tv_list_menuItemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

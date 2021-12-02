@@ -13,7 +13,7 @@
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_account.xml" value="0.5" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_add_menu_items.xml" value="0.5" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_advert.xml" value="0.572463768115942" />
-        <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_all_restaurants.xml" value="0.572463768115942" />
+        <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_all_restaurants.xml" value="0.25" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_confirm_payment.xml" value="0.5609375" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_create_restaurant.xml" value="0.3453125" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_favorites.xml" value="0.575" />
@@ -21,6 +21,7 @@
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_orders.xml" value="0.575" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_restaurants.xml" value="0.5" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/fragment_reviews.xml" value="0.575" />
+        <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/one_line_menu_item.xml" value="0.328804347826087" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/layout/one_line_restaurant.xml" value="0.572463768115942" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/menu/activity_main_drawer.xml" value="0.3453125" />
         <entry key="..\:/CodingProjects/School/Fundamentals of SE/second version/UFS-app/app/src/main/res/menu/admin_drawer_bottom_nav_menu.xml" value="0.575" />
