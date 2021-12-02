@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ufs.DatabaseHelper;
@@ -89,7 +90,8 @@ public class MyRestaurantFragment extends Fragment {
 
         // Get views
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id.createRestaurantButton);
-        FloatingActionButton editButton = (FloatingActionButton) view.findViewById(R.id.editRestaurantButton);
+        FloatingActionButton editRestaurantButton = (FloatingActionButton) view.findViewById(R.id.editRestaurantButton);
+        Button editMenuItemsButton = (Button) view.findViewById(R.id.button_editMenuItems);
         TextView noRestaurantsMessage = (TextView) view.findViewById(R.id.noRestaurantsMessage);
         TextView nameLabel = (TextView) view.findViewById(R.id.restaurantNameLabel);
         TextView locationLabel = (TextView) view.findViewById(R.id.restaurantLocationLabel);
@@ -107,11 +109,14 @@ public class MyRestaurantFragment extends Fragment {
         locationLabel.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
         name.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
         location.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
-        editButton.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
+        editRestaurantButton.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
 
         // Hide add button and no restaurant message
         addButton.setVisibility(userHasRestaurant ? View.GONE : View.VISIBLE);
         noRestaurantsMessage.setVisibility(userHasRestaurant ? View.GONE : View.VISIBLE);
+
+        // If user has restaurant show edit menu items button
+        editMenuItemsButton.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
 
         if (userHasRestaurant) {
             // Set name and location text
@@ -120,11 +125,11 @@ public class MyRestaurantFragment extends Fragment {
 
             // TODO: Show restaurant menu items
 
-            editButton.setOnClickListener(new View.OnClickListener() {
+            editRestaurantButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Perform action of going to createRestaurant Fragment
-                    final String TAG = "editButton";
+                    final String TAG = "editRestaurantButton";
 
                     MyRestaurantFragmentDirections.ActionRestaurantsFragmentToCreateRestaurantFragment action =
                             MyRestaurantFragmentDirections.actionRestaurantsFragmentToCreateRestaurantFragment();
@@ -136,6 +141,18 @@ public class MyRestaurantFragment extends Fragment {
                     navController.navigate(action);
 
 
+                }
+            });
+
+            editMenuItemsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyRestaurantFragmentDirections.ActionRestaurantsFragmentToAddMenuItemsFragment action =
+                            MyRestaurantFragmentDirections.actionRestaurantsFragmentToAddMenuItemsFragment();
+                    action.setRestaurantId(restaurant.getId());
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
                 }
             });
 

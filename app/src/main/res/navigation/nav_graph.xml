@@ -23,6 +23,9 @@
                 android:name="restaurantLocation"
                 android:defaultValue='""' />
         </action>
+        <action
+            android:id="@+id/action_restaurantsFragment_to_addMenuItemsFragment"
+            app:destination="@id/addMenuItemsFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersFragment"

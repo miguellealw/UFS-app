@@ -84,21 +84,30 @@ public class AddMenuItemsFragment extends Fragment {
         DatabaseHelper dbo = new DatabaseHelper(ctx);
         //List<MenuItemModel> menuItemList = dbo.getAllRestaurantMenuItems();
         List<MenuItemModel> menuItemList = new ArrayList<>();
-        // TODO: if restaurant has menu items insert to menuItemList
 
         //List<MenuItemModel> menuItemList = null;
-        //TextView noMenuItemsMessage = view.findViewById(R.id.noMenuItemsMessage);
+        TextView noMenuItemsMessage = view.findViewById(R.id.noMenuItemsMessage);
         EditText et_menuItemName = view.findViewById(R.id.et_menuItemName);
         EditText et_menuItemPrice = view.findViewById(R.id.et_menuItemPrice);
         Button button_addMenuItem = view.findViewById(R.id.button_addMenuItem);
 
         boolean isArgsAvailable = getArguments() != null;
+        int restaurantId;
+
+        if(isArgsAvailable) {
+            AddMenuItemsFragmentArgs args = AddMenuItemsFragmentArgs
+                    .fromBundle(getArguments());
+            restaurantId =  (int) args.getRestaurantId();
+
+            // TODO: if restaurant has menu items insert to menuItemList
+            menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+        }
 
 
         button_addMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: pass arguments from CreateRestaurantFragment to AddMenuItemsFragment
+                // get restaurant id as argument
                 if(isArgsAvailable) {
                     AddMenuItemsFragmentArgs args = AddMenuItemsFragmentArgs
                             .fromBundle(getArguments());
@@ -115,7 +124,8 @@ public class AddMenuItemsFragment extends Fragment {
 
                     // Add menu item to local array list to display in recycler view
                     if(menuItemId != -1) {
-                        menuItemList.add(newMenuItem);
+                        //menuItemList.add(newMenuItem);
+                        menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
                         Toast.makeText(ctx, "Menu Item Created", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_LONG).show();
@@ -129,9 +139,10 @@ public class AddMenuItemsFragment extends Fragment {
         if(menuItemList.size() > 0) {
             // Set up recycler view and display
             recyclerView = view.findViewById(R.id.rv_menuItems);
-            //recyclerView.setVisibility(View.VISIBLE);
-            //noRestaurantsMessage.setVisibility(View.GONE);
             recyclerView.setHasFixedSize(true);
+
+            recyclerView.setVisibility(View.VISIBLE);
+            noMenuItemsMessage.setVisibility(View.GONE);
 
             layoutManager = new LinearLayoutManager(ctx);
             recyclerView.setLayoutManager(layoutManager);
