@@ -1,7 +1,6 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.restaurants;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,14 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.RestaurantModel;
-import com.example.ufs.data.model.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.

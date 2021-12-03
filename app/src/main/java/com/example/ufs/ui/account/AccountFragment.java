@@ -1,4 +1,4 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.account;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ufs.R;
-import com.example.ufs.Registration;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.ui.login.LoginActivity;
 

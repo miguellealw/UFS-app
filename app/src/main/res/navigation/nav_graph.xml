@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/restaurantsFragment"
-        android:name="com.example.ufs.ui.MyRestaurantFragment"
+        android:name="com.example.ufs.ui.restaurants.MyRestaurantFragment"
         android:label="fragment_restaurants"
         tools:layout="@layout/fragment_restaurants" >
         <action
@@ -29,27 +29,27 @@
     </fragment>
     <fragment
         android:id="@+id/ordersFragment"
-        android:name="com.example.ufs.ui.OrdersFragment"
+        android:name="com.example.ufs.ui.orders.OrdersFragment"
         android:label="fragment_orders"
         tools:layout="@layout/fragment_orders" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.ufs.ui.FavoritesFragment"
+        android:name="com.example.ufs.ui.favorites.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/reviewsFragment"
-        android:name="com.example.ufs.ui.ReviewsFragment"
+        android:name="com.example.ufs.ui.reviews.ReviewsFragment"
         android:label="fragment_reviews"
         tools:layout="@layout/fragment_reviews" />
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.example.ufs.ui.AccountFragment"
+        android:name="com.example.ufs.ui.account.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/createRestaurantFragment"
-        android:name="com.example.ufs.ui.CreateRestaurantFragment"
+        android:name="com.example.ufs.ui.restaurants.CreateRestaurantFragment"
         android:label="fragment_create_restaurant"
         tools:layout="@layout/fragment_create_restaurant" >
         <action
@@ -74,17 +74,17 @@
     </fragment>
     <fragment
         android:id="@+id/advertFragment"
-        android:name="com.example.ufs.ui.AdvertFragment"
+        android:name="com.example.ufs.ui.ad.AdvertFragment"
         android:label="fragment_advert"
         tools:layout="@layout/fragment_advert" />
     <fragment
         android:id="@+id/allRestaurantsFragment"
-        android:name="com.example.ufs.ui.AllRestaurantsFragment"
+        android:name="com.example.ufs.ui.restaurants.AllRestaurantsFragment"
         android:label="fragment_all_restaurants"
         tools:layout="@layout/fragment_all_restaurants" />
     <fragment
         android:id="@+id/addMenuItemsFragment"
-        android:name="com.example.ufs.ui.AddMenuItemsFragment"
+        android:name="com.example.ufs.ui.menu_items.AddMenuItemsFragment"
         android:label="fragment_add_menu_items"
         tools:layout="@layout/fragment_add_menu_items" >
         <argument android:name="restaurantId"

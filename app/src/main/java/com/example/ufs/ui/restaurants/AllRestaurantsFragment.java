@@ -1,4 +1,4 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.restaurants;
 
 import android.content.Context;
 import android.os.Bundle;

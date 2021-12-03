@@ -1,4 +1,4 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.reviews;
 
 public class ReviewsRecyclerView {
 }

@@ -1,4 +1,4 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.orders;
 
 public class OrdersRecyclerView {
 }

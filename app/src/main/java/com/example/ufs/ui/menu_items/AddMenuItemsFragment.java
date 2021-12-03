@@ -1,4 +1,4 @@
-package com.example.ufs.ui;
+package com.example.ufs.ui.menu_items;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
 import com.example.ufs.data.model.MenuItemModel;
-import com.example.ufs.data.model.RestaurantModel;
 
 import java.util.ArrayList;
 import java.util.List;
