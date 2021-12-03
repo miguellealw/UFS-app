@@ -7,8 +7,8 @@
     tools:context=".ui.restaurants.MyRestaurantFragment">
 
 
-//todo: searchbar restaurants
-//todo: advertisement
+    //todo: searchbar restaurants
+    //todo: advertisement
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/restaurantsTitle"
@@ -30,13 +30,12 @@
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:src="@drawable/add_icon_white"
+        android:visibility="visible"
         app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/editRestaurantButton"
@@ -46,27 +45,24 @@
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:src="@drawable/edit_icon"
+        android:visibility="gone"
         app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView
         android:id="@+id/noRestaurantsMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
         android:text="Add your restaurant information"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/restaurantNameLabel"
@@ -124,5 +120,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_restaurants_noMenuItemsMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No menu items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantsTitle"
+        app:layout_constraintVertical_bias="0.453"
+        android:visibility="gone"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_myRestaurant_menuItems"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_editMenuItems"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantLocationLabel" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

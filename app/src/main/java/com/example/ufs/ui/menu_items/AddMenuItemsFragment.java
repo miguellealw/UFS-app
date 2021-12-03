@@ -144,7 +144,7 @@ public class AddMenuItemsFragment extends Fragment {
 
         //if(menuItemList != null) {
         // If there are menu items display in recycler view
-        if(menuItemList.size() > 0) {
+        if(menuItemList != null && menuItemList.size() > 0) {
             // Set up recycler view and display
             recyclerView = view.findViewById(R.id.rv_menuItems);
             recyclerView.setHasFixedSize(true);
@@ -158,6 +158,7 @@ public class AddMenuItemsFragment extends Fragment {
             //mAdapter = new MyAdapter(restaurantList);
             mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
             recyclerView.setAdapter(mAdapter);
+        } else {
         }
 
 
