@@ -15,28 +15,28 @@ import com.example.ufs.data.model.MenuItemModel;
 
 import java.util.List;
 
-public class MenuItemsRecyclerView extends RecyclerView.Adapter<MenuItemsRecyclerView.MenuItemViewHolder> {
+public class MenuItemsAdapter extends RecyclerView.Adapter<MenuItemsAdapter.MenuItemViewHolder> {
 
     List<MenuItemModel> menuItemList;
     Context context;
 
-    public MenuItemsRecyclerView(List<MenuItemModel> menuItemList, Context context) {
+    public MenuItemsAdapter(List<MenuItemModel> menuItemList, Context context) {
         this.menuItemList = menuItemList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public MenuItemsRecyclerView.MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MenuItemsAdapter.MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Get layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_line_menu_item, parent, false);
         // Associate with menu item one line view holder
-        MenuItemsRecyclerView.MenuItemViewHolder holder = new MenuItemsRecyclerView.MenuItemViewHolder(view);
+        MenuItemsAdapter.MenuItemViewHolder holder = new MenuItemsAdapter.MenuItemViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MenuItemsRecyclerView.MenuItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MenuItemsAdapter.MenuItemViewHolder holder, int position) {
         // Populate text views with list data
         holder.tv_menuItemName.setText(menuItemList.get(position).getName());
         holder.tv_menuItemPrice.setText(Float.toString(menuItemList.get(position).getPrice()));

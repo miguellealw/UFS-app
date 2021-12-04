@@ -128,7 +128,7 @@ public class AddMenuItemsFragment extends Fragment {
                         List<MenuItemModel> menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
 
                         // TODO: find better way of updating recycler view
-                        mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+                        mAdapter = new MenuItemsAdapter(menuItemList, ctx);
                         recyclerView.setAdapter(mAdapter);
 
                         et_menuItemName.setText("");
@@ -156,7 +156,7 @@ public class AddMenuItemsFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
 
             //mAdapter = new MyAdapter(restaurantList);
-            mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+            mAdapter = new MenuItemsAdapter(menuItemList, ctx);
             recyclerView.setAdapter(mAdapter);
         } else {
         }

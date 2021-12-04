@@ -26,9 +26,8 @@ import com.example.ufs.R;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.data.model.RestaurantModel;
-import com.example.ufs.ui.menu_items.AddMenuItemsFragmentArgs;
 import com.example.ufs.ui.menu_items.MenuItemDialog;
-import com.example.ufs.ui.menu_items.MenuItemsRecyclerView;
+import com.example.ufs.ui.menu_items.MenuItemsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -245,7 +244,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
                 recyclerView.setLayoutManager(layoutManager);
 
                 //mAdapter = new MyAdapter(restaurantList);
-                mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
                 recyclerView.setAdapter(mAdapter);
 
                 new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -324,7 +323,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
             menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
 
             // TODO: find better way of updating recycler view
-            mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+            mAdapter = new MenuItemsAdapter(menuItemList, ctx);
             recyclerView.setAdapter(mAdapter);
 
             Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_LONG).show();

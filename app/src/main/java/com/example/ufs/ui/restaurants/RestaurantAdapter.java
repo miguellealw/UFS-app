@@ -15,12 +15,12 @@ import com.example.ufs.data.model.RestaurantModel;
 
 import java.util.List;
 
-public class RestaurantRecyclerView extends RecyclerView.Adapter<RestaurantRecyclerView.RestaurantViewHolder> {
+public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> {
 
     List<RestaurantModel> restaurantList;
     Context context;
 
-    public RestaurantRecyclerView(List<RestaurantModel> restaurantList, Context context) {
+    public RestaurantAdapter(List<RestaurantModel> restaurantList, Context context) {
         this.restaurantList = restaurantList;
         this.context = context;
     }

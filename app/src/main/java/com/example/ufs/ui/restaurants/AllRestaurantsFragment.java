@@ -94,7 +94,7 @@ public class AllRestaurantsFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
 
             // Add data to the recycler view
-            mAdapter = new RestaurantRecyclerView(restaurantList, ctx);
+            mAdapter = new RestaurantAdapter(restaurantList, ctx);
             recyclerView.setAdapter(mAdapter);
         }
 
