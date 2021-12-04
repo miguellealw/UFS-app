@@ -944,7 +944,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean removeMenuItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long insert_status = db.delete(MENU_ITEM_TABLE, "WHERE id = ?", new String[]{ Integer.toString(id) });
+        long insert_status = db.delete(MENU_ITEM_TABLE, "id = ?", new String[]{ Integer.toString(id) });
         return insert_status > 0;
     }
 

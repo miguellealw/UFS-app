@@ -30,7 +30,7 @@ public class MenuItemDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.menu_item_dialog, null);
 
         builder.setView(view)
-                .setTitle(("Edit Menu Item"))
+                .setTitle(("Add Menu Item"))
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

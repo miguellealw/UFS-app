@@ -40,6 +40,8 @@ public class MenuItemsRecyclerView extends RecyclerView.Adapter<MenuItemsRecycle
         // Populate text views with list data
         holder.tv_menuItemName.setText(menuItemList.get(position).getName());
         holder.tv_menuItemPrice.setText(Float.toString(menuItemList.get(position).getPrice()));
+        int id = menuItemList.get(position).getId();
+        holder.itemView.setTag(id);
         //holder.iv_restaurantImage.setImage();
 
         // TODO: Use glide for images

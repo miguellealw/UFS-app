@@ -40,6 +40,9 @@ public class RestaurantRecyclerView extends RecyclerView.Adapter<RestaurantRecyc
         // Populate text views with list data
         holder.tv_restaurantName.setText(restaurantList.get(position).getName());
         holder.tv_restaurantLocation.setText(restaurantList.get(position).getLocation());
+        int id = restaurantList.get(position).getId();
+
+        holder.itemView.setTag(id);
         //holder.iv_restaurantImage.setImage();
 
         // TODO: Use glide for images

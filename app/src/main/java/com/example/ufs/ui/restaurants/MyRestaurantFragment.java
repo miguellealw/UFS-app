@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,12 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.data.model.RestaurantModel;
+import com.example.ufs.ui.menu_items.AddMenuItemsFragmentArgs;
 import com.example.ufs.ui.menu_items.MenuItemDialog;
 import com.example.ufs.ui.menu_items.MenuItemsRecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,7 +42,6 @@ import java.util.List;
 public class MyRestaurantFragment extends Fragment implements MenuItemDialog.MenuItemDialogListener
 //        RestaurantDialog.RestaurantDialogListener
 {
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -56,6 +58,16 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
     TextView name;
     TextView location;
+
+    int restaurantId;
+
+    DatabaseHelper dbo;
+
+    Context ctx;
+
+    List<MenuItemModel> menuItemList;
+
+    View view;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -116,28 +128,45 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
         restaurantDialog.show(getActivity().getSupportFragmentManager(), "Edit Restaurant Info");
     }
 
+    void removeMenuItem(int id) {
+        dbo.removeMenuItem(id);
+        Toast.makeText(ctx, "Menu Item Deleted", Toast.LENGTH_LONG).show();
+
+        // TODO: figure out how to update recycler view
+        //mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+        //recyclerView.setAdapter(mAdapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_restaurants, container, false);
-        Context ctx = getActivity().getApplicationContext();
+        view = inflater.inflate(R.layout.fragment_restaurants, container, false);
+        ctx = getActivity().getApplicationContext();
 
         // Get logged in user id
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
         SharedPreferences.Editor editor = sp.getEditor();
         int user_id = sp.getLoggedInUserId();
 
-        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        dbo = new DatabaseHelper(ctx);
         RestaurantModel restaurant = dbo.getRestaurantByUserId(user_id);
         List<MenuItemModel> menuItemList = restaurant != null ?
                 dbo.getAllRestaurantMenuItems(restaurant.getId()) : new ArrayList<>();
 
+        restaurantId = restaurant != null ? restaurant.getId() : null;
+
+        boolean userHasRestaurant = restaurant != null;
+        // set isEditingRestaurant so createRestaurant fragment knows what to show
+        editor.putBoolean("isEditingRestaurant", userHasRestaurant);
+        editor.apply();
+        //Log.i(TAG, " isEditingRestaurant " + sp.getIsEditingRestaurant());
+
         // Get views
         addButton = (FloatingActionButton) view.findViewById(R.id.createRestaurantButton);
         editRestaurantButton = (FloatingActionButton) view.findViewById(R.id.editRestaurantButton);
-        editMenuItemsButton = (Button) view.findViewById(R.id.button_editMenuItems);
+        editMenuItemsButton = (Button) view.findViewById(R.id.button_addMenuItems);
         noRestaurantsMessage = (TextView) view.findViewById(R.id.noRestaurantsMessage);
         nameLabel = (TextView) view.findViewById(R.id.restaurantNameLabel);
         locationLabel = (TextView) view.findViewById(R.id.restaurantLocationLabel);
@@ -146,11 +175,6 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
         name = (TextView) view.findViewById(R.id.restaurantName);
         location = (TextView) view.findViewById(R.id.restaurantLocation);
 
-        boolean userHasRestaurant = restaurant != null;
-        // set isEditingRestaurant so createRestaurant fragment knows what to show
-        editor.putBoolean("isEditingRestaurant", userHasRestaurant);
-        editor.apply();
-        Log.i(TAG, " isEditingRestaurant " + sp.getIsEditingRestaurant());
 
         // If user has restaurant show the information and edit button;
         nameLabel.setVisibility(userHasRestaurant ? View.VISIBLE : View.GONE);
@@ -170,8 +194,6 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
             // Set name and location text
             name.setText(restaurant.getName());
             location.setText(restaurant.getLocation());
-
-            // TODO: Show restaurant menu items
 
             // Edit restaurant button
             editRestaurantButton.setOnClickListener(new View.OnClickListener() {
@@ -200,15 +222,17 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
                 @Override
                 public void onClick(View v) {
                     openMenuItemDialog();
-//                    MyRestaurantFragmentDirections.ActionRestaurantsFragmentToAddMenuItemsFragment action =
-//                            MyRestaurantFragmentDirections.actionRestaurantsFragmentToAddMenuItemsFragment();
-//                    action.setRestaurantId(restaurant.getId());
-//
-//                    NavController navController = Navigation.findNavController(view);
-//                    navController.navigate(action);
+                    //MyRestaurantFragmentDirections.ActionRestaurantsFragmentToAddMenuItemsFragment action =
+                    //        MyRestaurantFragmentDirections.actionRestaurantsFragmentToAddMenuItemsFragment();
+                    //action.setRestaurantId(restaurant.getId());
+
+                    //NavController navController = Navigation.findNavController(view);
+                    //navController.navigate(action);
                 }
             });
 
+
+            // Show restaurant menu items
             if(menuItemList != null && menuItemList.size() > 0) {
                 // Set up recycler view and display
                 recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
@@ -223,6 +247,18 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
                 //mAdapter = new MyAdapter(restaurantList);
                 mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
                 recyclerView.setAdapter(mAdapter);
+
+                new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        removeMenuItem((int) viewHolder.itemView.getTag());
+                    }
+                }).attachToRecyclerView(recyclerView);
             } else {
                 //recyclerView.setVisibility(View.GONE);
                 noMenuItemsMessage.setVisibility(View.VISIBLE);
@@ -257,10 +293,44 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
     @Override
     public void applyMenuItemTexts(String menuItemName, String menuItemPrice) {
         // TODO: get editTexts of recycler view menu item
-        // call db to update menu items
+        // call db to add menu items
 
-        Log.i("MENU ITEM DIALG", "Dialog name: " + menuItemName);
-        Log.i("MENU ITEM DIALG", "Dialog price: " + menuItemPrice);
+        //Log.i("MENU ITEM DIALG", "Dialog name: " + menuItemName);
+        //Log.i("MENU ITEM DIALG", "Dialog price: " + menuItemPrice);
+
+//        AddMenuItemsFragmentArgs args = AddMenuItemsFragmentArgs
+//                .fromBundle(getArguments());
+
+        //int restaurantId =  (int) args.getRestaurantId();
+        Log.i("AddMenuFrag", "restaurant ID from menu items " + restaurantId);
+
+        // Get data from edit texts
+        //String menuItemName = menuItemName;
+        //float menuItemPrice = Float.parseFloat(et_menuItemPrice.getText().toString());
+
+        // Create menu item in DB
+        MenuItemModel newMenuItem = new MenuItemModel(menuItemName, Float.parseFloat(menuItemPrice), restaurantId);
+        int menuItemId = dbo.addMenuItem(newMenuItem);
+
+        if(recyclerView == null) {
+            recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
+            recyclerView.setHasFixedSize(true);
+        }
+
+        // Add menu item to local array list to display in recycler view
+        // TODO: does not work when first adding the menu item because recyclerView is null
+        if(menuItemId != -1) {
+            //menuItemList.add(newMenuItem);
+            menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+
+            // TODO: find better way of updating recycler view
+            mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
+            recyclerView.setAdapter(mAdapter);
+
+            Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_LONG).show();
+        }
     }
 
 //    @Override
