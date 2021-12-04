@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,7 +88,8 @@ public class OrderCartFragment extends Fragment {
 
         tv_emptyCartMessage.setVisibility(isCartEmpty ? View.VISIBLE : View.GONE);
         button_checkout.setEnabled(!isCartEmpty);
-        tv_totalPrice.setText(Float.toString(cart.getTotal()));
+        //tv_totalPrice.setText(Float.toString(cart.getTotal()));
+        tv_totalPrice.setText(String.format("%.02f", cart.getTotal()));
 
         if(!isCartEmpty) {
             recyclerView = view.findViewById(R.id.rv_cart_menuItems);
@@ -101,6 +104,17 @@ public class OrderCartFragment extends Fragment {
             mAdapter = new MenuItemsAdapter(cart.getMenuItems(), ctx);
             recyclerView.setAdapter(mAdapter);
         }
+
+        button_checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrderCartFragmentDirections.ActionOrderCartFragmentToConfirmPaymentFragment action =
+                        OrderCartFragmentDirections.actionOrderCartFragmentToConfirmPaymentFragment(cart.getTotal());
+
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(action);
+            }
+        });
 
         return view;
     }

@@ -41,8 +41,8 @@ public class MenuItemsAdapter extends RecyclerView.Adapter<MenuItemsAdapter.Menu
     public void onBindViewHolder(@NonNull MenuItemsAdapter.MenuItemViewHolder holder, int position) {
         // Populate text views with list data
         holder.tv_menuItemName.setText(menuItemList.get(position).getName());
-        holder.tv_menuItemPrice.setText(Float.toString(menuItemList.get(position).getPrice()));
-        //holder.tv_menuItemPrice.setText(String.format("%0.02f", menuItemList.get(position).getPrice()));
+        //holder.tv_menuItemPrice.setText(Float.toString(menuItemList.get(position).getPrice()));
+        holder.tv_menuItemPrice.setText(String.format("%.02f", menuItemList.get(position).getPrice()));
         int id = menuItemList.get(position).getId();
         holder.itemView.setTag(id);
         //holder.iv_restaurantImage.setImage();

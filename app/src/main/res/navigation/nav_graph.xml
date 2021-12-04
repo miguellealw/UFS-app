@@ -133,5 +133,34 @@
         android:id="@+id/orderCartFragment"
         android:name="com.example.ufs.ui.orders.OrderCartFragment"
         android:label="fragment_order_cart"
-        tools:layout="@layout/fragment_order_cart" />
+        tools:layout="@layout/fragment_order_cart" >
+        <action
+            android:id="@+id/action_orderCartFragment_to_confirmPaymentFragment"
+            app:destination="@id/confirmPaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmPaymentFragment"
+        android:name="com.example.ufs.ui.payment.ConfirmPaymentFragment"
+        android:label="fragment_confirm_payment"
+        tools:layout="@layout/fragment_confirm_payment" >
+        <argument
+            android:name="orderTotal"
+            app:argType="float" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_mealPlanPayment"
+            app:destination="@id/mealPlanPayment" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_creditCardPayment"
+            app:destination="@id/creditCardPayment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creditCardPayment"
+        android:name="com.example.ufs.ui.payment.CreditCardPayment"
+        android:label="fragment_credit_card_payment"
+        tools:layout="@layout/fragment_credit_card_payment" />
+    <fragment
+        android:id="@+id/mealPlanPayment"
+        android:name="com.example.ufs.ui.payment.MealPlanPayment"
+        android:label="fragment_meal_plan_payment"
+        tools:layout="@layout/fragment_meal_plan_payment" />
 </navigation>

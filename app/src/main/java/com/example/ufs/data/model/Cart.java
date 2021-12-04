@@ -8,6 +8,7 @@ public class Cart {
 
     private float total = 0;
     private List<MenuItemModel> menuItems = new ArrayList<>();
+    private boolean isPickup = false;
 
     private Cart() {}
 
@@ -21,6 +22,15 @@ public class Cart {
     public float getTotal() { return total; }
     public void setTotal(float total) { this.total = total; }
 
+    public boolean getIsPickup() { return isPickup; }
+    public void setIsPickup(boolean isPickup) {
+        // If delivery add 5 dollar fee to total
+        // TODO: don't add here
+        //if(!isPickup) total += 5;
+
+        this.isPickup = isPickup;
+    }
+
     public List<MenuItemModel> getMenuItems() { return menuItems; }
     public void setMenuItems(List<MenuItemModel> menuItems) { this.menuItems = menuItems; }
 
@@ -32,7 +42,6 @@ public class Cart {
     public void removeFromCart(MenuItemModel item) {
         this.menuItems.remove(item);
     }
-
 
     public void clearCart() {
         this.menuItems.clear();
