@@ -16,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.data.model.Cart;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.ui.menu_items.MenuItemsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -114,6 +116,16 @@ public class RestaurantInfoFragment extends Fragment {
             //mAdapter = new MyAdapter(restaurantList);
             mAdapter = new MenuItemsAdapter(menuItemList, ctx);
             rv_menuItemList.setAdapter(mAdapter);
+
+            mAdapter.setOnItemClickListener(new MenuItemsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(MenuItemModel menuItem) {
+                    Cart cart = Cart.getInstance();
+                    cart.addToCart(menuItem);
+
+                    Toast.makeText(ctx, "Added " + menuItem.getName() + " to cart", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         goToCartButton.setOnClickListener(new View.OnClickListener() {

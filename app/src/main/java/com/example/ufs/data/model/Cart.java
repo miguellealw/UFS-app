@@ -6,7 +6,7 @@ import java.util.List;
 public class Cart {
     private static Cart INSTANCE = new Cart();
 
-    private float total;
+    private float total = 0;
     private List<MenuItemModel> menuItems = new ArrayList<>();
 
     private Cart() {}
@@ -26,6 +26,7 @@ public class Cart {
 
     public void addToCart(MenuItemModel item) {
         // TODO: update total
+        total += item.getPrice();
         this.menuItems.add(item);
     }
     public void removeFromCart(MenuItemModel item) {
