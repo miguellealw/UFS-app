@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,7 @@ import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.ui.menu_items.MenuItemsAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +93,7 @@ public class RestaurantInfoFragment extends Fragment {
 
         Button favoriteButton = view.findViewById(R.id.favoriteRestaurantButton);
         Button reviewButton = view.findViewById(R.id.reviewRestaurantButton);
+        FloatingActionButton goToCartButton = view.findViewById(R.id.goToCartButton);
 
         TextView et_name = view.findViewById(R.id.tv_restaurantInfoName);
         TextView et_location = view.findViewById(R.id.tv_restaurantInfoLocation);
@@ -110,6 +115,18 @@ public class RestaurantInfoFragment extends Fragment {
             mAdapter = new MenuItemsAdapter(menuItemList, ctx);
             rv_menuItemList.setAdapter(mAdapter);
         }
+
+        goToCartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action = RestaurantInfoFragmentDirections
+                        .actionRestaurantInfoFragmentToOrderCartFragment();
+
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(action);
+            }
+        });
+
 
         return view;
     }

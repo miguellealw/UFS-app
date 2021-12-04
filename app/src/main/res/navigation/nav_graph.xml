@@ -125,5 +125,13 @@
         <argument
             android:name="restaurantLocation"
             app:argType="string" />
+        <action
+            android:id="@+id/action_restaurantInfoFragment_to_orderCartFragment"
+            app:destination="@id/orderCartFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/orderCartFragment"
+        android:name="com.example.ufs.ui.orders.OrderCartFragment"
+        android:label="fragment_order_cart"
+        tools:layout="@layout/fragment_order_cart" />
 </navigation>
