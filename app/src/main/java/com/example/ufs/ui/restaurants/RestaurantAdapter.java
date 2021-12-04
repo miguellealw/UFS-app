@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ufs.R;
+import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.data.model.RestaurantModel;
+import com.example.ufs.ui.menu_items.MenuItemsAdapter;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     List<RestaurantModel> restaurantList;
     Context context;
+    private RestaurantAdapter.OnItemClickListener listener;
 
     public RestaurantAdapter(List<RestaurantModel> restaurantList, Context context) {
         this.restaurantList = restaurantList;
@@ -64,6 +67,27 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             iv_restaurantImage = itemView.findViewById(R.id.iv_list_restaurantImage);
             tv_restaurantName = itemView.findViewById(R.id.tv_list_restaurantName);
             tv_restaurantLocation = itemView.findViewById(R.id.tv_list_restaurantLocation);
+
+            // When restaurant is clicked send the restaurant model to the event handler
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(listener != null && pos != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(restaurantList.get(pos));
+                    }
+                }
+            });
         }
     }
+
+    public void setOnItemClickListener(RestaurantAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(RestaurantModel restaurant);
+    }
+
+
 }

@@ -227,6 +227,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
                 @Override
                 public void onClick(View v) {
                     openMenuItemDialog(null);
+
                     //MyRestaurantFragmentDirections.ActionRestaurantsFragmentToAddMenuItemsFragment action =
                     //        MyRestaurantFragmentDirections.actionRestaurantsFragmentToAddMenuItemsFragment();
                     //action.setRestaurantId(restaurant.getId());
@@ -330,6 +331,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
         return view;
     }
 
+    // After ok is tapped this will run
     @Override
     public void applyMenuItemTexts(String menuItemName, String menuItemPrice) {
         if(isEditingMenuItem) {

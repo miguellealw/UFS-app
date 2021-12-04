@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +27,7 @@ import java.util.List;
  */
 public class AllRestaurantsFragment extends Fragment {
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RestaurantAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -96,6 +98,24 @@ public class AllRestaurantsFragment extends Fragment {
             // Add data to the recycler view
             mAdapter = new RestaurantAdapter(restaurantList, ctx);
             recyclerView.setAdapter(mAdapter);
+
+
+            mAdapter.setOnItemClickListener(new RestaurantAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(RestaurantModel restaurant) {
+                    // ACTION TO RESTAURANT INFO FRAGMENT
+                    AllRestaurantsFragmentDirections.ActionAllRestaurantsFragmentToRestaurantInfoFragment
+                            action = AllRestaurantsFragmentDirections
+                            .actionAllRestaurantsFragmentToRestaurantInfoFragment(
+                                restaurant.getId(),
+                                restaurant.getName(),
+                                restaurant.getLocation()
+                            );
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+                }
+            });
         }
 
 

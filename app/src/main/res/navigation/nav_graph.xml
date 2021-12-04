@@ -84,7 +84,11 @@
         android:id="@+id/allRestaurantsFragment"
         android:name="com.example.ufs.ui.restaurants.AllRestaurantsFragment"
         android:label="fragment_all_restaurants"
-        tools:layout="@layout/fragment_all_restaurants" />
+        tools:layout="@layout/fragment_all_restaurants" >
+        <action
+            android:id="@+id/action_allRestaurantsFragment_to_restaurantInfoFragment"
+            app:destination="@id/restaurantInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addMenuItemsFragment"
         android:name="com.example.ufs.ui.menu_items.AddMenuItemsFragment"
@@ -107,5 +111,19 @@
         <argument
             android:name="menuItemPrice"
             app:argType="float" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurantInfoFragment"
+        android:name="com.example.ufs.ui.restaurants.RestaurantInfoFragment"
+        android:label="fragment_restaurant_info"
+        tools:layout="@layout/fragment_restaurant_info" >
+        <argument
+            android:name="restaurantId"
+            app:argType="integer" />
+        <argument android:name="restaurantName"
+            app:argType="string" />
+        <argument
+            android:name="restaurantLocation"
+            app:argType="string" />
     </fragment>
 </navigation>
