@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_restaurantsFragment_to_addMenuItemsFragment"
             app:destination="@id/addMenuItemsFragment" />
+        <action
+            android:id="@+id/action_restaurantsFragment_to_menuItemDialog"
+            app:destination="@id/menuItemDialog" />
     </fragment>
     <fragment
         android:id="@+id/ordersFragment"
@@ -90,5 +93,19 @@
         <argument android:name="restaurantId"
             app:argType="integer"
             android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuItemDialog"
+        android:name="com.example.ufs.ui.menu_items.MenuItemDialog"
+        android:label="MenuItemDialog" >
+        <argument
+            android:name="menuItemId"
+            app:argType="integer" />
+        <argument
+            android:name="menuItemName"
+            app:argType="string" />
+        <argument
+            android:name="menuItemPrice"
+            app:argType="float" />
     </fragment>
 </navigation>

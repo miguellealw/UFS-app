@@ -25,12 +25,21 @@ public class MenuItemDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         bundle = savedInstanceState;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Bundle args = getArguments();
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.menu_item_dialog, null);
 
+        et_menuItemName = view.findViewById(R.id.et_dialog_menuItemName);
+        et_menuItemPrice = view.findViewById(R.id.et_dialog_menuItemPrice);
+
+        if(args != null) {
+            et_menuItemName.setText(args.getString("menuItemName"));
+            et_menuItemPrice.setText(Float.toString(args.getFloat("menuItemPrice")));
+        }
+
         builder.setView(view)
-                .setTitle(("Add Menu Item"))
+                .setTitle(("Menu Item Information"))
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -47,8 +56,6 @@ public class MenuItemDialog extends DialogFragment {
                     }
                 });
 
-        et_menuItemName = view.findViewById(R.id.et_dialog_menuItemName);
-        et_menuItemPrice = view.findViewById(R.id.et_dialog_menuItemPrice);
 
         return builder.create();
 

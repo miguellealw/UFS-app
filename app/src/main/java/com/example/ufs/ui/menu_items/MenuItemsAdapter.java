@@ -2,6 +2,7 @@ package com.example.ufs.ui.menu_items;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ public class MenuItemsAdapter extends RecyclerView.Adapter<MenuItemsAdapter.Menu
 
     List<MenuItemModel> menuItemList;
     Context context;
+    private OnItemClickListener listener;
 
     public MenuItemsAdapter(List<MenuItemModel> menuItemList, Context context) {
         this.menuItemList = menuItemList;
@@ -63,6 +65,26 @@ public class MenuItemsAdapter extends RecyclerView.Adapter<MenuItemsAdapter.Menu
             iv_menuItemImage = itemView.findViewById(R.id.iv_list_restaurantImage);
             tv_menuItemName = itemView.findViewById(R.id.tv_list_menuItemName);
             tv_menuItemPrice = itemView.findViewById(R.id.tv_list_menuItemPrice);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(listener != null && pos != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(menuItemList.get(pos));
+                    }
+                }
+            });
         }
     }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(MenuItemModel menuItem);
+    }
+
+
 }
