@@ -107,6 +107,9 @@ public class ConfirmPaymentFragment extends Fragment implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 NavDirections action;
+                // TODO: send to address fragment if delivery is chosen
+                // add payment option in cart singleton
+
                 // credit card
                 if(paymentOptionSelected == 0) {
                     action = ConfirmPaymentFragmentDirections
