@@ -152,6 +152,9 @@
         <action
             android:id="@+id/action_confirmPaymentFragment_to_creditCardPayment"
             app:destination="@id/creditCardPayment" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/creditCardPayment"
@@ -163,4 +166,16 @@
         android:name="com.example.ufs.ui.payment.MealPlanPayment"
         android:label="fragment_meal_plan_payment"
         tools:layout="@layout/fragment_meal_plan_payment" />
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.ufs.ui.payment.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address" >
+        <action
+            android:id="@+id/action_addressFragment_to_creditCardPayment"
+            app:destination="@id/creditCardPayment" />
+        <action
+            android:id="@+id/action_addressFragment_to_mealPlanPayment"
+            app:destination="@id/mealPlanPayment" />
+    </fragment>
 </navigation>

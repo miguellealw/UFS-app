@@ -1,14 +1,23 @@
 package com.example.ufs.ui.payment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ufs.R;
+import com.example.ufs.data.model.Cart;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +25,9 @@ import com.example.ufs.R;
  * create an instance of this fragment.
  */
 public class AddressFragment extends Fragment {
+
+    private Context ctx;
+    private Cart cart;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +73,48 @@ public class AddressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_address, container, false);
+        View view = inflater.inflate(R.layout.fragment_address, container, false);
+        ctx = getActivity().getApplicationContext();
+        cart = Cart.getInstance();
+
+        Button btn_pay = view.findViewById(R.id.btn_address_pay);
+        TextView tv_deliveryOption = view.findViewById(R.id.tv_address_deliveryOption);
+        TextView tv_orderTotal = view.findViewById(R.id.tv_address_orderTotal);
+        tv_orderTotal.setText(String.format("%.02f", cart.getTotal() + 5));
+
+        EditText et_address = view.findViewById(R.id.et_address_address);
+        EditText et_zip = view.findViewById(R.id.et_address_zip);
+        EditText et_city = view.findViewById(R.id.et_address_city);
+
+        String finalAddress = et_address.getText().toString() + ", " +
+                et_city.getText().toString() + ", " +
+                et_zip.getText().toString();
+
+        btn_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!et_address.getText().toString().trim().equals("") ||
+                    !et_zip.getText().toString().trim().equals("") ||
+                    !et_city.getText().toString().trim().equals("")
+                )
+                {
+                    NavDirections action;
+                    // Go to credit card fragment
+                    if(cart.getIsCreditCard()) {
+                        action = AddressFragmentDirections.actionAddressFragmentToCreditCardPayment();
+                    } else {
+                        // Go to meal plan fragment
+                        action = AddressFragmentDirections.actionAddressFragmentToMealPlanPayment();
+                    }
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+                } else {
+                    Toast.makeText(ctx, "Fill out address information to continue", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        return view;
     }
 }

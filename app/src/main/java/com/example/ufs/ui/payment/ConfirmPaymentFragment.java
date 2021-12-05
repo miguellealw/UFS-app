@@ -32,8 +32,8 @@ public class ConfirmPaymentFragment extends Fragment implements AdapterView.OnIt
     private static final String ORDER_TOTAL = "orderTotal";
     private float orderTotal;
 
-    int paymentOptionSelected;
-    int deliveryOptionSelected;
+    private boolean isCreditCard;
+    private boolean isPickup;
 
     Context ctx;
     Cart cart;
@@ -107,17 +107,25 @@ public class ConfirmPaymentFragment extends Fragment implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 NavDirections action;
-                // TODO: send to address fragment if delivery is chosen
-                // add payment option in cart singleton
-
-                // credit card
-                if(paymentOptionSelected == 0) {
-                    action = ConfirmPaymentFragmentDirections
-                            .actionConfirmPaymentFragmentToCreditCardPayment();
+                if(isPickup) {
+                    // is pickup so go directly to payment
+                    cart.setIsCreditCard(isCreditCard);
+                    // credit card
+                    if(isCreditCard) {
+                        action = ConfirmPaymentFragmentDirections
+                                .actionConfirmPaymentFragmentToCreditCardPayment();
+                    } else {
+                        action = ConfirmPaymentFragmentDirections
+                                .actionConfirmPaymentFragmentToMealPlanPayment();
+                    }
                 } else {
+                    // Delivery so go to address
+
+                    cart.setIsCreditCard(isCreditCard);
                     action = ConfirmPaymentFragmentDirections
-                            .actionConfirmPaymentFragmentToMealPlanPayment();
+                            .actionConfirmPaymentFragmentToAddressFragment();
                 }
+
 
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(action);
@@ -132,11 +140,12 @@ public class ConfirmPaymentFragment extends Fragment implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.sp_paymentOptions:
-                paymentOptionSelected = position;
+                //paymentOptionSelected = position;
+                isCreditCard = position == 0;
                 Log.i("onItemSelected", "Position: " + position + " and id: " + id);
                 break;
             case R.id.sp_deliveryOptions:
-                deliveryOptionSelected = position;
+                isPickup = position == 1;
                 cart.setIsPickup(position == 1);
                 Log.i("deliveryOptionSelected", "Position: " + position + " and id: " + id);
                 break;
