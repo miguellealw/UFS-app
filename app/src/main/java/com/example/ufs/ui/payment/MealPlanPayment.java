@@ -4,7 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,8 @@ public class MealPlanPayment extends Fragment {
     Context ctx;
     Cart cart;
     DatabaseHelper dbo;
+    SP_LocalStorage sp;
+    View view;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,15 +75,50 @@ public class MealPlanPayment extends Fragment {
         }
     }
 
+    public void placeOrder() {
+        float totalPrice = cart.getTotal();
+        boolean isDelivered = false;
+        boolean isPickup = cart.getIsPickup();
+        String address = cart.getAddress();
+        boolean isCreditCard = cart.getIsCreditCard();
+        // restaurantID is set in RestaurantInfoFragment
+        int restaurantID = cart.getRestaurantID();
+        int userID = sp.getLoggedInUserId();
+
+        // Credit card is valid. Place order
+        OrderModel newOrder = new OrderModel(
+                totalPrice,
+                isDelivered,
+                isPickup,
+                address,
+                isCreditCard,
+                restaurantID,
+                userID
+        );
+        dbo.addOrder(newOrder);
+
+        Toast.makeText(ctx, "Order has been placed", Toast.LENGTH_LONG).show();
+
+        // TODO: clear cart
+        cart.clearCart();
+
+        NavDirections action = MealPlanPaymentDirections
+                .actionMealPlanPaymentToOrderSuccessFragment();
+
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(action);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_meal_plan_payment, container, false);
+        view = inflater.inflate(R.layout.fragment_meal_plan_payment, container, false);
         ctx = getActivity().getApplicationContext();
         cart = Cart.getInstance();
         dbo = new DatabaseHelper(ctx);
-        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        sp = new SP_LocalStorage(ctx);
+        String uniId = sp.getUserUniId();
 
         Button button_pay = view.findViewById(R.id.button_mealPlan_finalPayment);
         EditText et_uniID = view.findViewById(R.id.et_mealPlan_universityId);
@@ -97,31 +138,14 @@ public class MealPlanPayment extends Fragment {
                 if(et_uniID.getText().toString().trim().equals("")) {
                     Toast.makeText(ctx, "Fill out all information to continue", Toast.LENGTH_LONG).show();
                 } else {
-                    float totalPrice = cart.getTotal();
-                    boolean isDelivered = false;
-                    boolean isPickup = cart.getIsPickup();
-                    String address = cart.getAddress();
-                    boolean isCreditCard = cart.getIsCreditCard();
-                    // restaurantID is set in RestaurantInfoFragment
-                    int restaurantID = cart.getRestaurantID();
-                    int userID = sp.getLoggedInUserId();
-
-                    // Credit card is valid. Place order
-                    OrderModel newOrder = new OrderModel(
-                            totalPrice,
-                            isDelivered,
-                            isPickup,
-                            address,
-                            isCreditCard,
-                            restaurantID,
-                            userID
-                    );
-                    dbo.addOrder(newOrder);
-
-                    Toast.makeText(ctx, "Order has been placed", Toast.LENGTH_LONG).show();
-
-                    // TODO: clear cart
-                    cart.clearCart();
+                    // If university id is incorrect
+                    Log.i("MealPlan", "user id: " + uniId);
+                    Log.i("MealPlan", "edit text id: " + et_uniID.getText().toString());
+                    if(!uniId.equals(et_uniID.getText().toString())) {
+                        Toast.makeText(ctx, "Incorrect ID", Toast.LENGTH_LONG).show();
+                    } else {
+                        placeOrder();
+                    }
                 }
             }
         });

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.data.model.Cart;
 import com.example.ufs.data.model.RestaurantModel;
 
 import java.util.List;
@@ -77,6 +78,10 @@ public class AllRestaurantsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_all_restaurants, container, false);
         // Inflate the layout for this fragment
         Context ctx = getActivity().getApplicationContext();
+
+        // clear cart to avoid user adding food from multiple restaurants
+        Cart cart = Cart.getInstance();
+        cart.clearCart();
 
         DatabaseHelper dbo = new DatabaseHelper(ctx);
         List<RestaurantModel> restaurantList = dbo.getAllRestaurants();

@@ -25,11 +25,12 @@ public class UserModel {
     // Will be used to return from getUser in the DatabaseHelper
     // to provide to LoggedInUser view model
     //public UserModel(int id, String firstName, boolean isStudent) {
-    public UserModel(int id, String firstName, String lastName, String email, boolean isStudent) {
+    public UserModel(int id, String firstName, String lastName, String email, String universityID, boolean isStudent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.universityID = universityID;
         this.isStudent = isStudent;
     }
 

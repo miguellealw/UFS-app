@@ -160,12 +160,20 @@
         android:id="@+id/creditCardPayment"
         android:name="com.example.ufs.ui.payment.CreditCardPayment"
         android:label="fragment_credit_card_payment"
-        tools:layout="@layout/fragment_credit_card_payment" />
+        tools:layout="@layout/fragment_credit_card_payment" >
+        <action
+            android:id="@+id/action_creditCardPayment_to_orderSuccessFragment"
+            app:destination="@id/orderSuccessFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mealPlanPayment"
         android:name="com.example.ufs.ui.payment.MealPlanPayment"
         android:label="fragment_meal_plan_payment"
-        tools:layout="@layout/fragment_meal_plan_payment" />
+        tools:layout="@layout/fragment_meal_plan_payment" >
+        <action
+            android:id="@+id/action_mealPlanPayment_to_orderSuccessFragment"
+            app:destination="@id/orderSuccessFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addressFragment"
         android:name="com.example.ufs.ui.payment.AddressFragment"
@@ -178,4 +186,9 @@
             android:id="@+id/action_addressFragment_to_mealPlanPayment"
             app:destination="@id/mealPlanPayment" />
     </fragment>
+    <fragment
+        android:id="@+id/orderSuccessFragment"
+        android:name="com.example.ufs.ui.orders.OrderSuccessFragment"
+        android:label="fragment_order_success"
+        tools:layout="@layout/fragment_order_success" />
 </navigation>

@@ -355,6 +355,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userEmail = "";
         int userID = -1;
         boolean userIsStudent;
+        String uniId;
 
         try {
             // get data from db
@@ -365,7 +366,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             COLUMN_USER_LAST_NAME + ", " +
                             COLUMN_USER_ID + ", " +
                             COLUMN_USER_EMAIL + ", " +
-                            COLUMN_USER_IS_STUDENT +
+                            COLUMN_USER_IS_STUDENT + ", " +
+                            COLUMN_USER_UNIVERSITY_ID +
                             " FROM " + USER_TABLE +
                             " WHERE email = ?",
                     new String[] {email}
@@ -379,6 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
             } else {
                 // if no user is found
                 return null;
@@ -390,7 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
 
-        return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
+        return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
     }
 
     public UserModel getUser(String email, String password) {
@@ -418,6 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userEmail = "";
         int userID = -1;
         boolean userIsStudent;
+        String uniId;
 
         try {
             // get data from db
@@ -428,7 +432,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_USER_FIRST_NAME + ", " +
                         COLUMN_USER_LAST_NAME + ", " +
                         COLUMN_USER_EMAIL + ", " +
-                        COLUMN_USER_IS_STUDENT +
+                        COLUMN_USER_IS_STUDENT + ", " +
+                        COLUMN_USER_UNIVERSITY_ID +
                     " FROM " + USER_TABLE +
                     " WHERE email = ? AND password = ?",
                 selectionArgs
@@ -440,6 +445,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
                 userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
                 userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
             } else {
@@ -447,7 +453,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
-            return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
+            return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
         } finally {
             assert cursor != null;
             cursor.close();
