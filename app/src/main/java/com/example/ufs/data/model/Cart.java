@@ -9,9 +9,11 @@ public class Cart {
     private float total = 0;
     private List<MenuItemModel> menuItems = new ArrayList<>();
     private boolean isPickup = false;
-
-
     private boolean isCreditCard = false;
+
+
+    private String address;
+    private int restaurantID;
 
     private Cart() {}
 
@@ -37,18 +39,28 @@ public class Cart {
     public List<MenuItemModel> getMenuItems() { return menuItems; }
     public void setMenuItems(List<MenuItemModel> menuItems) { this.menuItems = menuItems; }
 
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+
+    public int getRestaurantID() { return restaurantID; }
+    public void setRestaurantID(int restaurantID) { this.restaurantID = restaurantID; }
+
     public void addToCart(MenuItemModel item) {
-        // TODO: update total
+        // update total
         total += item.getPrice();
         this.menuItems.add(item);
     }
+
     public void removeFromCart(MenuItemModel item) {
+        total -= item.getPrice();
         this.menuItems.remove(item);
     }
 
     public void clearCart() {
         this.menuItems.clear();
         total = 0;
+        address = "";
+        restaurantID = -1;
     }
 
 }

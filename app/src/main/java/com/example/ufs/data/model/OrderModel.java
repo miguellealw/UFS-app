@@ -1,15 +1,17 @@
 package com.example.ufs.data.model;
 
+import java.util.Date;
+
 public class OrderModel {
     private int id;
     private Float totalPrice;
     private Boolean isDelivered;
     private Boolean isPickup;
     private String address;
-    private int paymentOption;
+    //private int paymentOption;
+    private boolean isCreditCard;
     private int restaurantID;
     private int userID;
-
 
     private String timestamp;
 
@@ -22,7 +24,7 @@ public class OrderModel {
             boolean isDelivered,
             boolean isPickup,
             String address,
-            int paymentOption,
+            boolean isCreditCard,
             int restaurantID,
             int userID
     ) {
@@ -31,25 +33,25 @@ public class OrderModel {
         this.isDelivered = isDelivered;
         this.isPickup = isPickup;
         this.address = address;
-        this.paymentOption = paymentOption;
+        this.isCreditCard = isCreditCard;
         this.restaurantID = restaurantID;
         this.userID = userID;
     }
 
     public OrderModel(
-        float totalPrice,
-        boolean isDelivered,
-        boolean isPickup,
-        String address,
-        int paymentOption,
-        int restaurantID,
-        int userID
+            float totalPrice,
+            boolean isDelivered,
+            boolean isPickup,
+            String address,
+            boolean isCreditCard,
+            int restaurantID,
+            int userID
     ) {
         this.totalPrice = totalPrice;
         this.isDelivered = isDelivered;
         this.isPickup = isPickup;
         this.address = address;
-        this.paymentOption = paymentOption;
+        this.isCreditCard = isCreditCard;
         this.restaurantID = restaurantID;
         this.userID = userID;
     }
@@ -61,7 +63,7 @@ public class OrderModel {
                 ", isDelivered=" + isDelivered +
                 ", isPickup=" + isPickup +
                 ", address='" + address +
-                ", paymentOption='" + paymentOption +
+                ", isCreditCard='" + isCreditCard +
                 ", restaurantID='" + restaurantID +
                 ", userID='" + userID + '\'' +
                 '}';
@@ -89,8 +91,8 @@ public class OrderModel {
     }
     public void setAddress(String address) { this.address = address; }
 
-    public int getPaymentOption() { return paymentOption; }
-    public void setPaymentOption(int paymentOption) { this.paymentOption = paymentOption; }
+    public boolean getIsCreditCard() { return isCreditCard; }
+    public void setPaymentOption(boolean isCreditCard) { this.isCreditCard = isCreditCard; }
 
     public int getRestaurantID() { return restaurantID; }
     public void setRestaurantID(int restaurantID) { this.restaurantID = restaurantID; }

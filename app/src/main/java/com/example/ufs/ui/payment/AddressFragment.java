@@ -86,18 +86,23 @@ public class AddressFragment extends Fragment {
         EditText et_zip = view.findViewById(R.id.et_address_zip);
         EditText et_city = view.findViewById(R.id.et_address_city);
 
-        String finalAddress = et_address.getText().toString() + ", " +
-                et_city.getText().toString() + ", " +
-                et_zip.getText().toString();
 
         btn_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!et_address.getText().toString().trim().equals("") ||
-                    !et_zip.getText().toString().trim().equals("") ||
-                    !et_city.getText().toString().trim().equals("")
+
+                if(et_address.getText().toString().trim().equals("") ||
+                    et_zip.getText().toString().trim().equals("") ||
+                    et_city.getText().toString().trim().equals("")
                 )
                 {
+                    Toast.makeText(ctx, "Fill out address information to continue", Toast.LENGTH_LONG).show();
+                } else {
+                    String finalAddress = et_address.getText().toString() + ", " +
+                            et_city.getText().toString() + ", " +
+                            et_zip.getText().toString();
+                    cart.setAddress(finalAddress);
+
                     NavDirections action;
                     // Go to credit card fragment
                     if(cart.getIsCreditCard()) {
@@ -109,8 +114,6 @@ public class AddressFragment extends Fragment {
 
                     NavController navController = Navigation.findNavController(view);
                     navController.navigate(action);
-                } else {
-                    Toast.makeText(ctx, "Fill out address information to continue", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -157,6 +157,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
         dbo = new DatabaseHelper(ctx);
         RestaurantModel restaurant = dbo.getRestaurantByUserId(user_id);
+        Log.i(TAG, restaurant.toString());
         List<MenuItemModel> menuItemList = restaurant != null ?
                 dbo.getAllRestaurantMenuItems(restaurant.getId()) : new ArrayList<>();
 

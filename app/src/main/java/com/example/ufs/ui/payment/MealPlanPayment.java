@@ -8,10 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.Cart;
+import com.example.ufs.data.model.OrderModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +27,7 @@ import com.example.ufs.data.model.Cart;
 public class MealPlanPayment extends Fragment {
     Context ctx;
     Cart cart;
+    DatabaseHelper dbo;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,9 +74,13 @@ public class MealPlanPayment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_meal_plan_payment, container, false);
-
         ctx = getActivity().getApplicationContext();
         cart = Cart.getInstance();
+        dbo = new DatabaseHelper(ctx);
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+
+        Button button_pay = view.findViewById(R.id.button_mealPlan_finalPayment);
+        EditText et_uniID = view.findViewById(R.id.et_mealPlan_universityId);
 
         TextView orderTotal = view.findViewById(R.id.tv_mealPlan_total);
         TextView deliveryOption = view.findViewById(R.id.tv_mealPlan_deliveryOption);
@@ -78,6 +89,42 @@ public class MealPlanPayment extends Fragment {
 
         orderTotal.setText(String.format("%.02f", cartTotal));
         deliveryOption.setText(cart.getIsPickup() ? "Pickup" : "Delivery (+ $5.00 delivery fee)");
+
+        button_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if empty
+                if(et_uniID.getText().toString().trim().equals("")) {
+                    Toast.makeText(ctx, "Fill out all information to continue", Toast.LENGTH_LONG).show();
+                } else {
+                    float totalPrice = cart.getTotal();
+                    boolean isDelivered = false;
+                    boolean isPickup = cart.getIsPickup();
+                    String address = cart.getAddress();
+                    boolean isCreditCard = cart.getIsCreditCard();
+                    // restaurantID is set in RestaurantInfoFragment
+                    int restaurantID = cart.getRestaurantID();
+                    int userID = sp.getLoggedInUserId();
+
+                    // Credit card is valid. Place order
+                    OrderModel newOrder = new OrderModel(
+                            totalPrice,
+                            isDelivered,
+                            isPickup,
+                            address,
+                            isCreditCard,
+                            restaurantID,
+                            userID
+                    );
+                    dbo.addOrder(newOrder);
+
+                    Toast.makeText(ctx, "Order has been placed", Toast.LENGTH_LONG).show();
+
+                    // TODO: clear cart
+                    cart.clearCart();
+                }
+            }
+        });
 
         return view;
     }

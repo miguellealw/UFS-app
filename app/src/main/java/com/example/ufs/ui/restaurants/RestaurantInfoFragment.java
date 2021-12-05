@@ -52,6 +52,8 @@ public class RestaurantInfoFragment extends Fragment {
 
     Context ctx;
 
+    Cart cart;
+
     public RestaurantInfoFragment() {
         // Required empty public constructor
     }
@@ -92,6 +94,7 @@ public class RestaurantInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant_info, container, false);
         ctx = getActivity().getApplicationContext();
         dbo = new DatabaseHelper(ctx);
+        cart = Cart.getInstance();
 
         Button favoriteButton = view.findViewById(R.id.favoriteRestaurantButton);
         Button reviewButton = view.findViewById(R.id.reviewRestaurantButton);
@@ -123,7 +126,7 @@ public class RestaurantInfoFragment extends Fragment {
                     Cart cart = Cart.getInstance();
                     cart.addToCart(menuItem);
 
-                    Toast.makeText(ctx, "Added " + menuItem.getName() + " to cart", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, "Added " + menuItem.getName() + " to cart", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -131,6 +134,8 @@ public class RestaurantInfoFragment extends Fragment {
         goToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cart.setRestaurantID(restaurantId);
+
                 NavDirections action = RestaurantInfoFragmentDirections
                         .actionRestaurantInfoFragmentToOrderCartFragment();
 

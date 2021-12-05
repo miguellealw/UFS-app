@@ -232,6 +232,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public void generateData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Clear db
+        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ORDER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RESTAURANT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + MENU_ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + REVIEW_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + FAVORITE_RESTAURANT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + FAVORITE_MENU_ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + AD_TABLE);
+        onCreate(db);
+
+        ContentValues cv = new ContentValues();
+
+        // Restaurant User
+        // 1
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "chickfila@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // 2
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "subway@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // 3
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "pandaexpress@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // Student
+        addUser(new UserModel(
+                "Jane",
+                "Doe",
+                "janedoe@gmail.com",
+                "1234567890",
+                "password123",
+                true
+        ));
+
+
+        // Create restaurant
+        // 1
+        addRestaurant(new RestaurantModel(
+            "Chick-fil-A",
+            "123 Test st",
+            1
+        ));
+        addMenuItem(new MenuItemModel("Chicken Tenders", (float) 4.99, 1));
+        addMenuItem(new MenuItemModel("Chicken Sandwich", (float) 5.99, 1));
+        addMenuItem(new MenuItemModel("Spicy Chicken Sandwich", (float) 5.99, 1));
+        addMenuItem(new MenuItemModel("Spicy Chicken Deluxe", (float) 6.99, 1));
+
+        // 2
+        addRestaurant(new RestaurantModel(
+                "Subway",
+                "321 Test st",
+                2
+        ));
+
+        // 3
+        addRestaurant(new RestaurantModel(
+                "Panda Express",
+                "123 Pioneer Lane",
+                3
+        ));
+        addMenuItem(new MenuItemModel("Orange Chicken", (float) 4.99, 3));
+        addMenuItem(new MenuItemModel("Grilled Teriyaki Chicken", (float) 5.99, 3));
+        addMenuItem(new MenuItemModel("Almond Chicken Breast", (float) 5.99, 3));
+        addMenuItem(new MenuItemModel("Black Pepper Angus Steak", (float) 6.99, 3));
+
+    }
+
     public boolean addUser(UserModel userModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -572,26 +661,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ---- Student orders
     // TODO - test
-    public boolean addOrder(OrderModel orderModel) {
+    public long addOrder(OrderModel orderModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         // add values to table
         cv.put(COLUMN_ORDER_TOTAL_PRICE, orderModel.getTotalPrice());
         cv.put(COLUMN_ORDER_IS_DELIVERED, orderModel.getIsDelivered());
-        cv.put(COLUMN_USER_EMAIL, orderModel.getIsPickup());
-        cv.put(COLUMN_USER_UNIVERSITY_ID, orderModel.getPaymentOption());
-        cv.put(COLUMN_USER_IS_STUDENT, orderModel.getTimestamp());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getAddress());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getUserID());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getRestaurantID());
+        cv.put(COLUMN_ORDER_IS_PICKUP, orderModel.getIsPickup());
+        cv.put(COLUMN_ORDER_PAYMENT_OPTION, orderModel.getIsCreditCard());
+        //cv.put(COLUMN_ORDER_TIMESTAMP, orderModel.getTimestamp());
+        cv.put(COLUMN_ORDER_ADDRESS, orderModel.getAddress());
+        cv.put(COLUMN_ORDER_USER_ID, orderModel.getUserID());
+        cv.put(COLUMN_ORDER_RESTAURANT_ID, orderModel.getRestaurantID());
 
         // commit data to DB
-        long insert_status = db.insert(ORDER_TABLE, null, cv);
-
-        // if positive then insertion was successful
-        // if negative then insertion was a failure
-        return insert_status > 0;
+        long row_inserted = db.insert(ORDER_TABLE, null, cv);
+        return row_inserted;
     }
 
     // TODO - test
@@ -602,9 +688,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = { id + "" };
 
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
 
         String queryString = "SELECT * FROM " + ORDER_TABLE +
@@ -621,7 +707,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                 isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                 address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                 restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                 userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                 timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
@@ -634,7 +720,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+        OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
         fetchedOrder.setTimestamp(timestamp);
         return fetchedOrder;
     }
@@ -648,9 +734,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int id;
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
         List<OrderModel> studentOrders = new ArrayList<>();
 
@@ -670,12 +756,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                    paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                    isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                     restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     studentOrders.add(fetchedOrder);
 
@@ -700,7 +786,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean isDelivered,
         boolean isPickup,
         String address,
-        int paymentOption,
+        int isCreditCard,
         int restaurantID,
         int userID
     ) {
@@ -711,7 +797,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ORDER_IS_DELIVERED, isDelivered);
         values.put(COLUMN_ORDER_IS_PICKUP, isPickup);
         values.put(COLUMN_ORDER_ADDRESS, address);
-        values.put(COLUMN_ORDER_PAYMENT_OPTION, paymentOption);
+        values.put(COLUMN_ORDER_PAYMENT_OPTION, isCreditCard);
         values.put(COLUMN_ORDER_RESTAURANT_ID, restaurantID);
         values.put(COLUMN_ORDER_USER_ID, userID);
 
@@ -730,9 +816,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int id;
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
         List<OrderModel> restaurantOrders = new ArrayList<>();
 
@@ -752,12 +838,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                    paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                    isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                     restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     restaurantOrders.add(fetchedOrder);
 
