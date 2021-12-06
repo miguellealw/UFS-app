@@ -232,6 +232,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public void generateData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Clear db
+        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ORDER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RESTAURANT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + MENU_ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + REVIEW_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + FAVORITE_RESTAURANT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + FAVORITE_MENU_ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + AD_TABLE);
+        onCreate(db);
+
+        ContentValues cv = new ContentValues();
+
+        // Restaurant User
+        // 1
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "chickfila@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // 2
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "subway@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // 3
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "pandaexpress@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // Student
+        addUser(new UserModel(
+                "Jane",
+                "Doe",
+                "janedoe@gmail.com",
+                "1234567890",
+                "password123",
+                true
+        ));
+
+
+        // Create restaurant
+        // 1
+        addRestaurant(new RestaurantModel(
+            "Chick-fil-A",
+            "123 Test st",
+            1
+        ));
+        addMenuItem(new MenuItemModel("Chicken Tenders", (float) 4.99, 1));
+        addMenuItem(new MenuItemModel("Chicken Sandwich", (float) 5.99, 1));
+        addMenuItem(new MenuItemModel("Spicy Chicken Sandwich", (float) 5.99, 1));
+        addMenuItem(new MenuItemModel("Spicy Chicken Deluxe", (float) 6.99, 1));
+
+        // 2
+        addRestaurant(new RestaurantModel(
+                "Subway",
+                "321 Test st",
+                2
+        ));
+
+        // 3
+        addRestaurant(new RestaurantModel(
+                "Panda Express",
+                "123 Pioneer Lane",
+                3
+        ));
+        addMenuItem(new MenuItemModel("Orange Chicken", (float) 4.99, 3));
+        addMenuItem(new MenuItemModel("Grilled Teriyaki Chicken", (float) 5.99, 3));
+        addMenuItem(new MenuItemModel("Almond Chicken Breast", (float) 5.99, 3));
+        addMenuItem(new MenuItemModel("Black Pepper Angus Steak", (float) 6.99, 3));
+
+    }
+
     public boolean addUser(UserModel userModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -266,6 +355,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userEmail = "";
         int userID = -1;
         boolean userIsStudent;
+        String uniId;
 
         try {
             // get data from db
@@ -276,7 +366,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             COLUMN_USER_LAST_NAME + ", " +
                             COLUMN_USER_ID + ", " +
                             COLUMN_USER_EMAIL + ", " +
-                            COLUMN_USER_IS_STUDENT +
+                            COLUMN_USER_IS_STUDENT + ", " +
+                            COLUMN_USER_UNIVERSITY_ID +
                             " FROM " + USER_TABLE +
                             " WHERE email = ?",
                     new String[] {email}
@@ -290,6 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
             } else {
                 // if no user is found
                 return null;
@@ -301,7 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
 
-        return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
+        return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
     }
 
     public UserModel getUser(String email, String password) {
@@ -329,6 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userEmail = "";
         int userID = -1;
         boolean userIsStudent;
+        String uniId;
 
         try {
             // get data from db
@@ -339,7 +432,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_USER_FIRST_NAME + ", " +
                         COLUMN_USER_LAST_NAME + ", " +
                         COLUMN_USER_EMAIL + ", " +
-                        COLUMN_USER_IS_STUDENT +
+                        COLUMN_USER_IS_STUDENT + ", " +
+                        COLUMN_USER_UNIVERSITY_ID +
                     " FROM " + USER_TABLE +
                     " WHERE email = ? AND password = ?",
                 selectionArgs
@@ -351,6 +445,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
                 userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
                 userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
                 userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
                 userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
             } else {
@@ -358,15 +453,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
-            return new UserModel(userID, userFName, userLName, userEmail, userIsStudent);
+            return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
         } finally {
             assert cursor != null;
             cursor.close();
         }
     }
 
+    public UserModel getUserById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        // Condition of rows to select
+        String[] selectionArgs = { id + "" };
+
+        // User Data
+        String userFName = "";
+        String userLName = "";
+        String userEmail = "";
+        int userID = -1;
+        boolean userIsStudent;
+        String uniId;
+
+        try {
+            // get data from db
+            //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
+            cursor = db.rawQuery(
+                    "SELECT " +
+                            COLUMN_USER_ID + ", " +
+                            COLUMN_USER_FIRST_NAME + ", " +
+                            COLUMN_USER_LAST_NAME + ", " +
+                            COLUMN_USER_EMAIL + ", " +
+                            COLUMN_USER_IS_STUDENT + ", " +
+                            COLUMN_USER_UNIVERSITY_ID +
+                            " FROM " + USER_TABLE +
+                            " WHERE id = ?",
+                    selectionArgs
+            );
+
+            // If user is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
+                userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
+                userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
+                userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+            } else {
+                // if no user is found
+                return null;
+            }
+
+            return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+    }
+
     // =============== RESTAURANTS:
-    public boolean addRestaurant(RestaurantModel restaurantModel) {
+    public int addRestaurant(RestaurantModel restaurantModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -379,9 +527,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long insert_status = db.insert(RESTAURANT_TABLE, null, cv);
         db.close();
 
+
+
         // if positive then insertion was successful
         // if negative then insertion was a failure
-        return insert_status > 0;
+        //return insert_status > 0;
+        return (int) insert_status;
     }
 
     // Will get restaurant belonging to user. Returns null if user does not own restaurant
@@ -420,7 +571,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new RestaurantModel(id, name, location, userId);
     }
 
-    // TODO - test
     public RestaurantModel getRestaurantById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -535,7 +685,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    // TODO - test
     public boolean removeRestaurant(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -547,7 +696,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return insert_status > 0;
     }
 
-    // TODO - test
     public boolean editRestaurant(int id, String newName, String newLocation) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -569,26 +717,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ---- Student orders
     // TODO - test
-    public boolean addOrder(OrderModel orderModel) {
+    public long addOrder(OrderModel orderModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         // add values to table
         cv.put(COLUMN_ORDER_TOTAL_PRICE, orderModel.getTotalPrice());
         cv.put(COLUMN_ORDER_IS_DELIVERED, orderModel.getIsDelivered());
-        cv.put(COLUMN_USER_EMAIL, orderModel.getIsPickup());
-        cv.put(COLUMN_USER_UNIVERSITY_ID, orderModel.getPaymentOption());
-        cv.put(COLUMN_USER_IS_STUDENT, orderModel.getTimestamp());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getAddress());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getUserID());
-        cv.put(COLUMN_USER_PASSWORD, orderModel.getRestaurantID());
+        cv.put(COLUMN_ORDER_IS_PICKUP, orderModel.getIsPickup());
+        cv.put(COLUMN_ORDER_PAYMENT_OPTION, orderModel.getIsCreditCard());
+        //cv.put(COLUMN_ORDER_TIMESTAMP, orderModel.getTimestamp());
+        cv.put(COLUMN_ORDER_ADDRESS, orderModel.getAddress());
+        cv.put(COLUMN_ORDER_USER_ID, orderModel.getUserID());
+        cv.put(COLUMN_ORDER_RESTAURANT_ID, orderModel.getRestaurantID());
 
         // commit data to DB
-        long insert_status = db.insert(ORDER_TABLE, null, cv);
-
-        // if positive then insertion was successful
-        // if negative then insertion was a failure
-        return insert_status > 0;
+        long row_inserted = db.insert(ORDER_TABLE, null, cv);
+        return row_inserted;
     }
 
     // TODO - test
@@ -599,9 +744,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = { id + "" };
 
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
 
         String queryString = "SELECT * FROM " + ORDER_TABLE +
@@ -618,7 +763,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                 isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                 address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                 restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                 userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                 timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
@@ -631,12 +776,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+        OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
         fetchedOrder.setTimestamp(timestamp);
         return fetchedOrder;
     }
 
-    // TODO - test
     // get all orders that a student made
     public List<OrderModel> getAllStudentOrders(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -645,9 +789,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int id;
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
         List<OrderModel> studentOrders = new ArrayList<>();
 
@@ -667,12 +811,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                    paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                    isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                     restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     studentOrders.add(fetchedOrder);
 
@@ -697,7 +841,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean isDelivered,
         boolean isPickup,
         String address,
-        int paymentOption,
+        int isCreditCard,
         int restaurantID,
         int userID
     ) {
@@ -708,7 +852,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ORDER_IS_DELIVERED, isDelivered);
         values.put(COLUMN_ORDER_IS_PICKUP, isPickup);
         values.put(COLUMN_ORDER_ADDRESS, address);
-        values.put(COLUMN_ORDER_PAYMENT_OPTION, paymentOption);
+        values.put(COLUMN_ORDER_PAYMENT_OPTION, isCreditCard);
         values.put(COLUMN_ORDER_RESTAURANT_ID, restaurantID);
         values.put(COLUMN_ORDER_USER_ID, userID);
 
@@ -718,7 +862,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ---- Restaurant orders
 
-    // TODO - test
     // get all orders a restaurant has received
     public List<OrderModel> getAllRestaurantOrders(int restaurantId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -727,9 +870,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int id;
         float totalPrice;
-        boolean isDelivered, isPickup;
+        boolean isDelivered, isPickup, isCreditCard;
         String address;
-        int paymentOption, userId, restaurantID;
+        int userId, restaurantID;
         String timestamp;
         List<OrderModel> restaurantOrders = new ArrayList<>();
 
@@ -749,12 +892,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     isDelivered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_DELIVERED)) == 1;
                     isPickup = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_IS_PICKUP)) == 1;
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_ADDRESS));
-                    paymentOption = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION));
+                    isCreditCard = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_PAYMENT_OPTION)) == 0;
                     restaurantID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_RESTAURANT_ID));
                     userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ORDER_USER_ID));
                     timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_TIMESTAMP));
 
-                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, paymentOption, restaurantID, userId);
+                    OrderModel fetchedOrder = new OrderModel(id, totalPrice, isDelivered, isPickup, address, isCreditCard, restaurantID, userId);
                     fetchedOrder.setTimestamp(timestamp);
                     restaurantOrders.add(fetchedOrder);
 
@@ -794,11 +937,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return status > 0;
     }
 
+    public boolean removeOrder(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // commit data to DB
+        long insert_status = db.delete(ORDER_TABLE, "id = ?", new String[]{id + ""});
+
+        // if positive then deletion was successful
+        // if negative then deletion was a failure
+        return insert_status > 0;
+    }
 
 
     // ================= MENU ITEMS
-    //  TODO:
-    public boolean addMenuItem(MenuItemModel menuItemModel) {
+    public int addMenuItem(MenuItemModel menuItemModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -808,8 +960,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_MENU_ITEM_RESTAURANT_ID, menuItemModel.getRestaurantId());
 
         // commit data to DB
-        long status = db.insert(MENU_ITEM_TABLE, null, cv);
-        return status > 0;
+        long row_id = db.insert(MENU_ITEM_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
     }
 
     public MenuItemModel getMenuItemById(int id) {
@@ -841,6 +994,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new MenuItemModel(id, name, price, restaurantID);
     }
@@ -876,6 +1030,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new MenuItemModel(id, name, price, restaurantID);
     }
@@ -919,6 +1074,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return restaurantMenuItems;
     }
@@ -937,14 +1093,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean removeMenuItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long insert_status = db.delete(MENU_ITEM_TABLE, "WHERE id = ?", new String[]{ Integer.toString(id) });
+        long insert_status = db.delete(MENU_ITEM_TABLE, "id = ?", new String[]{ Integer.toString(id) });
         return insert_status > 0;
     }
 
     // ================= REVIEWS
 
     // TODO - test
-    public boolean addReview(ReviewModel reviewModel) {
+    public int addReview(ReviewModel reviewModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -955,8 +1111,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_REVIEW_RESTAURANT_ID, reviewModel.getRestaurantId());
 
         // commit data to DB
-        long status = db.insert(REVIEW_TABLE, null, cv);
-        return status > 0;
+        long row_id = db.insert(REVIEW_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
     }
 
     // TODO - test
@@ -994,7 +1151,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new ReviewModel(id, rating, message, userId, restaurantId);
     }
 
-    // TODO
     public List<ReviewModel> getAllStudentReviews(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -1005,7 +1161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int restaurantId;
         List<ReviewModel> studentReviews = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE userId = ?";
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE user_id = ?";
 
         try {
             // get data from db
@@ -1049,7 +1205,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int userId;
         List<ReviewModel> restaurantReviews = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE restaurantId = ?";
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE restaurant_id = ?";
 
         try {
             // get data from db
@@ -1083,6 +1239,102 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurantReviews;
     }
 
+    // ================= FAVORITES
+    // TODO
+    public int addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // add values to table
+        cv.put(COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID, favoriteModel.getRestaurantId());
+        cv.put(COLUMN_FAVORITE_MENU_ITEM_USER_ID, favoriteModel.getUserId());
+
+        // commit data to DB
+        long row_id = db.insert(FAVORITE_RESTAURANT_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
+    }
+
+    // TODO
+    public List<FavoriteRestaurantModel> getAllUserFavoriteRestaurants(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        int id;
+        int restaurantId;
+        String restaurantName, restaurantLocation;
+        List<FavoriteRestaurantModel> favorites = new ArrayList<>();
+
+        // JOIN the FAVORITE_RESTAURANT_TABLE with the Restaurant Table
+
+        /*
+            SELECT
+                f.id, // favorites id
+                r.id as restaurantId, // restaurant id
+                r.name,
+                r.location
+           FROM
+                RESTAURANT_TABLE r
+                INNER JOIN FAVORITE_RESTAURANT_TABLE f
+                    ON f.restaurantId = r.id
+         */
+
+        //String queryString = "SELECT * FROM " + FAVORITE_RESTAURANT_TABLE + " WHERE restaurant_id = ?";
+        String queryString = "SELECT f.id, r.id as restaurant_id, r.name, r.location FROM " +
+                FAVORITE_RESTAURANT_TABLE + " f" +
+                //" INNER JOIN " + FAVORITE_RESTAURANT_TABLE + " f" +
+                " JOIN " + RESTAURANT_TABLE + " r" +
+                " ON f.restaurant_id = r.id" +
+                " WHERE f.user_id = ?;";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(userId)});
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_ID));
+                    restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID));
+
+                    restaurantName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                    restaurantLocation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+
+                    FavoriteRestaurantModel fetchedFavorite = new FavoriteRestaurantModel(
+                            id,
+                            userId,
+                            restaurantId,
+                            restaurantName,
+                            restaurantLocation
+                    );
+
+                    favorites.add(fetchedFavorite);
+
+                } while(cursor.moveToNext());
+        } else {
+                // if student has no favorites
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return favorites;
+    }
+
+    // TODO
+    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
+        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
+    }
+
+    // TODO
+    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
+        throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
+    }
     // ================= ADVERTISEMENTS
     // TODO
     public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {
@@ -1098,38 +1350,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         throw new NotImplementedError("getAllAdvertisements is not implemented");
     }
 
-    // ================= FAVORITES
-    // TODO
-    public boolean addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
-       throw new NotImplementedError("addFavoriteRestaurant is not implemented");
-    }
-    public boolean addFavoriteMenuItem(FavoriteRestaurantModel favoriteModel) {
-        throw new NotImplementedError("addFavoriteMenuItem is not implemented");
-    }
-
-    // TODO
-    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
-        throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
-    }
-    public FavoriteMenuItemModel getFavoriteMenuItemById(int id) {
-        throw new NotImplementedError("getFavoriteMenuItemById is not implemented");
-    }
-
-    // TODO
-    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {
-        throw new NotImplementedError("getAllFavoriteRestaurants is not implemented");
-    }
-    public List<FavoriteMenuItemModel> getAllFavoriteMenuItems() {
-        throw new NotImplementedError("getAllFavoriteMenuItems is not implemented");
-    }
-
-    // TODO
-    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
-        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
-    }
-    public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {
-        throw new NotImplementedError("removeFavoriteMenuItem is not implemented");
-    }
 
 
 }

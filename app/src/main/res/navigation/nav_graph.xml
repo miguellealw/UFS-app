@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/restaurantsFragment"
-        android:name="com.example.ufs.ui.MyRestaurantFragment"
+        android:name="com.example.ufs.ui.restaurants.MyRestaurantFragment"
         android:label="fragment_restaurants"
         tools:layout="@layout/fragment_restaurants" >
         <action
@@ -23,35 +23,49 @@
                 android:name="restaurantLocation"
                 android:defaultValue='""' />
         </action>
+        <action
+            android:id="@+id/action_restaurantsFragment_to_addMenuItemsFragment"
+            app:destination="@id/addMenuItemsFragment" />
+        <action
+            android:id="@+id/action_restaurantsFragment_to_menuItemDialog"
+            app:destination="@id/menuItemDialog" />
     </fragment>
     <fragment
         android:id="@+id/ordersFragment"
-        android:name="com.example.ufs.ui.OrdersFragment"
+        android:name="com.example.ufs.ui.orders.OrdersFragment"
         android:label="fragment_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_ordersFragment_to_cancelOrderDialog"
+            app:destination="@id/cancelOrderDialog" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.ufs.ui.FavoritesFragment"
+        android:name="com.example.ufs.ui.favorites.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/reviewsFragment"
-        android:name="com.example.ufs.ui.ReviewsFragment"
+        android:name="com.example.ufs.ui.reviews.ReviewsFragment"
         android:label="fragment_reviews"
         tools:layout="@layout/fragment_reviews" />
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.example.ufs.ui.AccountFragment"
+        android:name="com.example.ufs.ui.account.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/createRestaurantFragment"
-        android:name="com.example.ufs.ui.CreateRestaurantFragment"
+        android:name="com.example.ufs.ui.restaurants.CreateRestaurantFragment"
         android:label="fragment_create_restaurant"
         tools:layout="@layout/fragment_create_restaurant" >
         <action
             android:id="@+id/action_createRestaurantFragment_to_addMenuItemsFragment"
-            app:destination="@id/addMenuItemsFragment" />
+            app:destination="@id/addMenuItemsFragment" >
+            <argument
+                android:name="restaurantId"
+                android:defaultValue="-1" />
+        </action>
         <argument
             android:name="restaurantId"
             app:argType="integer" />
@@ -67,17 +81,144 @@
     </fragment>
     <fragment
         android:id="@+id/advertFragment"
-        android:name="com.example.ufs.ui.AdvertFragment"
+        android:name="com.example.ufs.ui.ad.AdvertFragment"
         android:label="fragment_advert"
         tools:layout="@layout/fragment_advert" />
     <fragment
         android:id="@+id/allRestaurantsFragment"
-        android:name="com.example.ufs.ui.AllRestaurantsFragment"
+        android:name="com.example.ufs.ui.restaurants.AllRestaurantsFragment"
         android:label="fragment_all_restaurants"
-        tools:layout="@layout/fragment_all_restaurants" />
+        tools:layout="@layout/fragment_all_restaurants" >
+        <action
+            android:id="@+id/action_allRestaurantsFragment_to_restaurantInfoFragment"
+            app:destination="@id/restaurantInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addMenuItemsFragment"
-        android:name="com.example.ufs.ui.AddMenuItemsFragment"
+        android:name="com.example.ufs.ui.menu_items.AddMenuItemsFragment"
         android:label="fragment_add_menu_items"
-        tools:layout="@layout/fragment_add_menu_items" />
+        tools:layout="@layout/fragment_add_menu_items" >
+        <argument android:name="restaurantId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuItemDialog"
+        android:name="com.example.ufs.ui.menu_items.MenuItemDialog"
+        android:label="MenuItemDialog" >
+        <argument
+            android:name="menuItemId"
+            app:argType="integer" />
+        <argument
+            android:name="menuItemName"
+            app:argType="string" />
+        <argument
+            android:name="menuItemPrice"
+            app:argType="float" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurantInfoFragment"
+        android:name="com.example.ufs.ui.restaurants.RestaurantInfoFragment"
+        android:label="fragment_restaurant_info"
+        tools:layout="@layout/fragment_restaurant_info" >
+        <argument
+            android:name="restaurantId"
+            app:argType="integer" />
+        <argument android:name="restaurantName"
+            app:argType="string" />
+        <argument
+            android:name="restaurantLocation"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_restaurantInfoFragment_to_orderCartFragment"
+            app:destination="@id/orderCartFragment" />
+        <action
+            android:id="@+id/action_restaurantInfoFragment_to_addReviewFragment2"
+            app:destination="@id/addReviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderCartFragment"
+        android:name="com.example.ufs.ui.orders.OrderCartFragment"
+        android:label="fragment_order_cart"
+        tools:layout="@layout/fragment_order_cart" >
+        <action
+            android:id="@+id/action_orderCartFragment_to_confirmPaymentFragment"
+            app:destination="@id/confirmPaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmPaymentFragment"
+        android:name="com.example.ufs.ui.payment.ConfirmPaymentFragment"
+        android:label="fragment_confirm_payment"
+        tools:layout="@layout/fragment_confirm_payment" >
+        <argument
+            android:name="orderTotal"
+            app:argType="float" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_mealPlanPayment"
+            app:destination="@id/mealPlanPayment" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_creditCardPayment"
+            app:destination="@id/creditCardPayment" />
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creditCardPayment"
+        android:name="com.example.ufs.ui.payment.CreditCardPayment"
+        android:label="fragment_credit_card_payment"
+        tools:layout="@layout/fragment_credit_card_payment" >
+        <action
+            android:id="@+id/action_creditCardPayment_to_orderSuccessFragment"
+            app:destination="@id/orderSuccessFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanPayment"
+        android:name="com.example.ufs.ui.payment.MealPlanPayment"
+        android:label="fragment_meal_plan_payment"
+        tools:layout="@layout/fragment_meal_plan_payment" >
+        <action
+            android:id="@+id/action_mealPlanPayment_to_orderSuccessFragment"
+            app:destination="@id/orderSuccessFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.ufs.ui.payment.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address" >
+        <action
+            android:id="@+id/action_addressFragment_to_creditCardPayment"
+            app:destination="@id/creditCardPayment" />
+        <action
+            android:id="@+id/action_addressFragment_to_mealPlanPayment"
+            app:destination="@id/mealPlanPayment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderSuccessFragment"
+        android:name="com.example.ufs.ui.orders.OrderSuccessFragment"
+        android:label="fragment_order_success"
+        tools:layout="@layout/fragment_order_success" />
+    <fragment
+        android:id="@+id/addReviewFragment"
+        android:name="com.example.ufs.ui.reviews.AddReviewFragment"
+        android:label="fragment_add_review"
+        tools:layout="@layout/fragment_add_review" >
+        <action
+            android:id="@+id/action_addReviewFragment_to_allRestaurantsFragment"
+            app:destination="@id/allRestaurantsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cancelOrderDialog"
+        android:name="com.example.ufs.ui.orders.CancelOrderDialog"
+        android:label="CancelOrderDialog" >
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
+        <argument
+            android:name="isStudent"
+            app:argType="boolean" />
+        <argument
+            android:name="isDelivered"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

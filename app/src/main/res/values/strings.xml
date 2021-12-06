@@ -26,4 +26,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="shared_prefs">sharedPrefs</string>
+
+
+    <string-array name="paymentOptions">
+        <item>Credit Card</item>
+        <item>Meal Plan</item>
+    </string-array>
+
+    <string-array name="deliveryOptions">
+        <item>Delivery (+ $5.00 delivery fee)</item>
+        <item>Pickup</item>
+    </string-array>
 </resources>

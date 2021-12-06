@@ -5,7 +5,7 @@
     android:id="@+id/advertFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FavoritesFragment">
+    tools:context=".ui.favorites.FavoritesFragment">
 //Todo: advertisement
     <TextView
         android:id="@+id/textView5"

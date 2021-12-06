@@ -51,6 +51,7 @@ public class LoginDataSource {
             editor.putString("userLName", db_user.getLastName());
             editor.putString("userEmail", db_user.getEmail());
             editor.putBoolean("isStudent", db_user.getIsStudent());
+            editor.putString("universityId", db_user.getUniversityID());
 
             editor.apply();
 

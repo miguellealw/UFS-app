@@ -31,10 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DatabaseHelper db = new DatabaseHelper(this);
+        //db.generateData();
+
         //  get logged in user info
         SP_LocalStorage sp = new SP_LocalStorage(MainActivity.this);
         boolean isLoggedIn = sp.getIsLoggedIn();
-        boolean isStudent = sp.isStudent();
+        boolean isStudent = sp.getIsStudent();
         //Log.i(TAG, "Is User Student " + isStudent);
 
         // If not logged in redirect to login screen
