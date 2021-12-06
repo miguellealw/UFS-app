@@ -95,7 +95,7 @@ public class OrderCartFragment extends Fragment {
         // remove menu item from list
         removeItemFromCart(id);
 
-        // TODO: figure out how to update recycler view
+        // update recycler view
         cartMenuItems = cart.getMenuItems();
         mAdapter = new MenuItemsAdapter(cartMenuItems, ctx);
         recyclerView.setAdapter(mAdapter);

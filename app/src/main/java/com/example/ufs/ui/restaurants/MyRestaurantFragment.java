@@ -135,11 +135,88 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
     void removeMenuItem(int id) {
         dbo.removeMenuItem(id);
-        Toast.makeText(ctx, "Menu Item Deleted", Toast.LENGTH_LONG).show();
+        Toast.makeText(ctx, "Menu Item Deleted", Toast.LENGTH_SHORT).show();
+
+        List<MenuItemModel> menuItemsList = dbo.getAllRestaurantMenuItems(restaurantId);
 
         // TODO: figure out how to update recycler view
-        //mAdapter = new MenuItemsRecyclerView(menuItemList, ctx);
-        //recyclerView.setAdapter(mAdapter);
+        if(menuItemsList != null) {
+            updateAdapter(menuItemsList);
+//            mAdapter = new MenuItemsAdapter(menuItemList, ctx);
+//            recyclerView.setAdapter(mAdapter);
+        } else {
+            noMenuItemsMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateAdapter(List<MenuItemModel> menuItemList) {
+        mAdapter = new MenuItemsAdapter(menuItemList, ctx);
+        recyclerView.setAdapter(mAdapter);
+
+        // Add listeners
+
+        // REMOVE MENU ITEM
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                removeMenuItem((int) viewHolder.itemView.getTag());
+
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        // EDIT MENU ITEM
+        mAdapter.setOnItemClickListener(new MenuItemsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItemModel menuItem) {
+                selectedMenuItemId = menuItem.getId();
+                isEditingMenuItem = true;
+
+                Bundle args = new Bundle();
+                args.putInt("menuItemId", menuItem.getId());
+                args.putString("menuItemName", menuItem.getName());
+                args.putFloat("menuItemPrice", menuItem.getPrice());
+
+
+                openMenuItemDialog(args);
+//                        DialogFragment dialog = new MenuItemDialog();
+//                        dialog.setArguments(args);
+//                        dialog.show(getSupportFragmentManager(), "TAG");
+//                        MyRestaurantFragmentDirections.
+//                                ActionRestaurantsFragmentToMenuItemDialog action =
+//                                MyRestaurantFragmentDirections.actionRestaurantsFragmentToMenuItemDialog(
+//                                   menuItem.getId(),
+//                                    menuItem.getName(),
+//                                    menuItem.getPrice()
+//                                );
+                //action.setMenuItemId(menuItem.getId());
+                //action.setMenuItemName(menuItem.getName());
+                //action.setMenuItemPrice(menuItem.getPrice());
+
+                Log.i(TAG, "Menu ITEM CLICK: " + menuItem.getName());
+            }
+        });
+    }
+
+    private void renderRecyclerView(List<MenuItemModel> menuItemsList) {
+        if(menuItemsList != null) {
+            recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
+            recyclerView.setHasFixedSize(true);
+
+           recyclerView.setVisibility(View.VISIBLE);
+           noMenuItemsMessage.setVisibility(View.GONE);
+
+           layoutManager = new LinearLayoutManager(ctx);
+           recyclerView.setLayoutManager(layoutManager);
+
+           updateAdapter(menuItemsList);
+       }
     }
 
     @Override
@@ -241,66 +318,7 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
             // Show restaurant menu items
             if(menuItemList != null && menuItemList.size() > 0) {
-                // Set up recycler view and display
-                recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
-                recyclerView.setHasFixedSize(true);
-
-                recyclerView.setVisibility(View.VISIBLE);
-                noMenuItemsMessage.setVisibility(View.GONE);
-
-                layoutManager = new LinearLayoutManager(ctx);
-                recyclerView.setLayoutManager(layoutManager);
-
-                //mAdapter = new MyAdapter(restaurantList);
-                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
-                recyclerView.setAdapter(mAdapter);
-
-                // REMOVE MENU ITEM
-                new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                        removeMenuItem((int) viewHolder.itemView.getTag());
-                    }
-                }).attachToRecyclerView(recyclerView);
-
-                // EDIT MENU ITEM
-                mAdapter.setOnItemClickListener(new MenuItemsAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(MenuItemModel menuItem) {
-                        selectedMenuItemId = menuItem.getId();
-                        isEditingMenuItem = true;
-
-                        Bundle args = new Bundle();
-                        args.putInt("menuItemId", menuItem.getId());
-                        args.putString("menuItemName", menuItem.getName());
-                        args.putFloat("menuItemPrice", menuItem.getPrice());
-
-
-                        openMenuItemDialog(args);
-//                        DialogFragment dialog = new MenuItemDialog();
-//                        dialog.setArguments(args);
-//                        dialog.show(getSupportFragmentManager(), "TAG");
-//                        MyRestaurantFragmentDirections.
-//                                ActionRestaurantsFragmentToMenuItemDialog action =
-//                                MyRestaurantFragmentDirections.actionRestaurantsFragmentToMenuItemDialog(
-//                                   menuItem.getId(),
-//                                    menuItem.getName(),
-//                                    menuItem.getPrice()
-//                                );
-                        //action.setMenuItemId(menuItem.getId());
-                        //action.setMenuItemName(menuItem.getName());
-                        //action.setMenuItemPrice(menuItem.getPrice());
-
-                        Log.i(TAG, "Menu ITEM CLICK: " + menuItem.getName());
-                    }
-                });
+                renderRecyclerView(menuItemList);
             } else {
                 //recyclerView.setVisibility(View.GONE);
                 noMenuItemsMessage.setVisibility(View.VISIBLE);
@@ -335,20 +353,23 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
     // After ok is tapped this will run
     @Override
     public void applyMenuItemTexts(String menuItemName, String menuItemPrice) {
+        noMenuItemsMessage.setVisibility(View.GONE);
         if(isEditingMenuItem) {
             // EDITING MENU ITEM
             boolean success = dbo.editMenuItem(selectedMenuItemId, menuItemName, menuItemPrice);
+            menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
             isEditingMenuItem = false;
 
             if(success) {
                 //menuItemList.add(newMenuItem);
-                // TODO: find better way of updating recycler view
-                menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+                updateAdapter(menuItemList);
+//                // TODO: find better way of updating recycler view
+//                menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+//
+//                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
+//                recyclerView.setAdapter(mAdapter);
 
-                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
-                recyclerView.setAdapter(mAdapter);
-
-                Toast.makeText(ctx, "Menu Item Updated", Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, "Menu Item Updated", Toast.LENGTH_SHORT).show();
             }
         } else {
             // ADD MENU ITEM
@@ -360,20 +381,27 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
             if(recyclerView == null) {
                 recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
                 recyclerView.setHasFixedSize(true);
+
+                recyclerView.setVisibility(View.VISIBLE);
+                noMenuItemsMessage.setVisibility(View.GONE);
+
+                layoutManager = new LinearLayoutManager(ctx);
+                recyclerView.setLayoutManager(layoutManager);
             }
 
             // Add menu item to local array list to display in recycler view
             if(menuItemId != -1) {
                 //menuItemList.add(newMenuItem);
                 menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+                updateAdapter(menuItemList);
 
                 // TODO: find better way of updating recycler view
-                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
-                recyclerView.setAdapter(mAdapter);
+//                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
+//                recyclerView.setAdapter(mAdapter);
 
-                Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_SHORT).show();
             }
 
         }
