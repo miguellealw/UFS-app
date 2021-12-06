@@ -1,14 +1,25 @@
 package com.example.ufs.ui.reviews;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
+import com.example.ufs.data.model.OrderModel;
+import com.example.ufs.data.model.ReviewModel;
+import com.example.ufs.ui.orders.OrdersAdapter;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +27,9 @@ import com.example.ufs.R;
  * create an instance of this fragment.
  */
 public class ReviewsFragment extends Fragment {
+    private RecyclerView recyclerView;
+    private ReviewsAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,10 +76,61 @@ public class ReviewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reviews, container, false);
+        Context ctx = getActivity().getApplicationContext();
 
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        boolean isStudent = sp.getIsStudent();
+
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+        List<ReviewModel> reviewsList;
+        TextView noReviewsMessage = view.findViewById(R.id.noReviewsMessage);
+
+        int userId = sp.getLoggedInUserId();
 
         // TODO: if isStudent show the student's reviews
         //  if not isStudent then show the restaurants reviews
+
+        if(isStudent) {
+            reviewsList = dbo.getAllStudentReviews(userId);
+
+            if(reviewsList != null) {
+                // Set up recycler view and display
+                recyclerView = view.findViewById(R.id.rv_reviews);
+                recyclerView.setHasFixedSize(true);
+
+                // Show list and hide no restaurants message
+                recyclerView.setVisibility(View.VISIBLE);
+                noReviewsMessage.setVisibility(View.GONE);
+
+                layoutManager = new LinearLayoutManager(ctx);
+                recyclerView.setLayoutManager(layoutManager);
+
+                // Add data to the recycler view
+                mAdapter = new ReviewsAdapter(reviewsList, ctx);
+                recyclerView.setAdapter(mAdapter);
+            }
+        } else {
+            // show restaurant reviews
+            int restaurantId = dbo.getRestaurantByUserId(userId).getId();
+            reviewsList = dbo.getAllRestaurantReviews(restaurantId);
+
+            if(reviewsList != null) {
+                // Set up recycler view and display
+                recyclerView = view.findViewById(R.id.rv_reviews);
+                recyclerView.setHasFixedSize(true);
+
+                // Show list and hide no restaurants message
+                recyclerView.setVisibility(View.VISIBLE);
+                noReviewsMessage.setVisibility(View.GONE);
+
+                layoutManager = new LinearLayoutManager(ctx);
+                recyclerView.setLayoutManager(layoutManager);
+
+                // Add data to the recycler view
+                mAdapter = new ReviewsAdapter(reviewsList, ctx);
+                recyclerView.setAdapter(mAdapter);
+            }
+        }
 
         return view;
     }

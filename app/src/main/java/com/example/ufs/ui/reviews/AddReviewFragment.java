@@ -96,26 +96,30 @@ public class AddReviewFragment extends Fragment {
         tv_restaurantName.setText(restaurant.getName());
 
 
-
         button_addReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReviewModel newReview = new ReviewModel(
-                        (int) rb_review_rating.getRating(),
-                        et_review_review.getText().toString(),
-                        userId,
-                        cart.getRestaurantID()
-                );
+                if(et_review_review.getText().toString().trim().equals("")) {
+                    ReviewModel newReview = new ReviewModel(
+                            (int) rb_review_rating.getRating(),
+                            et_review_review.getText().toString(),
+                            userId,
+                            cart.getRestaurantID()
+                    );
 
-                dbo.addReview(newReview);
+                    dbo.addReview(newReview);
 
-                Toast.makeText(ctx, "Review posted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Review posted", Toast.LENGTH_SHORT).show();
 
-                NavDirections action = AddReviewFragmentDirections
-                        .actionAddReviewFragmentToAllRestaurantsFragment();
+                    NavDirections action = AddReviewFragmentDirections
+                            .actionAddReviewFragmentToAllRestaurantsFragment();
 
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(action);
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+                } else {
+                    Toast.makeText(ctx, "Could not publish review. Try again.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

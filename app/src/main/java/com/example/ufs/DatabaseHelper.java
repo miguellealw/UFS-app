@@ -1152,7 +1152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int restaurantId;
         List<ReviewModel> studentReviews = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE userId = ?";
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE user_id = ?";
 
         try {
             // get data from db
@@ -1196,7 +1196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int userId;
         List<ReviewModel> restaurantReviews = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE restaurantId = ?";
+        String queryString = "SELECT * FROM " + REVIEW_TABLE + " WHERE restaurant_id = ?";
 
         try {
             // get data from db
