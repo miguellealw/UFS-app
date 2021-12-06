@@ -34,7 +34,11 @@
         android:id="@+id/ordersFragment"
         android:name="com.example.ufs.ui.orders.OrdersFragment"
         android:label="fragment_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_ordersFragment_to_cancelOrderDialog"
+            app:destination="@id/cancelOrderDialog" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.ufs.ui.favorites.FavoritesFragment"
@@ -202,5 +206,19 @@
         <action
             android:id="@+id/action_addReviewFragment_to_allRestaurantsFragment"
             app:destination="@id/allRestaurantsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cancelOrderDialog"
+        android:name="com.example.ufs.ui.orders.CancelOrderDialog"
+        android:label="CancelOrderDialog" >
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
+        <argument
+            android:name="isStudent"
+            app:argType="boolean" />
+        <argument
+            android:name="isDelivered"
+            app:argType="boolean" />
     </fragment>
 </navigation>

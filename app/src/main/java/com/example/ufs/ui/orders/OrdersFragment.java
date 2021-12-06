@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.example.ufs.data.model.OrderModel;
 import com.example.ufs.data.model.RestaurantModel;
 import com.example.ufs.ui.restaurants.RestaurantAdapter;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +30,23 @@ import java.util.List;
  * Use the {@link OrdersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OrdersFragment extends Fragment {
+public class OrdersFragment extends Fragment implements CancelOrderDialog.CancelOrderDialogListener {
     private RecyclerView recyclerView;
     private OrdersAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    List<OrderModel> ordersList;
+    int userId;
+
+    DatabaseHelper dbo;
+
+    View view;
+    Context ctx;
+
+    TextView noOrdersMessage;
+    boolean isStudent;
+
+    int restaurantId;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,6 +79,69 @@ public class OrdersFragment extends Fragment {
         return fragment;
     }
 
+    private void updateAdapter(List<OrderModel> ordersList) {
+        // Add data to the recycler view
+        mAdapter = new OrdersAdapter(ordersList, ctx);
+        recyclerView.setAdapter(mAdapter);
+
+        // Add click listener on order
+        mAdapter.setOnItemClickListener(new OrdersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(OrderModel order) {
+                CancelOrderDialog dialog = new CancelOrderDialog();
+
+                // Pass the order ID to the dialog
+                Bundle args = new Bundle();
+                args.putInt("orderId", order.getId());
+                args.putBoolean("isStudent", isStudent);
+                args.putBoolean("isDelivered", order.getIsDelivered());
+                dialog.setArguments(args);
+
+                dialog.show(getChildFragmentManager(), "CancelOrderDialog");
+            }
+        });
+    }
+
+    private void renderRecyclerView(List<OrderModel> ordersList) {
+        if(ordersList != null) {
+            // Set up recycler view and display
+            recyclerView = view.findViewById(R.id.rv_orders);
+            recyclerView.setHasFixedSize(true);
+
+            // Show list
+            recyclerView.setVisibility(View.VISIBLE);
+            noOrdersMessage.setVisibility(View.GONE);
+
+            layoutManager = new LinearLayoutManager(ctx);
+            recyclerView.setLayoutManager(layoutManager);
+
+            updateAdapter(ordersList);
+
+            // Add data to the recycler view
+            //mAdapter = new OrdersAdapter(ordersList, ctx);
+            //recyclerView.setAdapter(mAdapter);
+
+
+            // Add click listener on order
+            //mAdapter.setOnItemClickListener(new OrdersAdapter.OnItemClickListener() {
+            //    @Override
+            //    public void onItemClick(OrderModel order) {
+            //        CancelOrderDialog dialog = new CancelOrderDialog();
+
+            //        // Pass the order ID to the dialog
+            //        Bundle args = new Bundle();
+            //        args.putInt("orderId", order.getId());
+            //        args.putBoolean("isStudent", isStudent);
+            //        args.putBoolean("isDelivered", order.getIsDelivered());
+            //        dialog.setArguments(args);
+
+            //        dialog.show(getChildFragmentManager(), "CancelOrderDialog");
+            //    }
+            //});
+        }
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,65 +155,50 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_orders, container, false);
-        Context ctx = getActivity().getApplicationContext();
+        view = inflater.inflate(R.layout.fragment_orders, container, false);
+        ctx = getActivity().getApplicationContext();
 
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
-        boolean isStudent = sp.getIsStudent();
+        isStudent = sp.getIsStudent();
 
-        DatabaseHelper dbo = new DatabaseHelper(ctx);
-        List<OrderModel> ordersList;
-        TextView noOrdersMessage = view.findViewById(R.id.noOrdersMessage);
+        dbo = new DatabaseHelper(ctx);
+        noOrdersMessage = view.findViewById(R.id.noOrdersMessage);
 
-        int userId = sp.getLoggedInUserId();
+        userId = sp.getLoggedInUserId();
 
-        // TODO: if isStudent show the student's orders
-        //  if not isStudent then show the restaurants orders
+        // If student get student orders
         if(isStudent) {
             ordersList = dbo.getAllStudentOrders(userId);
-
-            if(ordersList != null) {
-                // Set up recycler view and display
-                recyclerView = view.findViewById(R.id.rv_orders);
-                recyclerView.setHasFixedSize(true);
-
-                // Show list and hide no restaurants message
-                recyclerView.setVisibility(View.VISIBLE);
-                noOrdersMessage.setVisibility(View.GONE);
-
-                layoutManager = new LinearLayoutManager(ctx);
-                recyclerView.setLayoutManager(layoutManager);
-
-                // Add data to the recycler view
-                mAdapter = new OrdersAdapter(ordersList, ctx);
-                recyclerView.setAdapter(mAdapter);
-            }
+            renderRecyclerView(ordersList);
         } else {
-            // User is restaurant owner
-            int restaurantId = dbo.getRestaurantByUserId(userId).getId();
+            // If restaurant, get orders placed for that restaurant
+            restaurantId = dbo.getRestaurantByUserId(userId).getId();
             ordersList = dbo.getAllRestaurantOrders(restaurantId);
-
-            if(ordersList != null) {
-                // Set up recycler view and display
-                recyclerView = view.findViewById(R.id.rv_orders);
-                recyclerView.setHasFixedSize(true);
-
-                // Show list and hide no restaurants message
-                recyclerView.setVisibility(View.VISIBLE);
-                noOrdersMessage.setVisibility(View.GONE);
-
-                layoutManager = new LinearLayoutManager(ctx);
-                recyclerView.setLayoutManager(layoutManager);
-
-                // Add data to the recycler view
-                mAdapter = new OrdersAdapter(ordersList, ctx);
-                recyclerView.setAdapter(mAdapter);
-            }
+            renderRecyclerView(ordersList);
         }
 
 
 
-
         return view;
+    }
+
+    // Event that fires from dialog
+    @Override
+    public void updateOrderList() {
+        ordersList = isStudent ? dbo.getAllStudentOrders(userId)
+                : dbo.getAllRestaurantOrders(restaurantId);
+
+        if(ordersList != null) {
+            updateAdapter(ordersList);
+            //mAdapter = new OrdersAdapter(ordersList, ctx);
+            //recyclerView.setAdapter(mAdapter);
+        } else {
+            // Pass empty array to avoid null pointer exception
+            updateAdapter(new ArrayList<>());
+            //mAdapter = new OrdersAdapter(new ArrayList<>(), ctx);
+            //recyclerView.setAdapter(mAdapter);
+
+            noOrdersMessage.setVisibility(View.VISIBLE);
+        }
     }
 }

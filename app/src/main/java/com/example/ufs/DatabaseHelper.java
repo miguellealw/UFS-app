@@ -937,6 +937,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return status > 0;
     }
 
+    public boolean removeOrder(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // commit data to DB
+        long insert_status = db.delete(ORDER_TABLE, "id = ?", new String[]{id + ""});
+
+        // if positive then deletion was successful
+        // if negative then deletion was a failure
+        return insert_status > 0;
+    }
 
 
     // ================= MENU ITEMS
@@ -1141,7 +1151,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new ReviewModel(id, rating, message, userId, restaurantId);
     }
 
-    // TODO
     public List<ReviewModel> getAllStudentReviews(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
