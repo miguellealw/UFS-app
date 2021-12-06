@@ -1,5 +1,6 @@
 package com.example.ufs.ui.favorites;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +64,14 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        Context ctx = getActivity().getApplicationContext();
+        DatabaseHelper dbo = new DatabaseHelper(ctx);
+
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        int userId = sp.getLoggedInUserId();
+        dbo.getAllUserFavoriteRestaurants(userId);
+
+        return view;
     }
 }

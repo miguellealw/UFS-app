@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
+import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.Cart;
+import com.example.ufs.data.model.FavoriteRestaurantModel;
 import com.example.ufs.data.model.MenuItemModel;
 import com.example.ufs.ui.menu_items.MenuItemsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -96,6 +98,9 @@ public class RestaurantInfoFragment extends Fragment {
         dbo = new DatabaseHelper(ctx);
         cart = Cart.getInstance();
 
+        SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        int userId = sp.getLoggedInUserId();
+
         Button favoriteButton = view.findViewById(R.id.favoriteRestaurantButton);
         Button reviewButton = view.findViewById(R.id.reviewRestaurantButton);
         FloatingActionButton goToCartButton = view.findViewById(R.id.goToCartButton);
@@ -130,6 +135,14 @@ public class RestaurantInfoFragment extends Fragment {
                 }
             });
         }
+
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoriteRestaurantModel fav = new FavoriteRestaurantModel(userId, restaurantId);
+                dbo.addFavoriteRestaurant(fav);
+            }
+        });
 
         goToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override

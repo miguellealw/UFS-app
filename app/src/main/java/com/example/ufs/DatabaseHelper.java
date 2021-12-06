@@ -1241,13 +1241,89 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ================= FAVORITES
     // TODO
-    public boolean addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
-        throw new NotImplementedError("addFavoriteRestaurant is not implemented");
+    public int addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // add values to table
+        cv.put(COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID, favoriteModel.getRestaurantId());
+        cv.put(COLUMN_FAVORITE_MENU_ITEM_USER_ID, favoriteModel.getUserId());
+
+        // commit data to DB
+        long row_id = db.insert(FAVORITE_RESTAURANT_TABLE, null, cv);
+        db.close();
+        return (int) row_id;
     }
 
     // TODO
-    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {
-        throw new NotImplementedError("getAllFavoriteRestaurants is not implemented");
+    public List<FavoriteRestaurantModel> getAllUserFavoriteRestaurants(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        int id;
+        int restaurantId;
+        String restaurantName, restaurantLocation;
+        List<FavoriteRestaurantModel> favorites = new ArrayList<>();
+
+        // JOIN the FAVORITE_RESTAURANT_TABLE with the Restaurant Table
+
+        /*
+            SELECT
+                f.id, // favorites id
+                r.id as restaurantId, // restaurant id
+                r.name,
+                r.location
+           FROM
+                RESTAURANT_TABLE r
+                INNER JOIN FAVORITE_RESTAURANT_TABLE f
+                    ON f.restaurantId = r.id
+         */
+
+        //String queryString = "SELECT * FROM " + FAVORITE_RESTAURANT_TABLE + " WHERE restaurant_id = ?";
+        String queryString = "SELECT f.id, r.id as restaurant_id, r.name, r.location FROM " +
+                FAVORITE_RESTAURANT_TABLE + " f" +
+                //" INNER JOIN " + FAVORITE_RESTAURANT_TABLE + " f" +
+                " JOIN " + RESTAURANT_TABLE + " r" +
+                " ON f.restaurant_id = r.id" +
+                " WHERE f.user_id = ?;";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(userId)});
+
+            // If restaurant is found
+            //if(cursor.getCount() > 0)
+            if(cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                do{
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_ID));
+                    restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID));
+
+                    restaurantName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                    restaurantLocation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+
+                    FavoriteRestaurantModel fetchedFavorite = new FavoriteRestaurantModel(
+                            id,
+                            userId,
+                            restaurantId,
+                            restaurantName,
+                            restaurantLocation
+                    );
+
+                    favorites.add(fetchedFavorite);
+
+                } while(cursor.moveToNext());
+        } else {
+                // if student has no favorites
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        return favorites;
     }
 
     // TODO
