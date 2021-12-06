@@ -144,6 +144,19 @@ public class RestaurantInfoFragment extends Fragment {
             }
         });
 
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cart.setRestaurantID(restaurantId);
+
+                NavDirections action = RestaurantInfoFragmentDirections
+                        .actionRestaurantInfoFragmentToAddReviewFragment2();
+
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(action);
+            }
+        });
+
 
         return view;
     }

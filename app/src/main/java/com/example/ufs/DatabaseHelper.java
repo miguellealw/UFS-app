@@ -571,7 +571,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new RestaurantModel(id, name, location, userId);
     }
 
-    // TODO - test
     public RestaurantModel getRestaurantById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -686,7 +685,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    // TODO - test
     public boolean removeRestaurant(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -698,7 +696,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return insert_status > 0;
     }
 
-    // TODO - test
     public boolean editRestaurant(int id, String newName, String newLocation) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -784,7 +781,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return fetchedOrder;
     }
 
-    // TODO - test
     // get all orders that a student made
     public List<OrderModel> getAllStudentOrders(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -866,7 +862,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ---- Restaurant orders
 
-    // TODO - test
     // get all orders a restaurant has received
     public List<OrderModel> getAllRestaurantOrders(int restaurantId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -945,7 +940,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // ================= MENU ITEMS
-    //  TODO:
     public int addMenuItem(MenuItemModel menuItemModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -1236,6 +1230,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurantReviews;
     }
 
+    // ================= FAVORITES
+    // TODO
+    public boolean addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
+        throw new NotImplementedError("addFavoriteRestaurant is not implemented");
+    }
+
+    // TODO
+    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {
+        throw new NotImplementedError("getAllFavoriteRestaurants is not implemented");
+    }
+
+    // TODO
+    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
+        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
+    }
+
+    // TODO
+    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
+        throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
+    }
     // ================= ADVERTISEMENTS
     // TODO
     public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {
@@ -1251,38 +1265,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         throw new NotImplementedError("getAllAdvertisements is not implemented");
     }
 
-    // ================= FAVORITES
-    // TODO
-    public boolean addFavoriteRestaurant(FavoriteRestaurantModel favoriteModel) {
-       throw new NotImplementedError("addFavoriteRestaurant is not implemented");
-    }
-    public boolean addFavoriteMenuItem(FavoriteRestaurantModel favoriteModel) {
-        throw new NotImplementedError("addFavoriteMenuItem is not implemented");
-    }
-
-    // TODO
-    public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
-        throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
-    }
-    public FavoriteMenuItemModel getFavoriteMenuItemById(int id) {
-        throw new NotImplementedError("getFavoriteMenuItemById is not implemented");
-    }
-
-    // TODO
-    public List<FavoriteRestaurantModel> getAllFavoriteRestaurants() {
-        throw new NotImplementedError("getAllFavoriteRestaurants is not implemented");
-    }
-    public List<FavoriteMenuItemModel> getAllFavoriteMenuItems() {
-        throw new NotImplementedError("getAllFavoriteMenuItems is not implemented");
-    }
-
-    // TODO
-    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
-        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
-    }
-    public FavoriteMenuItemModel removeFavoriteMenuItem(int id) {
-        throw new NotImplementedError("removeFavoriteMenuItem is not implemented");
-    }
 
 
 }

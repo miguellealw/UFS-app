@@ -128,6 +128,9 @@
         <action
             android:id="@+id/action_restaurantInfoFragment_to_orderCartFragment"
             app:destination="@id/orderCartFragment" />
+        <action
+            android:id="@+id/action_restaurantInfoFragment_to_addReviewFragment2"
+            app:destination="@id/addReviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderCartFragment"
@@ -191,4 +194,13 @@
         android:name="com.example.ufs.ui.orders.OrderSuccessFragment"
         android:label="fragment_order_success"
         tools:layout="@layout/fragment_order_success" />
+    <fragment
+        android:id="@+id/addReviewFragment"
+        android:name="com.example.ufs.ui.reviews.AddReviewFragment"
+        android:label="fragment_add_review"
+        tools:layout="@layout/fragment_add_review" >
+        <action
+            android:id="@+id/action_addReviewFragment_to_allRestaurantsFragment"
+            app:destination="@id/allRestaurantsFragment" />
+    </fragment>
 </navigation>
