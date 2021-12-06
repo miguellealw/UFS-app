@@ -342,9 +342,9 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
             if(success) {
                 //menuItemList.add(newMenuItem);
+                // TODO: find better way of updating recycler view
                 menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
 
-                // TODO: find better way of updating recycler view
                 mAdapter = new MenuItemsAdapter(menuItemList, ctx);
                 recyclerView.setAdapter(mAdapter);
 
