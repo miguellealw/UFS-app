@@ -15,9 +15,13 @@ public class OrderModel {
 
     private String timestamp;
 
+    private String orderName;
+    private String orderRestaurantName;
+
     // Can be get user of order
     // private int User;
 
+    // This is used the fetching a order from the DB
     public OrderModel(
             int id,
             float totalPrice,
@@ -38,6 +42,7 @@ public class OrderModel {
         this.userID = userID;
     }
 
+    // Used when creating an order
     public OrderModel(
             float totalPrice,
             boolean isDelivered,

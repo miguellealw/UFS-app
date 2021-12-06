@@ -62,6 +62,8 @@ public class UserModel {
     public String getLastName() { return lastName; }
     public void setLastName(String name) { this.lastName = name; }
 
+    public String getFullName() { return firstName + " " + lastName; }
+
     public String getUniversityID() {
         return universityID;
     }

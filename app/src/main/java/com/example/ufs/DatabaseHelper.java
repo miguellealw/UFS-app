@@ -460,6 +460,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public UserModel getUserById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        // Condition of rows to select
+        String[] selectionArgs = { id + "" };
+
+        // User Data
+        String userFName = "";
+        String userLName = "";
+        String userEmail = "";
+        int userID = -1;
+        boolean userIsStudent;
+        String uniId;
+
+        try {
+            // get data from db
+            //Cursor query = db.query(returned_cols, selection, selectionArgs, null, null, null);
+            cursor = db.rawQuery(
+                    "SELECT " +
+                            COLUMN_USER_ID + ", " +
+                            COLUMN_USER_FIRST_NAME + ", " +
+                            COLUMN_USER_LAST_NAME + ", " +
+                            COLUMN_USER_EMAIL + ", " +
+                            COLUMN_USER_IS_STUDENT + ", " +
+                            COLUMN_USER_UNIVERSITY_ID +
+                            " FROM " + USER_TABLE +
+                            " WHERE id = ?",
+                    selectionArgs
+            );
+
+            // If user is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                userFName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FIRST_NAME));
+                userLName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
+                userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+                uniId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_UNIVERSITY_ID));
+                userID = Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)));
+                userIsStudent = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_IS_STUDENT)) == 1;
+            } else {
+                // if no user is found
+                return null;
+            }
+
+            return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+    }
+
     // =============== RESTAURANTS:
     public int addRestaurant(RestaurantModel restaurantModel) {
         SQLiteDatabase db = this.getWritableDatabase();
