@@ -64,6 +64,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         holder.tv_order_deliveryStatus.setText(orderList.get(position).getIsDelivered() ? "Delivered" : "In Progress");
         holder.tv_order_restaurantName.setText(orderRestaurantName);
         holder.tv_order_time.setText(orderList.get(position).getTimestamp());
+        holder.tv_order_deliveryType.setText(orderList.get(position).getIsPickup() ? "Pickup" : "Delivery");
         int id = orderList.get(position).getId();
 
         holder.itemView.setTag(id);
@@ -81,6 +82,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         TextView tv_order_deliveryStatus;
         TextView tv_order_restaurantName;
         TextView tv_order_time;
+        TextView tv_order_deliveryType;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
@@ -89,6 +91,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             tv_order_deliveryStatus = itemView.findViewById(R.id.tv_order_deliveryStatus);
             tv_order_restaurantName = itemView.findViewById(R.id.tv_order_restaurantName);
             tv_order_time = itemView.findViewById(R.id.tv_order_time);
+            tv_order_deliveryType = itemView.findViewById(R.id.tv_order_deliveryType);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
