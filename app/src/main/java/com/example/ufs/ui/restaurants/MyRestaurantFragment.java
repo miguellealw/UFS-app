@@ -234,13 +234,16 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
 
         dbo = new DatabaseHelper(ctx);
         RestaurantModel restaurant = dbo.getRestaurantByUserId(user_id);
-        Log.i(TAG, restaurant.toString());
+
+        //Log.i(TAG, restaurant.toString());
+
         List<MenuItemModel> menuItemList = restaurant != null ?
                 dbo.getAllRestaurantMenuItems(restaurant.getId()) : new ArrayList<>();
 
-        restaurantId = restaurant != null ? restaurant.getId() : null;
+        restaurantId = restaurant != null ? restaurant.getId() : -1;
 
         boolean userHasRestaurant = restaurant != null;
+
         // set isEditingRestaurant so createRestaurant fragment knows what to show
         editor.putBoolean("isEditingRestaurant", userHasRestaurant);
         editor.apply();

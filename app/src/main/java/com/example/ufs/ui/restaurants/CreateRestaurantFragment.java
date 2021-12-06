@@ -91,9 +91,13 @@ public class CreateRestaurantFragment extends Fragment {
         // Created successfully
         if (restaurantId != -1) {
             // Go to menu items screen and pass restaurant id
-            CreateRestaurantFragmentDirections.ActionCreateRestaurantFragmentToAddMenuItemsFragment action = CreateRestaurantFragmentDirections
-                    .actionCreateRestaurantFragmentToAddMenuItemsFragment();
-            action.setRestaurantId(restaurantId);
+            //CreateRestaurantFragmentDirections.ActionCreateRestaurantFragmentToAddMenuItemsFragment action = CreateRestaurantFragmentDirections
+            //        .actionCreateRestaurantFragmentToAddMenuItemsFragment();
+            //action.setRestaurantId(restaurantId);
+
+            NavDirections action = CreateRestaurantFragmentDirections
+                    .actionCreateRestaurantFragmentToRestaurantsFragment();
+
             NavController navController = Navigation.findNavController(view);
             navController.navigate(action);
 

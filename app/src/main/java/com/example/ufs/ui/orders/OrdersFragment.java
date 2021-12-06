@@ -164,6 +164,7 @@ public class OrdersFragment extends Fragment implements CancelOrderDialog.Cancel
         dbo = new DatabaseHelper(ctx);
         noOrdersMessage = view.findViewById(R.id.noOrdersMessage);
 
+
         userId = sp.getLoggedInUserId();
 
         // If student get student orders
@@ -172,9 +173,14 @@ public class OrdersFragment extends Fragment implements CancelOrderDialog.Cancel
             renderRecyclerView(ordersList);
         } else {
             // If restaurant, get orders placed for that restaurant
-            restaurantId = dbo.getRestaurantByUserId(userId).getId();
-            ordersList = dbo.getAllRestaurantOrders(restaurantId);
-            renderRecyclerView(ordersList);
+            RestaurantModel restaurant = dbo.getRestaurantById(userId);
+
+            // check if restaurant exists before getting id
+            if(restaurant != null) {
+                restaurantId = restaurant.getId();
+                ordersList = dbo.getAllRestaurantOrders(restaurantId);
+                renderRecyclerView(ordersList);
+            }
         }
 
 

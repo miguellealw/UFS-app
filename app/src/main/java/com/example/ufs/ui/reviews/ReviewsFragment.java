@@ -16,6 +16,7 @@ import com.example.ufs.DatabaseHelper;
 import com.example.ufs.R;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.OrderModel;
+import com.example.ufs.data.model.RestaurantModel;
 import com.example.ufs.data.model.ReviewModel;
 import com.example.ufs.ui.orders.OrdersAdapter;
 
@@ -111,24 +112,28 @@ public class ReviewsFragment extends Fragment {
             }
         } else {
             // show restaurant reviews
-            int restaurantId = dbo.getRestaurantByUserId(userId).getId();
-            reviewsList = dbo.getAllRestaurantReviews(restaurantId);
+            RestaurantModel restaurant = dbo.getRestaurantByUserId(userId);
 
-            if(reviewsList != null) {
-                // Set up recycler view and display
-                recyclerView = view.findViewById(R.id.rv_reviews);
-                recyclerView.setHasFixedSize(true);
+            if(restaurant != null) {
+                int restaurantId = restaurant.getId();
+                reviewsList = dbo.getAllRestaurantReviews(restaurantId);
 
-                // Show list and hide no restaurants message
-                recyclerView.setVisibility(View.VISIBLE);
-                noReviewsMessage.setVisibility(View.GONE);
+                if(reviewsList != null) {
+                    // Set up recycler view and display
+                    recyclerView = view.findViewById(R.id.rv_reviews);
+                    recyclerView.setHasFixedSize(true);
 
-                layoutManager = new LinearLayoutManager(ctx);
-                recyclerView.setLayoutManager(layoutManager);
+                    // Show list and hide no restaurants message
+                    recyclerView.setVisibility(View.VISIBLE);
+                    noReviewsMessage.setVisibility(View.GONE);
 
-                // Add data to the recycler view
-                mAdapter = new ReviewsAdapter(reviewsList, ctx);
-                recyclerView.setAdapter(mAdapter);
+                    layoutManager = new LinearLayoutManager(ctx);
+                    recyclerView.setLayoutManager(layoutManager);
+
+                    // Add data to the recycler view
+                    mAdapter = new ReviewsAdapter(reviewsList, ctx);
+                    recyclerView.setAdapter(mAdapter);
+                }
             }
         }
 

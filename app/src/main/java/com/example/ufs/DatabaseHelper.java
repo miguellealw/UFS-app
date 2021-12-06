@@ -307,6 +307,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "321 Test st",
                 2
         ));
+        addMenuItem(new MenuItemModel("Grilled Chicken Sandwich", (float) 4.99, 2));
+        addMenuItem(new MenuItemModel("Steak and Cheese Sandwich", (float) 5.99, 2));
+        addMenuItem(new MenuItemModel("Buffalo Chicken Sandwich", (float) 5.99, 2));
+        addMenuItem(new MenuItemModel("Meatbal Marinara Sandwich", (float) 6.99, 2));
 
         // 3
         addRestaurant(new RestaurantModel(
@@ -318,6 +322,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         addMenuItem(new MenuItemModel("Grilled Teriyaki Chicken", (float) 5.99, 3));
         addMenuItem(new MenuItemModel("Almond Chicken Breast", (float) 5.99, 3));
         addMenuItem(new MenuItemModel("Black Pepper Angus Steak", (float) 6.99, 3));
+
+
+        // TODO: Orders
+
+        // TODO: Reviews
 
     }
 
