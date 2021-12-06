@@ -75,11 +75,13 @@ public class AccountFragment extends Fragment {
         TextView fName = (TextView) view.findViewById(R.id.accountFirstName);
         TextView lName = (TextView) view.findViewById(R.id.accountLastName);
         TextView email = (TextView) view.findViewById(R.id.accountEmail);
+        TextView isStudent = (TextView) view.findViewById(R.id.tv_account_isStudent);
 
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
         fName.setText(sp.getUserFName());
         lName.setText(sp.getUserLName());
         email.setText(sp.getUserEmail());
+        isStudent.setText(sp.getIsStudent() ? "Student" : "Restaurant");
 
         Button logoutButton = view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
