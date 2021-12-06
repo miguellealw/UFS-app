@@ -100,6 +100,8 @@ public class AddReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(et_review_review.getText().toString().trim().equals("")) {
+                    Toast.makeText(ctx, "Provide a review to publish", Toast.LENGTH_SHORT).show();
+                } else {
                     ReviewModel newReview = new ReviewModel(
                             (int) rb_review_rating.getRating(),
                             et_review_review.getText().toString(),
@@ -116,8 +118,6 @@ public class AddReviewFragment extends Fragment {
 
                     NavController navController = Navigation.findNavController(view);
                     navController.navigate(action);
-                } else {
-                    Toast.makeText(ctx, "Could not publish review. Try again.", Toast.LENGTH_SHORT).show();
                 }
 
             }
