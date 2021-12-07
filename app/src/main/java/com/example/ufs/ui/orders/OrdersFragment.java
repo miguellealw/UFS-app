@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,7 @@ import com.example.ufs.R;
 import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.OrderModel;
 import com.example.ufs.data.model.RestaurantModel;
+import com.example.ufs.data.model.UserModel;
 import com.example.ufs.ui.restaurants.RestaurantAdapter;
 
 import org.w3c.dom.Text;
@@ -88,16 +92,36 @@ public class OrdersFragment extends Fragment implements CancelOrderDialog.Cancel
         mAdapter.setOnItemClickListener(new OrdersAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(OrderModel order) {
-                CancelOrderDialog dialog = new CancelOrderDialog();
+                if(isStudent) {
+                    CancelOrderDialog dialog = new CancelOrderDialog();
 
-                // Pass the order ID to the dialog
-                Bundle args = new Bundle();
-                args.putInt("orderId", order.getId());
-                args.putBoolean("isStudent", isStudent);
-                args.putBoolean("isDelivered", order.getIsDelivered());
-                dialog.setArguments(args);
+                    // Pass the order ID to the dialog
+                    Bundle args = new Bundle();
+                    args.putInt("orderId", order.getId());
+                    args.putBoolean("isStudent", isStudent);
+                    args.putBoolean("isDelivered", order.getIsDelivered());
+                    dialog.setArguments(args);
 
-                dialog.show(getChildFragmentManager(), "CancelOrderDialog");
+                    dialog.show(getChildFragmentManager(), "CancelOrderDialog");
+                } else {
+                    UserModel user = dbo.getUserById(order.getUserID());
+                    String address = order.getAddress();
+                    NavDirections action =
+                            OrdersFragmentDirections.actionOrdersFragmentToOrderRestaurantFragment(
+                                    user.getFullName(),
+                                    order.getIsDelivered(),
+                                    order.getTimestamp(),
+                                    order.getIsCreditCard(),
+                                    //address == null ? "N/A" : address,
+                                    order.getAddress(),
+                                    order.getTotalPrice(),
+                                    order.getId()
+                            );
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(action);
+                }
+
             }
         });
     }
