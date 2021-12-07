@@ -157,11 +157,13 @@ public class RestaurantInfoFragment extends Fragment {
                     FavoriteRestaurantModel fav = new FavoriteRestaurantModel(userId, restaurantId);
                     dbo.addFavoriteRestaurant(fav);
                     isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+                    Toast.makeText(ctx, "Restaurant favorited", Toast.LENGTH_SHORT).show();
 
                 } else {
                     dbo.removeFavoriteRestaurant(userId, restaurantId);
                     favoriteButton.setText("Favorite");
                     isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+                    Toast.makeText(ctx, "Restaurant unfavorited", Toast.LENGTH_SHORT).show();
                 }
             }
         });
