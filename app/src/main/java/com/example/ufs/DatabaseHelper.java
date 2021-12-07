@@ -1156,6 +1156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return new ReviewModel(id, rating, message, userId, restaurantId);
     }
@@ -1264,6 +1265,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (int) row_id;
     }
 
+    // Used to check if user has restaurant favorited
+    public FavoriteRestaurantModel getFavoriteRestaurantByUserId(int userId, int restaurantId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        int id;
+        String restaurantName, restaurantLocation;
+        FavoriteRestaurantModel fetchedFavorite;
+
+        // JOIN the FAVORITE_RESTAURANT_TABLE with the Restaurant Table
+
+        /*
+            SELECT
+                f.id, // favorites id
+                r.id as restaurantId, // restaurant id
+                r.name,
+                r.location
+           FROM
+                RESTAURANT_TABLE r
+                INNER JOIN FAVORITE_RESTAURANT_TABLE f
+                    ON f.restaurantId = r.id
+         */
+
+        //String queryString = "SELECT * FROM " + FAVORITE_RESTAURANT_TABLE + " WHERE restaurant_id = ?";
+        String queryString = "SELECT f.id, r.id as restaurant_id, r.name, r.location FROM " +
+                FAVORITE_RESTAURANT_TABLE + " f" +
+                //" INNER JOIN " + FAVORITE_RESTAURANT_TABLE + " f" +
+                " JOIN " + RESTAURANT_TABLE + " r" +
+                " ON f.restaurant_id = r.id" +
+                " WHERE f.user_id = ? AND f.restaurant_id = ?;";
+
+        try {
+            // get data from db
+            cursor = db.rawQuery(queryString, new String[] {Integer.toString(userId), Integer.toString(restaurantId)});
+
+            // If restaurant is found
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_ID));
+                //restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE_RESTAURANT_RESTAURANT_ID));
+
+                restaurantName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
+                restaurantLocation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_LOCATION));
+
+                fetchedFavorite = new FavoriteRestaurantModel(
+                        id,
+                        userId,
+                        restaurantId,
+                        restaurantName,
+                        restaurantLocation
+                );
+
+            } else {
+                // if student has no favorites
+                return null;
+            }
+
+        } finally {
+            assert cursor != null;
+            cursor.close();
+        }
+
+        db.close();
+
+        return fetchedFavorite;
+    }
+
     // TODO
     public List<FavoriteRestaurantModel> getAllUserFavoriteRestaurants(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1332,18 +1400,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
+
         return favorites;
     }
 
     // TODO
-    public FavoriteRestaurantModel removeFavoriteRestaurant(int id) {
-        throw new NotImplementedError("removeFavoriteRestaurant is not implemented");
+    //public boolean removeFavoriteRestaurant(int id) {
+    public boolean removeFavoriteRestaurant(int userId, int restaurantId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long insert_status = db.delete(FAVORITE_RESTAURANT_TABLE, "user_id = ? AND restaurant_id = ?",
+                new String[]{ Integer.toString(userId), Integer.toString(restaurantId) });
+        return insert_status > 0;
     }
 
     // TODO
     public FavoriteRestaurantModel getFavoriteRestaurantById(int id) {
         throw new NotImplementedError("getFavoriteRestaurantById is not implemented");
     }
+
     // ================= ADVERTISEMENTS
     // TODO
     public AdvertisementModel addAdvertisement(AdvertisementModel advertisementModel) {

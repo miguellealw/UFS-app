@@ -24,6 +24,7 @@ import com.example.ufs.SP_LocalStorage;
 import com.example.ufs.data.model.Cart;
 import com.example.ufs.data.model.FavoriteRestaurantModel;
 import com.example.ufs.data.model.MenuItemModel;
+import com.example.ufs.data.model.RestaurantModel;
 import com.example.ufs.ui.menu_items.MenuItemsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -101,7 +102,14 @@ public class RestaurantInfoFragment extends Fragment {
         SP_LocalStorage sp = new SP_LocalStorage(ctx);
         int userId = sp.getLoggedInUserId();
 
+        // TODO: check if restaurant is favorited
+        FavoriteRestaurantModel isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+
         Button favoriteButton = view.findViewById(R.id.favoriteRestaurantButton);
+        if(isFavoriteRestaurant != null) {
+            favoriteButton.setText("Unfavorite");
+        }
+
         Button reviewButton = view.findViewById(R.id.reviewRestaurantButton);
         FloatingActionButton goToCartButton = view.findViewById(R.id.goToCartButton);
 
@@ -116,6 +124,7 @@ public class RestaurantInfoFragment extends Fragment {
 
         // get menu items by restaurant id
         menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+
 
         if(menuItemList != null && menuItemList.size() > 0) {
             layoutManager = new LinearLayoutManager(ctx);
@@ -137,10 +146,23 @@ public class RestaurantInfoFragment extends Fragment {
         }
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
+            FavoriteRestaurantModel isFavoriteRestaurant;
             @Override
             public void onClick(View v) {
-                FavoriteRestaurantModel fav = new FavoriteRestaurantModel(userId, restaurantId);
-                dbo.addFavoriteRestaurant(fav);
+                isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+
+                // If restaurant is not yet favorited
+                if(isFavoriteRestaurant == null) {
+                    favoriteButton.setText("Unfavorite");
+                    FavoriteRestaurantModel fav = new FavoriteRestaurantModel(userId, restaurantId);
+                    dbo.addFavoriteRestaurant(fav);
+                    isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+
+                } else {
+                    dbo.removeFavoriteRestaurant(userId, restaurantId);
+                    favoriteButton.setText("Favorite");
+                    isFavoriteRestaurant = dbo.getFavoriteRestaurantByUserId(userId, restaurantId);
+                }
             }
         });
 

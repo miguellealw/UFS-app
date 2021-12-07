@@ -26,12 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "===== MAIN ACTIVITY";
     NavController navController;
 
+    public MainActivity() {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         DatabaseHelper db = new DatabaseHelper(this);
+        // IMPORTANT: UN-COMMENT AFTER DATA IS GENERATED
         //db.generateData();
 
         //  get logged in user info
