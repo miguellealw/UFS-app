@@ -43,7 +43,11 @@
         android:id="@+id/favoritesFragment"
         android:name="com.example.ufs.ui.favorites.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_restaurantInfoFragment"
+            app:destination="@id/restaurantInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
         android:name="com.example.ufs.ui.reviews.ReviewsFragment"
