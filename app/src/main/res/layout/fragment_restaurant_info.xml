@@ -65,22 +65,24 @@
         android:id="@+id/reviewRestaurantButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="Review"
+        android:textSize="12sp"
         app:icon="@drawable/review_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/goToCartButton"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/goToCartButton"
+        app:layout_constraintStart_toEndOf="@+id/goToCartButton"
         app:layout_constraintTop_toTopOf="@+id/goToCartButton" />
 
     <Button
         android:id="@+id/favoriteRestaurantButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:text="Favorite"
+        android:textSize="12sp"
         app:icon="@drawable/favorites_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/goToCartButton"
+        app:layout_constraintBottom_toBottomOf="@+id/goToCartButton"
+        app:layout_constraintEnd_toStartOf="@+id/goToCartButton"
         app:layout_constraintTop_toTopOf="@+id/goToCartButton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
