@@ -74,38 +74,46 @@ public class CreateRestaurantFragment extends Fragment {
     public void createRestaurant(Context ctx, View view, EditText et_name, EditText et_location) {
         // TODO: data validation
 
-        // Get logged in user id
-        SP_LocalStorage sp = new SP_LocalStorage(ctx);
-        int user_id = sp.getLoggedInUserId();
-
-        // Create model to pass to Database Object (dbo)
-        RestaurantModel newRestaurant = new RestaurantModel(
-                et_name.getText().toString(),
-                et_location.getText().toString(),
-                user_id
-        );
-
-        DatabaseHelper dbo = new DatabaseHelper(ctx);
-        int restaurantId = dbo.addRestaurant(newRestaurant);
-
-        // Created successfully
-        if (restaurantId != -1) {
-            // Go to menu items screen and pass restaurant id
-            //CreateRestaurantFragmentDirections.ActionCreateRestaurantFragmentToAddMenuItemsFragment action = CreateRestaurantFragmentDirections
-            //        .actionCreateRestaurantFragmentToAddMenuItemsFragment();
-            //action.setRestaurantId(restaurantId);
-
-            NavDirections action = CreateRestaurantFragmentDirections
-                    .actionCreateRestaurantFragmentToRestaurantsFragment();
-
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(action);
-
-            Toast.makeText(ctx, "Add your menu items", Toast.LENGTH_LONG).show();
-
+        if(
+            et_name.getText().toString().trim().isEmpty() ||
+            et_location.getText().toString().trim().isEmpty()
+        ) {
+            Toast.makeText(ctx, "Provide information to create restaurant", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
+            // Get logged in user id
+            SP_LocalStorage sp = new SP_LocalStorage(ctx);
+            int user_id = sp.getLoggedInUserId();
+
+            // Create model to pass to Database Object (dbo)
+            RestaurantModel newRestaurant = new RestaurantModel(
+                    et_name.getText().toString(),
+                    et_location.getText().toString(),
+                    user_id
+            );
+
+            DatabaseHelper dbo = new DatabaseHelper(ctx);
+            int restaurantId = dbo.addRestaurant(newRestaurant);
+
+            // Created successfully
+            if (restaurantId != -1) {
+                // Go to menu items screen and pass restaurant id
+                //CreateRestaurantFragmentDirections.ActionCreateRestaurantFragmentToAddMenuItemsFragment action = CreateRestaurantFragmentDirections
+                //        .actionCreateRestaurantFragmentToAddMenuItemsFragment();
+                //action.setRestaurantId(restaurantId);
+
+                NavDirections action = CreateRestaurantFragmentDirections
+                        .actionCreateRestaurantFragmentToRestaurantsFragment();
+
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(action);
+
+                Toast.makeText(ctx, "Add your menu items", Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(ctx, "Error creating restaurant. Try again", Toast.LENGTH_LONG).show();
+            }
         }
+
     }
 
     public void updateRestaurant(Context ctx, View view, int id, EditText et_name, EditText et_location) {

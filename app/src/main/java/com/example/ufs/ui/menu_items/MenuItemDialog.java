@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
@@ -52,7 +53,12 @@ public class MenuItemDialog extends DialogFragment {
                         String menuItemName = et_menuItemName.getText().toString();
                         String menuItemPrice = et_menuItemPrice.getText().toString();
 
-                        listener.applyMenuItemTexts(menuItemName, menuItemPrice);
+                        if(menuItemName.isEmpty() || menuItemPrice.isEmpty()){
+                            Toast.makeText(getActivity(), "Fill out information to continue", Toast.LENGTH_SHORT).show();
+                        } else {
+                            listener.applyMenuItemTexts(menuItemName, menuItemPrice);
+                        }
+
                     }
                 });
 
