@@ -52,32 +52,40 @@ public class Registration extends AppCompatActivity {
                 UserModel newUser;
                 DatabaseHelper dbo = new DatabaseHelper(Registration.this);
                 try {
-                    // TODO: data validation
+
                     // check if edittext data is empty
+                    if(
+                            et_fName.getText().toString().trim().isEmpty() ||
+                            et_lName.getText().toString().trim().isEmpty() ||
+                            et_email.getText().toString().trim().isEmpty() ||
+                            et_password.getText().toString().trim().isEmpty() ||
+                            (chk_isStudent.isChecked() && et_universityID.getText().toString().isEmpty())
+                    ) {
+                        Toast.makeText(Registration.this, "Please provide all necessary info", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // check if user already exists
+                        UserModel userWithSameEmail = dbo.getUserByEmail(et_email.getText().toString());
+                        if(userWithSameEmail != null) throw new Exception("Email is already registered");
 
-                    // check if user already exists
-                    UserModel userWithSameEmail = dbo.getUserByEmail(et_email.getText().toString());
-                    if(userWithSameEmail != null) throw new Exception("Email is already registered");
+                        //newUser = new UserModel("Jon", "Doe", "jondoe@gmail.edu", "12345679", "password123", 1);
+                        newUser = new UserModel(
+                                et_fName.getText().toString(),
+                                et_lName.getText().toString(),
+                                et_email.getText().toString(),
+                                et_universityID.getText().toString(),
+                                et_password.getText().toString(),
+                                chk_isStudent.isChecked()
+                        );
+                        boolean u_success = dbo.addUser(newUser);
+                        if(!u_success) throw new IOException("Error registering user");
 
+                        Toast.makeText(Registration.this, "Registered Successfully! You can now login.", Toast.LENGTH_SHORT).show();
 
+                        // Go to Login screen
+                        Intent i = new Intent(Registration.this, LoginActivity.class);
+                        startActivity(i);
+                    }
 
-                    //newUser = new UserModel("Jon", "Doe", "jondoe@gmail.edu", "12345679", "password123", 1);
-                    newUser = new UserModel(
-                            et_fName.getText().toString(),
-                            et_lName.getText().toString(),
-                            et_email.getText().toString(),
-                            et_universityID.getText().toString(),
-                            et_password.getText().toString(),
-                            chk_isStudent.isChecked()
-                    );
-                    boolean u_success = dbo.addUser(newUser);
-                    if(!u_success) throw new IOException("Error registering user");
-
-                    Toast.makeText(Registration.this, "Registered Successfully! You can now login.", Toast.LENGTH_SHORT).show();
-
-                    // Go to Login screen
-                    Intent i = new Intent(Registration.this, LoginActivity.class);
-                    startActivity(i);
                 } catch(Exception e) {
                     //Toast.makeText(Registration.this, "Error registering user", Toast.LENGTH_SHORT).show();
                     Toast.makeText(Registration.this, e.getMessage(), Toast.LENGTH_SHORT).show();

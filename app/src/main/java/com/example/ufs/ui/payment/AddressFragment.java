@@ -91,12 +91,13 @@ public class AddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(et_address.getText().toString().trim().equals("") ||
+                if(
+                    et_address.getText().toString().trim().equals("") ||
                     et_zip.getText().toString().trim().equals("") ||
                     et_city.getText().toString().trim().equals("")
                 )
                 {
-                    Toast.makeText(ctx, "Fill out address information to continue", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, "Fill out address information to continue", Toast.LENGTH_SHORT).show();
                 } else {
                     String finalAddress = et_address.getText().toString() + ", " +
                             et_city.getText().toString() + ", " +
