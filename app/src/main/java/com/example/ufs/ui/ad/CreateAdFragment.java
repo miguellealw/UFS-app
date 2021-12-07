@@ -3,24 +3,19 @@ package com.example.ufs.ui.ad;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ufs.R;
-import com.example.ufs.ui.payment.AddressFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AdvertFragment#newInstance} factory method to
+ * Use the {@link CreateAdFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdvertFragment extends Fragment {
+public class CreateAdFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +26,7 @@ public class AdvertFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AdvertFragment() {
+    public CreateAdFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +36,11 @@ public class AdvertFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AdvertFragment.
+     * @return A new instance of fragment CreateAdFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AdvertFragment newInstance(String param1, String param2) {
-        AdvertFragment fragment = new AdvertFragment();
+    public static CreateAdFragment newInstance(String param1, String param2) {
+        CreateAdFragment fragment = new CreateAdFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,19 +61,7 @@ public class AdvertFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_advert, container, false);
-
-        FloatingActionButton btn_createAd = view.findViewById(R.id.ab_createAdvert);
-
-        btn_createAd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavDirections action = AdvertFragmentDirections.actionAdvertFragmentToCreateAdFragment();
-
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(action);
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_create_ads, container, false);
 
 
         return view;
