@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ufs.ActivityForgotPassword;
 import com.example.ufs.DatabaseHelper;
 import com.example.ufs.MainActivity;
 import com.example.ufs.R;
@@ -152,6 +153,16 @@ public class LoginActivity extends AppCompatActivity {
 
                 // Go to registration activity
                 Intent i = new Intent(getApplicationContext(), Registration.class);
+                startActivity(i);
+            }
+        });
+
+        Button forgotPass = findViewById(R.id.button_forgotPassword);
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Go to registration activity
+                Intent i = new Intent(getApplicationContext(), ActivityForgotPassword.class);
                 startActivity(i);
             }
         });
