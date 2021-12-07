@@ -356,59 +356,63 @@ public class MyRestaurantFragment extends Fragment implements MenuItemDialog.Men
     // After ok is tapped this will run
     @Override
     public void applyMenuItemTexts(String menuItemName, String menuItemPrice) {
-        noMenuItemsMessage.setVisibility(View.GONE);
-        if(isEditingMenuItem) {
-            // EDITING MENU ITEM
-            boolean success = dbo.editMenuItem(selectedMenuItemId, menuItemName, menuItemPrice);
-            menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
-            isEditingMenuItem = false;
+        // Empty input validatoin
+        if(!menuItemName.trim().isEmpty() || !menuItemName.trim().isEmpty()) {
+            if(isEditingMenuItem) {
+                // EDITING MENU ITEM
+                boolean success = dbo.editMenuItem(selectedMenuItemId, menuItemName, menuItemPrice);
+                menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+                isEditingMenuItem = false;
 
-            if(success) {
-                //menuItemList.add(newMenuItem);
-                updateAdapter(menuItemList);
+                if(success) {
+                    //menuItemList.add(newMenuItem);
+                    updateAdapter(menuItemList);
 //                // TODO: find better way of updating recycler view
 //                menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
 //
 //                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
 //                recyclerView.setAdapter(mAdapter);
 
-                Toast.makeText(ctx, "Menu Item Updated", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            // ADD MENU ITEM
-            // Create menu item in DB
-            MenuItemModel newMenuItem = new MenuItemModel(menuItemName, Float.parseFloat(menuItemPrice), restaurantId);
-            int menuItemId = dbo.addMenuItem(newMenuItem);
+                    Toast.makeText(ctx, "Menu Item Updated", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // ADD MENU ITEM
+                // Create menu item in DB
+                MenuItemModel newMenuItem = new MenuItemModel(menuItemName, Float.parseFloat(menuItemPrice), restaurantId);
+                int menuItemId = dbo.addMenuItem(newMenuItem);
 
-            // If there is no recycler view then create one
-            if(recyclerView == null) {
-                recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
-                recyclerView.setHasFixedSize(true);
+                // If there is no recycler view then create one
+                if(recyclerView == null) {
+                    recyclerView = view.findViewById(R.id.rv_myRestaurant_menuItems);
+                    recyclerView.setHasFixedSize(true);
 
-                recyclerView.setVisibility(View.VISIBLE);
-                noMenuItemsMessage.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    noMenuItemsMessage.setVisibility(View.GONE);
 
-                layoutManager = new LinearLayoutManager(ctx);
-                recyclerView.setLayoutManager(layoutManager);
-            }
+                    layoutManager = new LinearLayoutManager(ctx);
+                    recyclerView.setLayoutManager(layoutManager);
+                }
 
-            // Add menu item to local array list to display in recycler view
-            if(menuItemId != -1) {
-                //menuItemList.add(newMenuItem);
-                menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
-                updateAdapter(menuItemList);
+                // Add menu item to local array list to display in recycler view
+                if(menuItemId != -1) {
+                    //menuItemList.add(newMenuItem);
+                    menuItemList = dbo.getAllRestaurantMenuItems(restaurantId);
+                    updateAdapter(menuItemList);
 
-                // TODO: find better way of updating recycler view
+                    // TODO: find better way of updating recycler view
 //                mAdapter = new MenuItemsAdapter(menuItemList, ctx);
 //                recyclerView.setAdapter(mAdapter);
 
-                Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, newMenuItem.getName() + " Created", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ctx, "Error creating menu item", Toast.LENGTH_SHORT).show();
+                }
+
             }
-
+            noMenuItemsMessage.setVisibility(View.GONE);
+        } else {
+            Toast.makeText(ctx, "Provide menu items info", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 //    @Override

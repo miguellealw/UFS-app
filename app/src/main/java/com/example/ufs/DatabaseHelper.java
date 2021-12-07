@@ -278,7 +278,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 false
         ));
 
+        // 4
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "kfc@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
+        // 5
+        addUser(new UserModel(
+                "Jon",
+                "Doe",
+                "wendys@gmail.com",
+                null,
+                "password123",
+                false
+        ));
+
         // Student
+        // 6
         addUser(new UserModel(
                 "Jane",
                 "Doe",
@@ -323,11 +344,111 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         addMenuItem(new MenuItemModel("Almond Chicken Breast", (float) 5.99, 3));
         addMenuItem(new MenuItemModel("Black Pepper Angus Steak", (float) 6.99, 3));
 
+        // 4
+        addRestaurant(new RestaurantModel(
+                "KFC",
+                "444 Pioneer Lane",
+                4
+        ));
+        addMenuItem(new MenuItemModel("3pc Chicken Box", (float) 4.99, 4));
+        addMenuItem(new MenuItemModel("8pc Tenders Meal", (float) 5.99, 4));
+        addMenuItem(new MenuItemModel("5pc Tenders Combo", (float) 5.99, 4));
+        addMenuItem(new MenuItemModel("Sandwich Combo", (float) 6.99, 4));
+
+        // 5
+        addRestaurant(new RestaurantModel(
+                "Wendy's",
+                "333 Pioneer Lane",
+                5
+        ));
+        addMenuItem(new MenuItemModel("Baconator", (float) 4.99, 5));
+        addMenuItem(new MenuItemModel("Dave's Single", (float) 5.99, 5));
+        addMenuItem(new MenuItemModel("Jr. Cheese Burger", (float) 5.99, 5));
+        addMenuItem(new MenuItemModel("Jr. Cheeseburger Deluxe", (float) 6.99, 5));
 
         // TODO: Orders
 
-        // TODO: Reviews
+        // Jane doe order from Panda
+        addOrder(
+            new OrderModel(
+                (float) 12.99,
+                true,
+                true,
+                null,
+                true,
+                3,
+                6
+            )
+        );
 
+        addOrder(
+            new OrderModel(
+                (float) 18.23,
+                true,
+                false,
+                "123 address 333",
+                false,
+                1,
+                6
+            )
+        );
+
+        addOrder(
+            new OrderModel(
+                (float) 23.00,
+                true,
+                false,
+                "123 address 333",
+                false,
+                1,
+                6
+            )
+        );
+
+        addOrder(
+            new OrderModel(
+                (float) 10.99,
+                true,
+                false,
+                "123 address 333",
+                false,
+                5,
+                6
+            )
+        );
+
+        addOrder(
+            new OrderModel(
+                (float) 23.00,
+                true,
+                false,
+                "123 address 333",
+                false,
+                1,
+                6
+            )
+        );
+
+        // TODO: Reviews
+        addReview(
+            new ReviewModel(
+                4,
+                "It was good",
+                6,
+                5
+            )
+        );
+
+        addReview(
+            new ReviewModel(
+                1,
+                "I did not like it",
+                6,
+                4
+            )
+        );
+
+        db.close();
     }
 
     public boolean addUser(UserModel userModel) {
@@ -399,8 +520,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             assert cursor != null;
             cursor.close();
-            db.close();
         }
+
+        db.close();
 
         return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
     }
@@ -462,6 +584,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
+            db.close();
             return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
         } finally {
             assert cursor != null;
@@ -514,6 +637,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
+            db.close();
             return new UserModel(userID, userFName, userLName, userEmail, uniId, userIsStudent);
         } finally {
             assert cursor != null;
@@ -840,6 +964,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
+
         return studentOrders;
     }
 
@@ -921,6 +1047,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
+
         return restaurantOrders;
     }
 
@@ -943,6 +1071,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // values.put(COLUMN_ORDER_USER_ID, userID);
 
         long status = db.update( ORDER_TABLE, values, "id=?", new String[]{Integer.toString(id)});
+        db.close();
         return status > 0;
     }
 
@@ -951,6 +1080,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // commit data to DB
         long insert_status = db.delete(ORDER_TABLE, "id = ?", new String[]{id + ""});
+        db.close();
 
         // if positive then deletion was successful
         // if negative then deletion was a failure
@@ -1097,18 +1227,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //int status = db.rawQuery(queryString, selectionArgs);
         long status = db.update( MENU_ITEM_TABLE, values, "id=?", new String[]{Integer.toString(id)});
+        db.close();
         return status > 0;
     }
 
     public boolean removeMenuItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         long insert_status = db.delete(MENU_ITEM_TABLE, "id = ?", new String[]{ Integer.toString(id) });
+        db.close();
         return insert_status > 0;
     }
 
     // ================= REVIEWS
 
-    // TODO - test
     public int addReview(ReviewModel reviewModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -1201,6 +1332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return studentReviews;
     }
@@ -1245,6 +1377,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             assert cursor != null;
             cursor.close();
         }
+        db.close();
 
         return restaurantReviews;
     }
@@ -1411,6 +1544,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long insert_status = db.delete(FAVORITE_RESTAURANT_TABLE, "user_id = ? AND restaurant_id = ?",
                 new String[]{ Integer.toString(userId), Integer.toString(restaurantId) });
+        db.close();
         return insert_status > 0;
     }
 

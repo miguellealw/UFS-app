@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="629dp"
         android:layout_above="@+id/navLayout"
+        android:layout_marginBottom="46dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
@@ -45,5 +45,34 @@
 
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ad_banner_image"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/foodbackground"
+        android:layout_above="@+id/navLayout"
+        />
+
+    <RelativeLayout
+        android:id="@+id/darkOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_above="@+id/navLayout"
+        android:background="#86171717">
+
+        <TextView
+            android:id="@+id/tv_ad_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Chick-fil-A"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
