@@ -36,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DatabaseHelper db = new DatabaseHelper(this);
-        // IMPORTANT: UN-COMMENT AFTER DATA IS GENERATED
+        // IMPORTANT: COMMENT AFTER DATA IS GENERATED.
+        // This will generate the data for the start of the demo
+        // but needs to be commented and re-run the app to avoid wiping out the data
+        // that we create during the demo
         //db.generateData();
 
         //  get logged in user info
