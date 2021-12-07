@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_ordersFragment_to_cancelOrderDialog"
             app:destination="@id/cancelOrderDialog" />
+        <action
+            android:id="@+id/action_ordersFragment_to_orderRestaurantFragment"
+            app:destination="@id/orderRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -234,4 +237,32 @@
         android:name="com.example.ufs.ui.ad.CreateAdFragment"
         android:label="fragment_create_ads"
         tools:layout="@layout/fragment_create_ads" />
+
+    <fragment
+        android:id="@+id/orderRestaurantFragment"
+        android:name="com.example.ufs.ui.orders.OrderRestaurantFragment"
+        android:label="fragment_order_restaurant"
+        tools:layout="@layout/fragment_order_restaurant" >
+        <argument
+            android:name="orderName"
+            app:argType="string" />
+        <argument
+            android:name="orderIsDelivered"
+            app:argType="boolean" />
+        <argument
+            android:name="orderTime"
+            app:argType="string" />
+        <argument
+            android:name="orderIsCreditCard"
+            app:argType="boolean" />
+        <argument
+            android:name="orderAddress"
+            app:argType="string" />
+        <argument
+            android:name="orderPrice"
+            app:argType="float" />
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
