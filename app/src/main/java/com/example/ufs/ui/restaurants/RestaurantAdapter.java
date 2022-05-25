@@ -46,9 +46,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         int id = restaurantList.get(position).getId();
 
         holder.itemView.setTag(id);
-        //holder.iv_restaurantImage.setImage();
-
-        // TODO: Use glide for images
     }
 
     @Override
