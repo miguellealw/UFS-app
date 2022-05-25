@@ -1,8 +1,8 @@
 # University Food System (Grubhub Clone)
-An android application that allows students to order from a selection of restaurants in the app. Students can also favorite and review restaurants. Restaurants can manage their restaurant info and menu. They can also view order placed by students and view the reviews placed by the students.
+An android application that allows students to order from a selection of restaurants in the app. Students can also favorite and review restaurants. Restaurants can manage their restaurant info and menu. They can also view orders placed by students and view the reviews placed by the students.
 
 ## Students can order from restaurants
-A student can add items from their cart and checkout. They can pay with their meal plan or with a credit card. If they pay with their meal plan they have to provide their university id for verification. They can also choose to pick it up or have it delivered for a $5.00 fee.
+A student can add items from their cart and checkout. They can pay with their meal plan or with a credit card. If they pay with their meal plan they have to provide their university id for verification. They can also choose to pick it up or have it delivered for a $5.00 fee.  
 ![student placing order](./readme_asssets/student_placing_order.gif)
 
 ---
